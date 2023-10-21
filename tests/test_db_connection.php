@@ -2,7 +2,7 @@
 
 namespace tests;
 
-require_once __DIR__ . '/../app/core/Db.php'; // Inclure le fichier Db.php
+require_once __DIR__ . '/../src/core/Db.php'; // Inclure le fichier Db.php
 
 $db = \app\core\Db::getInstance();
 
