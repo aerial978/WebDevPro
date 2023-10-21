@@ -1,6 +1,6 @@
 <?php
 
-use app\controller\HomeController;
+use src\controller\HomeController;
 
 return [
     '/' => ['controller' => HomeController::class, 'action' => 'index'],

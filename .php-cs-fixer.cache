@@ -1,0 +1,1 @@
+{"php":"8.1.0","version":"3.35.1:v3.35.1#ec1ccc264994b6764882669973ca435cf05bab08","indent":"    ","lineEnding":"\n","rules":{"encoding":true,"full_opening_tag":true},"hashes":{"app\\controller\\BaseController.php":"638cba65b955d6613ba3a1bb466e3846","app\\controller\\HomeController.php":"ee466c1386cba6a953e1e874129d4976","app\\core\\db.php":"8d3c1e294c9583daa8440274b66d917e"}}
