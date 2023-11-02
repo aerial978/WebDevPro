@@ -1,0 +1,40 @@
+h1 {
+  font-size: 3.5rem;
+  text-transform: uppercase;
+  font-weight: 700; }
+
+body {
+  background-color: #FFFF;
+  font-family: "Lato", sans-serif; }
+
+.masthead {
+  padding-top: calc(6rem + 74px);
+  padding-bottom: 6rem;
+  background-color: #2980B9;
+  color: #FFFF; }
+  .masthead .masthead__avatar {
+    width: 15rem;
+    margin-bottom: 3rem; }
+  .masthead .masthead__heading {
+    font-family: "Montserrat", sans-serif;
+    line-height: 2.75rem; }
+  .masthead .masthead__subheading {
+    font-size: 1.50rem; }
+
+.separator-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1.25rem 0 1.5rem; }
+  .separator-block .separator-block__line {
+    background-color: #FFFF;
+    width: 100%;
+    max-width: 7rem;
+    height: 0.25rem;
+    border-radius: 1rem; }
+  .separator-block .separator-block__line:first-child {
+    margin-right: 1rem; }
+  .separator-block .separator-block__line:last-child {
+    margin-left: 1rem; }
+  .separator-block .separator-block__icon {
+    font-size: 2rem; }

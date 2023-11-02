@@ -1,0 +1,52 @@
+body {
+    background-color: $white-color;
+    font-family: $lato-font;
+}
+
+.masthead {
+    padding-top: calc(6rem + 74px);
+    padding-bottom: 6rem; 
+    background-color: $blue-color;
+    color: $white-color;
+
+    .masthead__avatar {
+        width: 15rem;
+        margin-bottom: 3rem;
+    }
+
+    .masthead__heading {
+        font-family: $montserrat-font;
+        line-height: 2.75rem;
+    }
+
+    .masthead__subheading {
+        font-size: 1.50rem;
+    }
+}
+
+.separator-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1.25rem 0 1.5rem;
+
+    .separator-block__line {
+        background-color: $white-color;
+        width: 100%;
+        max-width: 7rem;
+        height: 0.25rem;
+        border-radius: 1rem;
+    }
+    
+    .separator-block__line:first-child {
+        margin-right: 1rem;
+    }
+    
+    .separator-block__line:last-child {
+        margin-left: 1rem;
+    }
+
+    .separator-block__icon {
+        font-size: 2rem;
+    }
+}

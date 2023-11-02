@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'host' => 'localhost',
-    'dbname' => 'webdevpro',
+    'host'     => 'localhost',
+    'dbname'   => 'webdevpro',
     'username' => 'root',
     'password' => ''
 ];
