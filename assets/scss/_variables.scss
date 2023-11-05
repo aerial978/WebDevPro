@@ -1,9 +1,15 @@
 $white-color: #FFFF;
 $green-color: #1aBC9C;
 $blue-color: #2980B9;
-$grey-color: #34495E;
+$grey-color: #2c3e50;
 $purple-color: #805D93;
 
 $montserrat-font: 'Montserrat', sans-serif;
 $lato-font: 'Lato', sans-serif;
 $libre-font: 'Libre Baskerville', sans-serif;
+
+body {
+    background-color: $white-color;
+    font-family: $lato-font;
+    color: $grey-color;
+}

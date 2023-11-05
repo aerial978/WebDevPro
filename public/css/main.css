@@ -1,25 +1,28 @@
-h1 {
-  font-size: 3.5rem;
-  text-transform: uppercase;
-  font-weight: 700; }
-
 body {
   background-color: #FFFF;
-  font-family: "Lato", sans-serif; }
+  font-family: "Lato", sans-serif;
+  color: #2c3e50; }
 
-.masthead {
-  padding-top: calc(6rem + 74px);
-  padding-bottom: 6rem;
-  background-color: #2980B9;
-  color: #FFFF; }
-  .masthead .masthead__avatar {
-    width: 15rem;
-    margin-bottom: 3rem; }
-  .masthead .masthead__heading {
-    font-family: "Montserrat", sans-serif;
+h1 {
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 3.5rem; }
+
+h2 {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 2.5rem; }
+
+h1, h2 {
+  text-transform: uppercase; }
+
+@media (max-width: 992px) {
+  h1 {
+    font-size: 2.75rem;
     line-height: 2.75rem; }
-  .masthead .masthead__subheading {
-    font-size: 1.50rem; }
+  h2 {
+    font-size: 2.25rem;
+    line-height: 2rem; } }
 
 .separator-block {
   display: flex;
@@ -27,7 +30,6 @@ body {
   align-items: center;
   margin: 1.25rem 0 1.5rem; }
   .separator-block .separator-block__line {
-    background-color: #FFFF;
     width: 100%;
     max-width: 7rem;
     height: 0.25rem;
@@ -38,3 +40,53 @@ body {
     margin-left: 1rem; }
   .separator-block .separator-block__icon {
     font-size: 2rem; }
+
+.page-section {
+  padding: 6rem 0; }
+
+.separator-block__line--dark {
+  background-color: #2c3e50; }
+
+.masthead {
+  padding-top: calc(6rem + 104px);
+  padding-bottom: 6rem;
+  background-color: #2980B9;
+  color: #FFFF; }
+  .masthead .masthead__avatar {
+    width: 15rem;
+    margin-bottom: 3rem; }
+  .masthead .masthead__heading {
+    font-family: "Montserrat", sans-serif; }
+  .masthead .masthead__subheading {
+    font-size: 1.5rem; }
+
+.separator-block__line--light {
+  background-color: #FFFF; }
+
+@media (max-width: 992px) {
+  .masthead {
+    padding-top: calc(6rem + 74px); }
+    .masthead .masthead__subheading {
+      font-size: 1.25rem; } }
+
+.page-section__heading {
+  font-family: "Montserrat", sans-serif; }
+
+.portfolio .portfolio-item {
+  cursor: pointer;
+  position: relative;
+  display: block;
+  max-width: 25rem;
+  border-radius: 0.5rem;
+  overflow: hidden; }
+  .portfolio .portfolio-item .portfolio-item-caption {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: all 0.2s ease-in-out;
+    opacity: 0;
+    background-color: #1aBC9C; }
+  .portfolio .portfolio-item .portfolio-item-caption:hover {
+    opacity: 1; }
+  .portfolio .portfolio-item .portfolio-item-caption-content {
+    font-size: 1.5rem; }

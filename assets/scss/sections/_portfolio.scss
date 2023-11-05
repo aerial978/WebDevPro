@@ -1,0 +1,29 @@
+.page-section__heading {
+    font-family: $montserrat-font;
+}
+
+.portfolio .portfolio-item {
+    cursor: pointer;
+    position: relative;
+    display: block;
+    max-width: 25rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+
+    .portfolio-item-caption {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: all 0.2s ease-in-out;
+        opacity: 0;
+        background-color: $green-color;
+    }
+    
+    .portfolio-item-caption:hover {
+        opacity: 1;
+    }
+
+    .portfolio-item-caption-content {
+        font-size: 1.5rem;
+    }
+}
