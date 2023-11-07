@@ -24,7 +24,7 @@ class Db extends PDO
         } catch (PDOException $e) {
 
             error_log('Database Connection Error:' . $e->getMessage());
-            die('Database connection error. Please check the logs for more details');
+            throw new PDOException('Database connection error. Please check the logs for more details');
         }
     }
 

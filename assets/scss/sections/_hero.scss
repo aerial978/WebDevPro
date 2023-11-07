@@ -1,0 +1,34 @@
+.masthead {
+    padding-top: calc(6rem + 104px);
+    padding-bottom: 6rem; 
+    background-color: $blue-color;
+    color: $white-color;
+
+    .masthead__avatar {
+        width: 15rem;
+        margin-bottom: 3rem;
+    }
+
+    .masthead__heading {
+        font-family: $montserrat-font;
+    }
+
+    .masthead__subheading {
+        font-size: 1.5rem;
+    }
+}
+
+.separator-block__line--light {
+    background-color: $white-color;
+}
+
+@media (max-width: 992px) {
+    .masthead {
+        padding-top: calc(6rem + 74px);
+
+        .masthead__subheading {
+            font-size: 1.25rem;
+        }
+    }
+}
+

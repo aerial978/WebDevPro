@@ -1,0 +1,29 @@
+$button-border-radius: 4px;
+$button-padding: 1rem 1.75rem;
+$button-font-size: 1.25rem;
+$button-font-weight: 500;
+$button-primary-color: $blue-color;
+$button-secondary-color: $white-color;
+$button-border-color: $blue-color; // Couleur de la bordure
+$button-border-width: 2px; // Largeur de la bordure au survol
+
+.btn {
+    background-color: $button-primary-color;
+    color: $blue-light-color;
+    display: inline-block;
+    border: $button-border-width solid $button-border-color; 
+    border-radius: $button-border-radius;
+    padding: $button-padding;
+    font-size: $button-font-size;
+    font-weight: $button-font-weight;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn:hover {
+    background-color: $button-secondary-color;
+    border: $button-border-width solid $button-border-color; // Ajout de la bordure au survol
+    color: $button-primary-color;
+}

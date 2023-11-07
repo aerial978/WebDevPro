@@ -1,0 +1,33 @@
+.separator-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1.25rem 0 1.5rem;
+
+    .separator-block__line {
+        width: 100%;
+        max-width: 7rem;
+        height: 0.25rem;
+        border-radius: 1rem;
+    }
+    
+    .separator-block__line:first-child {
+        margin-right: 1rem;
+    }
+    
+    .separator-block__line:last-child {
+        margin-left: 1rem;
+    }
+
+    .separator-block__icon {
+        font-size: 2rem;
+    }
+}
+
+.separator-block__line--dark {
+    background-color: $grey-color;
+}
+
+.page-section {
+    padding: 6rem 0;
+}
