@@ -3,6 +3,10 @@ body {
   font-family: "Lato", sans-serif;
   color: #2c3e50; }
 
+.about, .contact {
+  background-color: #D6EAF8;
+  color: #2c3e50; }
+
 h1 {
   font-size: 4rem;
   font-weight: 700;
@@ -91,15 +95,54 @@ h1, h2 {
   .portfolio .portfolio-item .portfolio-item-caption-content {
     font-size: 1.5rem; }
 
-.about {
-  background-color: #D6EAF8;
-  color: #2c3e50; }
+.form-floating {
+  position: relative; }
+
+.form-floating > .form-control {
+  height: 5.5rem;
+  line-height: 1.25; }
+
+.form-floating > label {
+  position: absolute;
+  font-size: 1.25rem;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 1.5rem 1.5rem;
+  overflow: hidden;
+  text-align: start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+  border: 0.125rem solid transparent;
+  transform-origin: 0 0;
+  transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  .form-floating > label {
+    transition: none; } }
+
+.form-floating > .form-control {
+  padding: 1.5rem 1.5rem; }
+
+.form-floating > .form-control::placeholder {
+  color: transparent; }
+
+.form-floating > .form-control:focus, .form-floating > .form-control:not(:placeholder-shown) {
+  padding-top: 2.5rem;
+  padding-bottom: 1.5rem; }
+
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+  transform: scale(0.65) translateY(-0.5rem) translateX(0rem);
+  color: #2980B9; }
 
 .btn {
-  background-color: #805D93;
-  color: #D1CED6;
+  background-color: #2980B9;
+  color: #D6EAF8;
   display: inline-block;
-  border: none;
+  border: 2px solid #2980B9;
   border-radius: 4px;
   padding: 1rem 1.75rem;
   font-size: 1.25rem;
@@ -110,4 +153,6 @@ h1, h2 {
   transition: background-color 0.3s, color 0.3s; }
 
 .btn:hover {
-  background-color: #D1CED6; }
+  background-color: #F9F9F9;
+  border: 2px solid #2980B9;
+  color: #2980B9; }
