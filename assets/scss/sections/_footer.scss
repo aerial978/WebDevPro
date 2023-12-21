@@ -1,0 +1,23 @@
+footer {
+    background-color: $grey-color;
+    color: $white-color;
+}
+
+footer .menu-footer {
+    color: $green-color;
+}
+
+footer .nav-link {
+    color: $white-color;
+    font-size: 20px;
+}
+
+.social-network-footer a {
+    color: $white-color;
+    font-size: 50px;
+    margin: 5px;
+}
+
+.social-network-footer a:hover {
+    color: $blue-light-color;
+}

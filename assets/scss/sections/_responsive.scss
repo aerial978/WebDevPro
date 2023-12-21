@@ -1,0 +1,77 @@
+@media (max-width: 992px) {
+
+    /* Typography */
+
+    h1 {
+        font-size: 2.75rem;
+        line-height: 2.75rem;
+    }
+
+    h2 {
+        font-size: 2.25rem;
+        line-height: 2rem;
+    }
+
+    /* Hero */
+
+    .masthead {
+        padding-top: calc(2rem + 74px);
+
+    .masthead .masthead__subheading {
+            font-size: 1.25rem;
+        }
+    }
+}
+
+@media (max-width: 576px) {
+
+    /* Typography */
+
+    h2 {
+        font-size: 1.8rem;
+        line-height: 1.5rem;
+    }
+
+    /* Utilities */
+
+    .separator-block .separator-block__line {
+        max-width: 4.5rem;
+    }
+
+    /* Navbar */
+
+    .navbar-brand {
+        font-size: 20px;
+    }
+
+    .navbar .nav-link {
+        border-bottom: none;
+    }
+
+    /* Hero */
+
+    .masthead .masthead__avatar {
+        width: 8rem;
+    }
+
+    .masthead__heading  {
+        font-size: 1.8rem;
+        line-height: 1;
+    }
+
+    .masthead h3 {
+        font-size: 1.3rem;
+    }
+
+    .masthead .masthead__subheading {
+        font-size: 1rem;
+    }
+
+    .lead {
+        font-size: 1.1rem;
+    }
+
+    .form-floating label {
+        font-size: 1rem;
+    }
+}

@@ -13,13 +13,3 @@ $montserrat-font: 'Montserrat', sans-serif;
 $lato-font: 'Lato', sans-serif;
 $libre-font: 'Libre Baskerville', sans-serif;
 
-body {
-    background-color: $white-color;
-    font-family: $lato-font;
-    color: $grey-color;
-}
-
-.about, .contact {
-    background-color: $blue-light-color;
-    color: $grey-color;
-}
