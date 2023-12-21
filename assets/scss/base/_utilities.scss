@@ -1,8 +1,25 @@
+*,
+::after,
+::before {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: $white-color;
+    font-family: $lato-font;
+    text-decoration: none;
+}
+
+.portfolio, .contact {
+    background-color: $green-light-color;
+    color: $grey-color;
+}
+
 .separator-block {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 1.25rem 0 1.5rem;
+    margin: 0rem 0 2rem;
 
     .separator-block__line {
         width: 100%;

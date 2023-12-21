@@ -1,20 +1,23 @@
 .masthead {
-    padding-top: calc(6rem + 104px);
-    padding-bottom: 6rem; 
-    background-color: $blue-color;
+    font-family: $montserrat-font;
+    padding: 3rem 0; 
+    background-color: $green-color;
     color: $white-color;
+    padding-top: calc(6rem + 74px);
 
     .masthead__avatar {
-        width: 15rem;
+        width: 10rem;
         margin-bottom: 3rem;
     }
 
-    .masthead__heading {
-        font-family: $montserrat-font;
+    .masthead__heading span {
+        font-weight: 600;
     }
 
     .masthead__subheading {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
     }
 }
 
@@ -22,13 +25,14 @@
     background-color: $white-color;
 }
 
-@media (max-width: 992px) {
-    .masthead {
-        padding-top: calc(6rem + 74px);
-
-        .masthead__subheading {
-            font-size: 1.25rem;
-        }
-    }
+.social-network a {
+    color: $grey-color;
+    background-color: $green-color;
+    font-size: 50px;
+    margin: 5px;
 }
 
+.social-network a:hover {
+    color: $blue-light-color;
+    background-color: $green-color;
+}
