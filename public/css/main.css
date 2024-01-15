@@ -1,15 +1,14 @@
 h1 {
-  font-size: 4rem;
-  font-weight: 700;
-  /*line-height: 3.5;*/ }
+  font-size: 4rem; }
 
 h2 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  /*line-height: 2.5;*/ }
+  font-size: 2.5rem; }
 
 h1, h2 {
   text-transform: uppercase; }
+
+a {
+  text-decoration: none; }
 
 *,
 ::after,
@@ -17,9 +16,11 @@ h1, h2 {
   box-sizing: border-box; }
 
 body {
-  background-color: #F9F9F9;
-  font-family: "Lato", sans-serif;
-  text-decoration: none; }
+  background-color: #F6F6F6;
+  font-family: "Lato", sans-serif; }
+
+section {
+  padding: 0 20px; }
 
 .portfolio, .contact {
   background-color: #D1F2EB;
@@ -49,7 +50,7 @@ body {
   padding: 6rem 0; }
 
 .navbar {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Candal", sans-serif;
   background-color: #2c3e50;
   width: 100%;
   height: auto;
@@ -62,66 +63,52 @@ body {
   z-index: 1001; }
 
 .navbar-brand {
-  font-size: 25px;
-  font-weight: 600;
-  color: #F9F9F9; }
+  font-size: 30px;
+  color: #F6F6F6; }
 
 .navbar-brand:hover {
   color: #1aBC9C; }
 
 .navbar .navbar-toggler {
-  border: 2px solid #F9F9F9; }
+  border: 2px solid #F6F6F6; }
 
 .navbar-toggler-icon i {
   color: #fff;
   font-size: 25px; }
 
-.navbar .nav-link {
-  color: #F9F9F9;
-  text-transform: uppercase;
+.nav-link {
+  color: #F6F6F6;
   font-size: 20px;
-  font-weight: 600;
   position: relative;
   border-bottom: 3px solid transparent;
   transition: border-color 0.2s; }
 
-.navbar .nav-link:hover {
+.nav-link:hover {
   color: #1aBC9C; }
 
-.nav-item .social-network {
-  font-size: 25px; }
+.dropdown-menu .dropdown-link:hover {
+  background-color: #D1F2EB;
+  color: #2c3e50; }
 
 .masthead {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Candal", sans-serif;
   padding: 3rem 0;
   background-color: #1aBC9C;
-  color: #F9F9F9;
+  color: #F6F6F6;
   padding-top: calc(6rem + 74px); }
   .masthead .masthead__avatar {
     width: 10rem;
     margin-bottom: 3rem; }
-  .masthead .masthead__heading span {
-    font-weight: 600; }
   .masthead .masthead__subheading {
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
-    font-weight: 600; }
+    font-family: "Lato", sans-serif;
+    font-size: 1.6rem;
+    margin-bottom: 1rem; }
 
-.separator-block__line--light {
-  background-color: #F9F9F9; }
-
-.social-network a {
-  color: #2c3e50;
-  background-color: #1aBC9C;
-  font-size: 50px;
-  margin: 5px; }
-
-.social-network a:hover {
-  color: #D6EAF8;
-  background-color: #1aBC9C; }
+.separator-block__icon {
+  color: #2c3e50; }
 
 .page-section__heading {
-  font-family: "Montserrat", sans-serif; }
+  font-family: "Candal", sans-serif; }
 
 .portfolio .portfolio-item {
   cursor: pointer;
@@ -187,36 +174,67 @@ body {
 
 footer {
   background-color: #2c3e50;
-  color: #F9F9F9; }
+  color: #F6F6F6; }
 
 footer .menu-footer {
   color: #1aBC9C; }
 
-footer .nav-link {
-  color: #F9F9F9;
-  font-size: 20px; }
+.sign-form {
+  background-color: white;
+  color: #2c3e50;
+  font-family: "Lato", sans-serif;
+  max-width: 550px;
+  border-radius: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+  padding: 20px; }
 
-.social-network-footer a {
-  color: #F9F9F9;
-  font-size: 50px;
-  margin: 5px; }
+.sign-form-title {
+  font-family: "Candal", sans-serif;
+  border: 4px solid #1aBC9C;
+  border-radius: 5px;
+  padding: 15px; }
 
-.social-network-footer a:hover {
-  color: #D6EAF8; }
+.sign-form .error-message {
+  color: red; }
+
+.sign-form label {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 5px; }
+
+.sign-link {
+  margin-top: 20px; }
+
+.sign-link a {
+  color: #2980B9; }
+
+.sign-link a:hover {
+  color: #94BFDC; }
 
 .btn.btn-custom {
-  font-size: 1.125rem;
   background-color: #2980B9;
-  color: #F9F9F9;
-  border: 2px solid #2980B9;
+  color: #F6F6F6;
   transition: background-color 0.3s ease; }
   .btn.btn-custom:hover {
-    background-color: #D6EAF8;
-    color: #2980B9;
-    border: 2px solid #2980B9; }
+    background-color: #94BFDC;
+    color: #2c3e50; }
 
 .btn.btn-custom.text-custom {
   font-size: 1.3rem; }
+
+.btn-font-size {
+  font-size: 1.125rem; }
+
+.btn-submit {
+  font-size: 1.4rem; }
+
+.social-network a {
+  color: #2980B9;
+  font-size: 50px;
+  margin: 5px; }
+
+.social-network a:hover {
+  color: #94BFDC; }
 
 @media (max-width: 992px) {
   /* Typography */

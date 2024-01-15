@@ -1,17 +1,32 @@
 .btn.btn-custom {
-    font-size: 1.125rem;
-    background-color: $blue-color;
+    background-color: $button-color;
     color: $white-color;
-    border: 2px solid $blue-color;
     transition: background-color 0.3s ease;
 
     &:hover {
-        background-color: $blue-light-color;
-        color: $blue-color;
-        border: 2px solid $blue-color;
+        background-color: $button-light-color;
+        color: $secondary-color;   
     }
 }
 
 .btn.btn-custom.text-custom {
     font-size: 1.3rem;
+}
+
+.btn-font-size {
+    font-size: 1.125rem;
+}
+
+.btn-submit {
+    font-size: 1.4rem;
+}
+
+.social-network a {
+    color: $button-color;
+    font-size: 50px;
+    margin: 5px;
+}
+
+.social-network a:hover {
+    color: $button-light-color;
 }

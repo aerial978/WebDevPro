@@ -6,6 +6,6 @@ class HomeController extends BaseController
 {
     public function index()
     {
-        echo $this->twig->render('front/home.html.twig');
+        $this->twig->display('front/home.html.twig');
     }
 }

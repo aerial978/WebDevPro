@@ -45,7 +45,7 @@
   .form-floating > .form-control:focus ~ label,
   .form-floating > .form-control:not(:placeholder-shown) ~ label {
     transform: scale(0.65) translateY(-0.5rem) translateX(0rem);
-    color: $blue-color;
+    color: $button-color;
   }
 
 

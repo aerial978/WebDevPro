@@ -1,0 +1,38 @@
+.sign-form {
+    background-color: white;
+    color: $secondary-color;
+    font-family: $secondary-font;
+    max-width: 550px;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+    padding: 20px;
+}
+
+.sign-form-title {
+    font-family: $primary-font;
+    border: 4px solid $primary-color;
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.sign-form .error-message {
+    color: red;
+}
+
+.sign-form label {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.sign-link {
+    margin-top: 20px;
+}
+
+.sign-link a {
+    color: $button-color;
+}
+
+.sign-link a:hover {
+    color: $button-light-color;
+}

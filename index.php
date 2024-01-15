@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require  'vendor/autoload.php';
 
 //fonction de rappel anonyme afin de rechercher automatiquement le fichier de classe, le charger, et de l'utiliser.
