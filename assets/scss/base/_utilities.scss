@@ -6,13 +6,16 @@
 
 body {
     background-color: $white-color;
-    font-family: $lato-font;
-    text-decoration: none;
+    font-family: $secondary-font;
+}
+
+section {
+    padding: 0 20px;
 }
 
 .portfolio, .contact {
-    background-color: $green-light-color;
-    color: $grey-color;
+    background-color: $primary-light-color;
+    color: $secondary-color;
 }
 
 .separator-block {
@@ -42,7 +45,7 @@ body {
 }
 
 .separator-block__line--dark {
-    background-color: $grey-color;
+    background-color: $secondary-color;
 }
 
 .page-section {

@@ -1,7 +1,7 @@
 .masthead {
-    font-family: $montserrat-font;
+    font-family: $primary-font;
     padding: 3rem 0; 
-    background-color: $green-color;
+    background-color: $primary-color;
     color: $white-color;
     padding-top: calc(6rem + 74px);
 
@@ -10,29 +10,15 @@
         margin-bottom: 3rem;
     }
 
-    .masthead__heading span {
-        font-weight: 600;
-    }
-
     .masthead__subheading {
-        font-size: 1.4rem;
+        font-family: $secondary-font;
+        font-size: 1.6rem;
         margin-bottom: 1rem;
-        font-weight: 600;
+        
     }
 }
 
-.separator-block__line--light {
-    background-color: $white-color;
+.separator-block__icon {
+    color: $secondary-color;
 }
 
-.social-network a {
-    color: $grey-color;
-    background-color: $green-color;
-    font-size: 50px;
-    margin: 5px;
-}
-
-.social-network a:hover {
-    color: $blue-light-color;
-    background-color: $green-color;
-}

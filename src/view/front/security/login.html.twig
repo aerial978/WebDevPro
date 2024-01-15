@@ -1,0 +1,27 @@
+{% extends 'template/layouts/login_register.html.twig' %}
+
+{% block title %}Login - WebDevPro
+{% endblock %}
+
+{% block content %}
+    <section class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+        <div class="container sign-form">
+            <h3 class="sign-form-title text-center mb-4">Login</h3>
+				{% if errors %}
+				<div class="alert alert-danger" role="alert">
+					<ul class="errors-list">
+						{% for error in errors %}
+							<li>{{ error }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% endif %}
+            <div id="generalError" class="error-message"></div>
+            {{ loginForm|raw }}
+            <div class="sign-link d-flex justify-content-between">
+                <h5><a href="">Forgot password ?</a></h5>
+                <h5>Not a member ?<a href="registration"> Sign up</a></h5>
+            </div>
+        </div>
+    </section>
+{% endblock %}

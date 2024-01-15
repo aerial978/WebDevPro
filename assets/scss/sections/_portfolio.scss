@@ -1,5 +1,5 @@
 .page-section__heading {
-    font-family: $montserrat-font;
+    font-family: $primary-font;
 }
 
 .portfolio .portfolio-item {
@@ -16,7 +16,7 @@
         left: 0;
         transition: all 0.2s ease-in-out;
         opacity: 0;
-        background-color: $green-color;
+        background-color: $primary-color;
     }
     
     .portfolio-item-caption:hover {

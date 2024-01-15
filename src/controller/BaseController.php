@@ -15,5 +15,7 @@ abstract class BaseController
         $this->loader = new FilesystemLoader(__DIR__ . '/../../src/view');
 
         $this->twig = new Environment($this->loader);
+
+        $this->twig->addGlobal('session', $_SESSION);
     }
 }
