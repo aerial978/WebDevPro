@@ -1,0 +1,17 @@
+@media(min-width: 992px) {
+
+    /* Sidebar admin */
+
+    #offcanvasExample {
+        transform: none;
+        visibility: visible;
+        top: 56px;
+        height: calc(100% - 56px);
+    }
+}
+
+@media(max-width: 992px) {
+    main {
+        margin-left: 0;
+    }
+}

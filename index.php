@@ -1,5 +1,11 @@
 <?php
 
+session_set_cookie_params([
+    'secure' => true, // Utiliser seulement pour les connexions HTTPS
+    'httponly' => true,
+    'samesite' => 'Lax', // Ajuster selon vos besoins
+]);
+
 session_start();
 
 require  'vendor/autoload.php';
@@ -19,11 +25,13 @@ spl_autoload_register(function ($class) {
 // Inclure le fichier des routes.
 $routes = include 'config/route.php';
 
-$requestUri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : null;
+$requestUri = isset($_SERVER['REQUEST_URI']) ? stripslashes($_SERVER['REQUEST_URI']) : null;
 
 if ($requestUri) {
     // Extraction de l'URI.
     //$requestUri = parse_url($requestUri, PHP_URL_PATH);
+
+    $cleanedUri = filter_var($requestUri, FILTER_SANITIZE_URL);
 
     $uriSegments = explode('/webdevpro', $requestUri);
 

@@ -22,35 +22,37 @@ class SecurityController extends BaseController
         $errors = [];
 
         try {
-            if (Form::validate($_POST, ['email', 'password'])) {
-                $email = trim(htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8'));
-                $password = trim(htmlspecialchars($_POST['password'], ENT_QUOTES, 'UTF-8'));
-                $confirmPassword = trim($_POST['confirm_password']);
+            if (isset($_POST['email'], $_POST['password'], $_POST['confirm_password'])) {
+                if (Form::validate($_POST, ['email', 'password'])) {
+                    $email = trim(htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8'));
+                    $password = trim(htmlspecialchars($_POST['password'], ENT_QUOTES, 'UTF-8'));
+                    $confirmPassword = trim($_POST['confirm_password']);
 
-                if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    $errors['email'] = ErrorMessage::EMAIL_INVALID;
-                }
+                    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        $errors['email'] = ErrorMessage::EMAIL_INVALID;
+                    }
 
-                $regexPassword = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$#!%*?&])[A-Za-z\d@$#!%*?&]{12,}$/';
-                if (empty($password) || !preg_match($regexPassword, $password)) {
-                    $errors['password'] = ErrorMessage::PASSWORD_INVALID;
-                }
+                    $regexPassword = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$#!%*?&])[A-Za-z\d@$#!%*?&]{12,}$/';
+                    if (empty($password) || !preg_match($regexPassword, $password)) {
+                        $errors['password'] = ErrorMessage::PASSWORD_INVALID;
+                    }
 
-                if (empty($confirmPassword) || $confirmPassword !== $password) {
-                    $errors['password_confirm'] = ErrorMessage::PASSWORD_MISMATCH;
-                }
+                    if (empty($confirmPassword) || $confirmPassword !== $password) {
+                        $errors['password_confirm'] = ErrorMessage::PASSWORD_MISMATCH;
+                    }
 
-                if (empty($errors)) {
-                    $user = new UserModel();
-                    if ($user->findOneByEmail($email)) {
-                        $errors['emailexist'] = ErrorMessage::EMAIL_ALREADYEXISTS;
-                    } else {
-                        $password = password_hash($_POST['password'], PASSWORD_ARGON2I);
+                    if (empty($errors)) {
+                        $user = new UserModel();
+                        if ($user->findOneByEmail($email)) {
+                            $errors['emailexist'] = ErrorMessage::EMAIL_ALREADYEXISTS;
+                        } else {
+                            $password = password_hash($_POST['password'], PASSWORD_ARGON2I);
 
-                        $user->setEmail($email)
-                            ->setPassword($password);
+                            $user->setEmail($email)
+                                ->setPassword($password);
 
-                        $user->create();
+                            $user->create();
+                        }
                     }
                 }
             }
@@ -58,21 +60,29 @@ class SecurityController extends BaseController
             $securityService = new SecurityService();
             $registrationForm = $securityService->registrationService();
 
-            $this->twig->display('front/Security/registration.html.twig', [
+            $this->twig->display('frontend/Security/registration.html.twig', [
                 'errors' => $errors,
                 'registrationForm' => $registrationForm->create()
             ]);
         } catch (\Exception $e) {
             header('Location: /error-page-500');
+            exit;
         }
     }
 
+    /**
+    * Gère le processus de connexion de l'utilisateur.
+    *
+    * Cette méthode vérifie les données de connexion reçues et authentifie l'utilisateur.
+    *
+    * @return void
+    */
     public function handleLogin()
     {
         $errors = [];
 
         try {
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (!empty($_POST['email']) || !empty($_POST['password'])) {
                     $userModel = new UserModel();
                     $userArray = $userModel->findOneByEmail(strip_tags($_POST['email']));
@@ -82,7 +92,7 @@ class SecurityController extends BaseController
                         $hashPassword = $user->getPassword();
                         if (password_verify($_POST['password'], $hashPassword)) {
                             $user->setSession();
-                            header('Location: home');
+                            header('Location: dashboard');
                         } else {
                             $errors['error'] = 'Invalid email address or/and password !';
                         }
@@ -97,19 +107,25 @@ class SecurityController extends BaseController
             $securityService = new SecurityService();
             $loginForm = $securityService->loginService();
 
-            $this->twig->display('front/Security/login.html.twig', [
+            $this->twig->display('frontend/Security/login.html.twig', [
                 'errors' => $errors,
                 'loginForm' => $loginForm->create(),
             ]);
         } catch (\Exception $e) {
             header('Location: /error-page-500');
+            exit;
         }
     }
 
+    /**
+     * Déconnecte l'utilisateur en supprimant sa session.
+     *
+     * @return void
+     */
     public function logout()
     {
         unset($_SESSION['user']);
-        header('Location: '. $_SERVER['HTTP_REFERER']);
+        header('Location: home');
         exit;
     }
 }

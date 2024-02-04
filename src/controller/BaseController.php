@@ -4,6 +4,7 @@ namespace src\controller;
 
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
+use src\Session\SessionManager;
 
 abstract class BaseController
 {
@@ -16,6 +17,7 @@ abstract class BaseController
 
         $this->twig = new Environment($this->loader);
 
-        $this->twig->addGlobal('session', $_SESSION);
+        $sessionManager = new SessionManager();
+        $this->twig->addGlobal('session', $sessionManager->getAll());
     }
 }

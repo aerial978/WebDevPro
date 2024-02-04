@@ -3,6 +3,7 @@
 namespace src\Models;
 
 use src\Models\Model;
+use src\Session\SessionManager;
 
 class UserModel extends Model
 {
@@ -43,11 +44,12 @@ class UserModel extends Model
         $username = $parts[0]; // Ceci contiendra la partie avant le "@" de l'e-mail
 
         // Enregistrer l'ID de l'utilisateur et le nom d'utilisateur dans la session
-        $_SESSION['user'] = [
+        $sessionManager = new SessionManager();
+        $sessionManager->set('user', [
             'id' => $this->id,
             'email' => $this->email,
             'username' => $username
-        ];
+        ]);
     }
 
     /**

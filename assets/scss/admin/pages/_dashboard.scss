@@ -1,0 +1,99 @@
+main {
+    margin-left: 270px;
+    height: 100vh;
+    max-height: 100vh;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+.dashboard .cards-dash .card {
+    color: white;
+    border: none;
+    box-shadow: rgba(77, 55, 55, 0.5) 0 5px 15px;
+}
+
+.dashboard .cards-dash .card-posts {
+    background: linear-gradient(to right, #0D6EFD, #00D4FF);
+}
+
+.dashboard .cards-dash .card-comments{
+    background: linear-gradient(to right, #FFC107, #FFE083);
+}
+
+.dashboard .cards-dash .card-projects {
+    background: linear-gradient(to right, #DC3545, #ED9AA2);
+}
+
+.dashboard .cards-dash .card-categories {
+    background: linear-gradient(to right, #198754, #8CC3A9);
+}
+
+.dashboard .cards-dash .card-tags {
+    background: linear-gradient(to right, #800080, #B18BBB);
+}
+
+.dashboard .cards-dash .card-accounts {
+    background: linear-gradient(to right, #FF69B4, #FFB6C1);
+}
+
+.dashboard .cards-dash .card-roles {
+    background: linear-gradient(to right, #219EBC, #8Fd9EB);
+}
+
+.dashboard .cards-dash .card-medias {
+    background: linear-gradient(to right, #FF8000, #FFC489);
+}
+
+.dashboard .card .card-body {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 125px;
+    margin: 5px;
+}
+/*
+.dashboard .card .card-footer {
+    color: white;
+    text-decoration: none;
+}*/
+
+.dashboard .card-body .card-icon {
+    font-size: 55px;
+    color: white;
+}
+
+.dashboard .card .card-footer:hover {
+    background: white;
+}
+
+.dashboard .card-posts .card-footer:hover {
+    color: #0D6EFD;
+}
+
+.dashboard .card-comments .card-footer:hover {
+    color: #FFC107;
+}
+
+.dashboard .card-projects .card-footer:hover {
+    color: #DC3545;
+}
+
+.dashboard .card-categories .card-footer:hover {
+    color: #198754;
+}
+
+.dashboard .card-tags .card-footer:hover {
+    color: #800080;
+}
+
+.dashboard .card-accounts .card-footer:hover {
+    color: #FF69B4;
+}
+
+.dashboard .card-roles .card-footer:hover {
+    color: #219EBC;
+}
+
+.dashboard .card-medias .card-footer:hover {
+    color: #FF8000;
+}
