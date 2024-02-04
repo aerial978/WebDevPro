@@ -1,7 +1,7 @@
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-front navbar-expand-lg">
 	<div class="container">
-		<a class="navbar-brand" href="home">Michel HATHIER</a>
-		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		<a class="navbar-brand navbar-brand-front" href="home">WebDevPro</a>
+		<button class="navbar-toggler navbar-toggler-front" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon">
 				<i class="fas fa-bars"></i>
 			</span>
@@ -9,24 +9,24 @@
 		<div class="navbar-collapse collapse" id="navbarNav">
 			<ul class="navbar-nav py-2 m-auto">
 				<li class="nav-item mx-0 mx-lg-1">
-					<a class="nav-link py-2 px-0 px-lg-2" href="home">Home</a>
+					<a class="nav-link nav-link-front py-2 px-0 px-lg-2" href="home">Home</a>
 				</li>
 				<li class="nav-item mx-0 mx-lg-1">
-					<a class="nav-link py-2 px-0 px-lg-3" href="">Projects</a>
+					<a class="nav-link nav-link-front py-2 px-0 px-lg-3" href="">Projects</a>
 				</li>
 				<li class="nav-item mx-0 mx-lg-1">
-					<a class="nav-link py-2 px-0 px-lg-3" href="">Blog</a>
+					<a class="nav-link nav-link-front py-2 px-0 px-lg-3" href="">Blog</a>
 				</li>
 			</ul>
 			{% if session.user is not null %}
 				<div class="navbar-nav ml-auto">
 					<div class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<a class="nav-link-front dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							<img src="public/img/default.png" alt="user-pic" class="rounded-5" width="55">
 							<span class="ms-2">{{ session.user.username }}</span>
 						</a>
 						<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-							<a class="dropdown-item dropdown-link" href="#">Dashboard</a>
+							<a class="dropdown-item dropdown-link" href="dashboard">Dashboard</a>
 							<a class="dropdown-item dropdown-link" href="logout">Logout</a>
 						</div>
 					</div>
@@ -34,10 +34,10 @@
 			{% else %}
 				<ul class="navbar-nav">
 					<li class="nav-item">
-						<a class="nav-link py-2 px-0 px-lg-3" href="registration">Sign up</a>
+						<a class="nav-link-front py-2 px-0 px-lg-3" href="registration">Sign up</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link py-2 px-0 px-lg-3" href="login">Sign in</a>
+						<a class="nav-link-front py-2 px-0 px-lg-3" href="login">Sign in</a>
 					</li>
 				</ul>
 			{% endif %}

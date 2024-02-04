@@ -4,22 +4,28 @@
 
 @import 'base/utilities';
 
-@import 'sections/navbar';
-
-@import 'sections/hero';
-
-@import 'sections/portfolio';
-
-@import 'sections/about';
-
-@import 'sections/contact';
-
-@import 'sections/footer';
-
 @import 'components/forms';
 
 @import 'components/buttons';
 
-@import 'sections/responsive';
+@import 'front_end/sections/navbar_front_end';
+
+@import 'front_end/sections/footer';
+
+@import 'front_end/sections/hero';
+
+@import 'front_end/sections/portfolio';
+
+@import 'front_end/sections/about';
+
+@import 'front_end/sections/contact';
+
+@import 'front_end/responsive';
+
+@import 'admin/sections/_navbar_admin';
+
+@import 'admin/pages/dashboard';
+
+@import 'admin/_responsive_admin';
 
 

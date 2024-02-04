@@ -1,4 +1,4 @@
-.navbar {
+.navbar-front {
     font-family: $primary-font;
     background-color: $secondary-color;
     width: 100%;
@@ -9,20 +9,20 @@
     z-index: 1000;
 }
 
-.navbar-toggler {
+.navbar-toggler-front {
     z-index: 1001;
 }
 
-.navbar-brand {
+.navbar-brand-front {
     font-size: 30px;
     color: $white-color;
 }
 
-.navbar-brand:hover {
+.navbar-brand-front:hover {
     color: $primary-color;
 }
 
-.navbar .navbar-toggler {
+.navbar-front .navbar-toggler-front {
     border: 2px solid $white-color;
 }
 
@@ -31,7 +31,7 @@
     font-size:25px;
 }
 
-.nav-link {
+.nav-link-front {
     color: $white-color;
     font-size: 20px;
     position: relative;
@@ -39,7 +39,7 @@
     transition: border-color 0.2s;
 }
 
-.nav-link:hover {
+.nav-link-front:hover {
     color: $primary-color;
 }
 
