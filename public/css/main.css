@@ -295,7 +295,6 @@ footer .menu-footer {
 
 main {
   margin-left: 270px;
-  height: 100vh;
   max-height: 100vh;
   overflow-x: auto;
   overflow-y: auto; }
@@ -371,6 +370,46 @@ main {
 
 .dashboard .card-medias .card-footer:hover {
   color: #FF8000; }
+
+#offcanvasExample {
+  background-color: #2c3e50;
+  width: 270px; }
+
+.sidebar-link {
+  display: flex;
+  align-items: center; }
+
+.sidebar-link .right-icon {
+  display: inline-flex;
+  transition: all ease 0.25s; }
+
+.sidebar-link[aria-expanded="true"] .right-icon {
+  transform: rotate(180deg); }
+
+.card-body textarea {
+  display: none; }
+
+.card-header {
+  background-color: #cee2fe; }
+
+.image-wrapper {
+  padding: 25px 0;
+  height: 185px; }
+
+.image-wrapper .image-btn {
+  width: 100%;
+  border-radius: 5px;
+  height: 37px;
+  background-color: #d3d3d3;
+  border: 1px dashed grey;
+  display: flex;
+  align-items: center;
+  justify-content: space-around; }
+
+.image-wrapper .bg-image {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center; }
 
 @media (min-width: 992px) {
   /* Sidebar admin */

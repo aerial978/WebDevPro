@@ -89,6 +89,7 @@ class Form
     public function endForm(): self
     {
         $this->formCode .= '</form>';
+
         return $this;
     }
 
@@ -130,6 +131,7 @@ class Form
 
     public function addTextarea(string $name, string $value = '', array $attributes = []): self
     {
+        $this->formCode .= "<div id='editor'></div>";
         // On ouvre la balise
         $this->formCode .= "<textarea name='$name'";
 
@@ -142,13 +144,15 @@ class Form
         return $this;
     }
 
-    public function addSelect(string $name, array $options, array $attributes = []): self
+    public function addSelect(string $name, array $options, string $defaultText, array $attributes = []): self
     {
         // On crée le select
         $this->formCode .= "<select name='$name'";
 
         // On ajoute les attributs
         $this->formCode .= $attributes ? $this->addAttributes($attributes) . '>' : '>';
+
+        $this->formCode .= "<option value='' selected disabled>Select a $defaultText</option>";
 
         // On ajoute les options
         foreach ($options as $value => $text) {
@@ -161,10 +165,10 @@ class Form
         return $this;
     }
 
-    public function addButton(string $text, string $type, array $attributes = []): self
+    public function addButton(string $text, string $type, string $name, array $attributes = []): self
     {
         // On ouvre le bouton
-        $this->formCode .= "<br><button type='$type' ";
+        $this->formCode .= "<br><button type='$type' name='$name'";
 
         // On ajoute les attributs
         $this->formCode .= $attributes ? $this->addAttributes($attributes) : '';
@@ -172,6 +176,52 @@ class Form
         // On ajoute le texte et on ferme
         $this->formCode .= ">$text</button>";
 
+        return $this;
+    }
+
+    public function addImageInput(string $name, array $attributes = []): self
+    {
+        // Ouvrir la balise div pour le champ image
+        $this->formCode .= "<div class='image-wrapper'>";
+
+        // Ajouter le champ input de type file
+        $this->formCode .= "<input type='file' name='$name' class='visually-hidden image-input'";
+
+        // Ajouter les attributs éventuels
+        $this->formCode .= $attributes ? $this->addAttributes($attributes) : '';
+
+        // Fermer la balise input
+        $this->formCode .= '>';
+
+        // Ajouter le bouton "Choose Image"
+        $this->formCode .= "<button type='button' class='btn image-btn bg-image img-fluid'>";
+        $this->formCode .= "<span class='choose-image-label me-1'><i class='bi bi-image'></i>";
+        $this->formCode .= "<span> Upload an image</span></span>";
+        $this->formCode .= "</button><p id='fileName'></p>";
+        $this->formCode .= "<div id='postImageError' class='text-danger'></div>";
+
+        // Fermer la balise div pour le champ image
+        $this->formCode .= '</div>';
+        return $this;
+    }
+
+    public function startDiv(array $attributes = []): self
+    {
+        // On ouvre la balise div
+        $this->formCode .= "<div";
+
+        // On ajoute les attributs éventuels
+        $this->formCode .= $attributes ? $this->addAttributes($attributes) : '';
+
+        // On ferme la balise div
+        $this->formCode .= '>';
+
+        return $this;
+    }
+
+    public function endDiv(): self
+    {
+        $this->formCode .= '</div>';
         return $this;
     }
 }

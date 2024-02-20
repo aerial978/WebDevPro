@@ -6,6 +6,6 @@ class PrivacyPolicyController extends BaseController
 {
     public function index()
     {
-        echo $this->twig->render('frontend/privacy-policy.html.twig');
+        $this->twig->display('frontend/privacy_policy.html.twig');
     }
 }

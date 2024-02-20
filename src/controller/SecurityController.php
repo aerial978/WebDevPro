@@ -5,7 +5,7 @@ namespace src\controller;
 use src\Core\Form;
 use src\Models\UserModel;
 use src\Constants\ErrorMessage;
-use src\Service\SecurityService;
+use src\Service\FormService;
 
 class SecurityController extends BaseController
 {
@@ -57,8 +57,8 @@ class SecurityController extends BaseController
                 }
             }
 
-            $securityService = new SecurityService();
-            $registrationForm = $securityService->registrationService();
+            $formService = new FormService();
+            $registrationForm = $formService->registrationService();
 
             $this->twig->display('frontend/Security/registration.html.twig', [
                 'errors' => $errors,
@@ -92,7 +92,7 @@ class SecurityController extends BaseController
                         $hashPassword = $user->getPassword();
                         if (password_verify($_POST['password'], $hashPassword)) {
                             $user->setSession();
-                            header('Location: dashboard');
+                            header('Location: admin/dashboard');
                         } else {
                             $errors['error'] = 'Invalid email address or/and password !';
                         }
@@ -104,8 +104,8 @@ class SecurityController extends BaseController
                 }
             }
 
-            $securityService = new SecurityService();
-            $loginForm = $securityService->loginService();
+            $formService = new FormService();
+            $loginForm = $formService->loginService();
 
             $this->twig->display('frontend/Security/login.html.twig', [
                 'errors' => $errors,
@@ -124,7 +124,21 @@ class SecurityController extends BaseController
      */
     public function logout()
     {
-        unset($_SESSION['user']);
+        // Démarrez la session si ce n'est pas déjà fait
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Utilisez isset() pour vérifier si la clé est définie dans $_SESSION
+        if (isset($_SESSION['user'])) {
+            // Supprimez la clé 'user' de la session
+            unset($_SESSION['user']);
+        }
+
+        // Terminez la session
+        session_destroy();
+
+        // Redirigez vers la page d'accueil
         header('Location: home');
         exit;
     }

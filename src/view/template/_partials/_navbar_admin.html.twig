@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
 	<div class="container-fluid">
 		<button class="navbar-toggler me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
 			<span class="navbar-toggler-icon"></span>
@@ -20,11 +20,11 @@
 			<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						<img src="public/img/default.png" alt="user" class="rounded-circle" height="25">
+						<img src="{{ base_path }}public/img/default.png" alt="user" class="rounded-circle" height="25">
 					</a>
 					<ul class="dropdown-menu dropdown-menu-end my-2">
 						<li>
-							<a class="dropdown-item" href="home">Home</a>
+							<a class="dropdown-item" href="{{ base_path }}home">Home</a>
 						</li>
 						<li>
 							<a class="dropdown-item" href="#">Another action</a>
@@ -32,7 +32,7 @@
 						<li><hr class="dropdown-divider"></li>
 						<li>
 
-							<a class="dropdown-item text-danger" href="logout">
+							<a class="dropdown-item text-danger" href="{{ base_path }}logout">
 								<span class="me-2">
 									<i class="bi bi-box-arrow-right"></i>
 								</span>
@@ -45,4 +45,5 @@
 		</div>
 	</div>
 </nav>
+
 

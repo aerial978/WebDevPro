@@ -2,11 +2,11 @@
 	<div class="offcanvas-body p-0">
 		<nav>
 			<div class="d-flex justify-content-center my-5">
-				<img class="masthead__avatar" src="public/img/avatar.png" alt="avatar" width="90">
+				<img class="masthead__avatar" src="{{ base_path }}public/img/avatar.png" alt="avatar" width="90">
 			</div>
 			<ul class="navbar-nav">
 				<li>
-					<a href="dashboard" class="nav-link px-3 active">
+					<a href="{{ base_path }}admin/dashboard" class="nav-link px-3 active">
 						<span class="me-2">
 							<i class="bi bi-speedometer2"></i>
 						</span>
@@ -30,11 +30,11 @@
 						<div>
 							<ul class="navbar-nav ps-3">
 								<li>
-									<a href="#" class="nav-link px-3">
+									<a href="{{ base_path }}admin/posts/create" class="nav-link px-3">
 										<span class="me-2">
 											<i class="bi bi-pencil"></i>
 										</span>
-										<span>Nested Link</span>
+										<span>Create</span>
 									</a>
 								</li>
 							</ul>

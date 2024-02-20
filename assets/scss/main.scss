@@ -22,9 +22,11 @@
 
 @import 'front_end/responsive';
 
-@import 'admin/sections/_navbar_admin';
+@import 'admin/sections/_sidebar_admin';
 
 @import 'admin/pages/dashboard';
+
+@import 'admin/pages/create_post';
 
 @import 'admin/_responsive_admin';
 

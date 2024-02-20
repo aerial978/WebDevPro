@@ -1,12 +1,13 @@
 <?php
-
+/*
 session_set_cookie_params([
     'secure' => true, // Utiliser seulement pour les connexions HTTPS
     'httponly' => true,
     'samesite' => 'Lax', // Ajuster selon vos besoins
 ]);
 
-session_start();
+session_start();*/
+
 
 require  'vendor/autoload.php';
 
