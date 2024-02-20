@@ -17,6 +17,8 @@ abstract class BaseController
 
         $this->twig = new Environment($this->loader);
 
+        $this->twig->addGlobal('base_path', '/webdevpro/');
+
         $sessionManager = new SessionManager();
         $this->twig->addGlobal('session', $sessionManager->getAll());
     }

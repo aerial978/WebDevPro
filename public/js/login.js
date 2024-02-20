@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (email.value.trim() === '') {
                 isValid = false;
             } else if (!isValidEmail(email.value)) {
-                errorMessage = 'Veuillez entrer une adresse e-mail valide.';
+                errorMessage = 'Please enter a valid email address !';
                 isValid = false;
             }
 

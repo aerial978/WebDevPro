@@ -1,0 +1,33 @@
+{% extends 'template/layouts/base_admin.html.twig' %}
+
+{% block title %}Posts Create
+{% endblock %}
+
+{% block content %}
+	<main>
+		<div class="container-fluid px-4">
+            <div class="row mt-4">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header d-flex justify-content-between">
+							<h4>Create Post</h4>
+							<a href="" class="btn btn-danger">Back</a>
+						</div>
+						<div class="card-body">
+						{% if errors %}
+							<div class="alert alert-danger" role="alert">
+								<ul class="errors-list">
+									{% for error in errors %}
+										<li>{{ error }}</li>
+									{% endfor %}
+								</ul>
+							</div>
+						{% endif %}
+						{{ createPostForm|raw }}
+						</div>
+					</div>
+				</div>
+            </div>
+		</div>
+	</main>
+{% endblock %}

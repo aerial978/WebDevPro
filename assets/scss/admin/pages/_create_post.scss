@@ -1,0 +1,29 @@
+.card-body textarea {
+    display: none;
+}
+
+.card-header {
+    background-color: #cee2fe;
+}
+
+.image-wrapper {
+    padding: 25px 0;
+    height: 185px;
+}
+
+.image-wrapper .image-btn {
+    width: 100%;
+    border-radius: 5px;
+    height: 37px;
+    background-color: #d3d3d3;
+    border: 1px dashed grey;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.image-wrapper .bg-image {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}

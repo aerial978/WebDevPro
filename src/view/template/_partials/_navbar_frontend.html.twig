@@ -9,7 +9,7 @@
 		<div class="navbar-collapse collapse" id="navbarNav">
 			<ul class="navbar-nav py-2 m-auto">
 				<li class="nav-item mx-0 mx-lg-1">
-					<a class="nav-link nav-link-front py-2 px-0 px-lg-2" href="home">Home</a>
+					<a class="nav-link nav-link-front py-2 px-0 px-lg-2" href="{{ base_path }}home">Home</a>
 				</li>
 				<li class="nav-item mx-0 mx-lg-1">
 					<a class="nav-link nav-link-front py-2 px-0 px-lg-3" href="">Projects</a>
@@ -26,8 +26,8 @@
 							<span class="ms-2">{{ session.user.username }}</span>
 						</a>
 						<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-							<a class="dropdown-item dropdown-link" href="dashboard">Dashboard</a>
-							<a class="dropdown-item dropdown-link" href="logout">Logout</a>
+							<a class="dropdown-item dropdown-link" href="{{ base_path }}admin/dashboard">Dashboard</a>
+							<a class="dropdown-item dropdown-link" href="{{ base_path }}logout">Logout</a>
 						</div>
 					</div>
 				</div>
