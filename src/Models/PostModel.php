@@ -9,15 +9,27 @@ class PostModel extends Model
     protected $id;
     protected $title;
     protected $introduction;
-    protected $postContent;
+    protected $post_content;
     protected $category;
-    protected $postStatus;
-    protected $postImage;
+    protected $post_status;
+    protected $post_image;
     protected $user_id;
+    protected $created_at_post;
+    protected $updated_at_post;
 
     public function __construct()
     {
         $this->table = "Post";
+    }
+
+    public function findAll()
+    {
+        $sql = "SELECT *, DATE_FORMAT(created_at_post, '%d/%m/%Y %H:%i:%s') AS date_create, post.id AS postId FROM {$this->table}
+                JOIN user ON post.user_id = user.id";
+
+        $query = $this->request($sql);
+
+        return $query->fetchAll();
     }
 
     /**
@@ -85,7 +97,7 @@ class PostModel extends Model
     */
     public function getPostContent()
     {
-        return $this->postContent;
+        return $this->post_content;
     }
 
     /**
@@ -93,9 +105,9 @@ class PostModel extends Model
      *
      * @return  self
      */
-    public function setPostContent($postContent)
+    public function setPostContent($post_content)
     {
-        $this->postContent = $postContent;
+        $this->post_content = $post_content;
 
         return $this;
     }
@@ -125,7 +137,7 @@ class PostModel extends Model
      */
     public function getPostStatus()
     {
-        return $this->postStatus;
+        return $this->post_status;
     }
 
     /**
@@ -133,9 +145,9 @@ class PostModel extends Model
      *
      * @return  self
      */
-    public function setPostStatus($postStatus)
+    public function setPostStatus($post_status)
     {
-        $this->postStatus = $postStatus;
+        $this->post_status = $post_status;
 
         return $this;
     }
@@ -145,7 +157,7 @@ class PostModel extends Model
     */
     public function getPostImage()
     {
-        return $this->postImage;
+        return $this->post_image;
     }
 
     /**
@@ -153,9 +165,9 @@ class PostModel extends Model
      *
      * @return  self
      */
-    public function setPostImage($postImage)
+    public function setPostImage($post_image)
     {
-        $this->postImage = $postImage;
+        $this->post_image = $post_image;
 
         return $this;
     }
@@ -176,6 +188,46 @@ class PostModel extends Model
     public function setUser_id(int $user_id)
     {
         $this->user_id = $user_id;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of date
+     */
+    public function getCreated_at_post()
+    {
+        return $this->created_at_post;
+    }
+
+    /**
+     * Set the value of date
+     *
+     * @return  self
+     */
+    public function setCreated_at_post()
+    {
+        $this->created_at_post = date('Y-m-d H:i:s');
+
+        return $this;
+    }
+
+    /**
+     * Get the value of update
+     */
+    public function getUpdated_at_post()
+    {
+        return $this->updated_at_post;
+    }
+
+    /**
+     * Set the value of update
+     *
+     * @return  self
+     */
+    public function setUpdated_at_post()
+    {
+        $this->updated_at_post = date('Y-m-d H:i:s');
 
         return $this;
     }

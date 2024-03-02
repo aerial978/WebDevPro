@@ -296,8 +296,8 @@ footer .menu-footer {
 main {
   margin-left: 270px;
   max-height: 100vh;
-  overflow-x: auto;
-  overflow-y: auto; }
+  /*overflow-x: auto!important;
+    overflow-y: auto!important;*/ }
 
 .dashboard .cards-dash .card {
   color: white;
@@ -335,11 +335,10 @@ main {
   height: 125px;
   margin: 5px; }
 
-/*
-.dashboard .card .card-footer {
-    color: white;
-    text-decoration: none;
-}*/
+.dashboard .card .card-footer a {
+  color: white;
+  text-decoration: none; }
+
 .dashboard .card-body .card-icon {
   font-size: 55px;
   color: white; }
@@ -347,44 +346,29 @@ main {
 .dashboard .card .card-footer:hover {
   background: white; }
 
-.dashboard .card-posts .card-footer:hover {
+.dashboard .card-posts .card-footer a:hover {
   color: #0D6EFD; }
 
-.dashboard .card-comments .card-footer:hover {
+.dashboard .card-comments .card-footer a:hover {
   color: #FFC107; }
 
-.dashboard .card-projects .card-footer:hover {
+.dashboard .card-projects .card-footer a:hover {
   color: #DC3545; }
 
-.dashboard .card-categories .card-footer:hover {
+.dashboard .card-categories .card-footer a:hover {
   color: #198754; }
 
-.dashboard .card-tags .card-footer:hover {
+.dashboard .card-tags .card-footer a:hover {
   color: #800080; }
 
-.dashboard .card-accounts .card-footer:hover {
+.dashboard .card-accounts .card-footer a:hover {
   color: #FF69B4; }
 
-.dashboard .card-roles .card-footer:hover {
+.dashboard .card-roles .card-footer a:hover {
   color: #219EBC; }
 
-.dashboard .card-medias .card-footer:hover {
+.dashboard .card-medias .card-footer a:hover {
   color: #FF8000; }
-
-#offcanvasExample {
-  background-color: #2c3e50;
-  width: 270px; }
-
-.sidebar-link {
-  display: flex;
-  align-items: center; }
-
-.sidebar-link .right-icon {
-  display: inline-flex;
-  transition: all ease 0.25s; }
-
-.sidebar-link[aria-expanded="true"] .right-icon {
-  transform: rotate(180deg); }
 
 .card-body textarea {
   display: none; }
@@ -392,24 +376,8 @@ main {
 .card-header {
   background-color: #cee2fe; }
 
-.image-wrapper {
-  padding: 25px 0;
-  height: 185px; }
-
-.image-wrapper .image-btn {
-  width: 100%;
-  border-radius: 5px;
-  height: 37px;
-  background-color: #d3d3d3;
-  border: 1px dashed grey;
-  display: flex;
-  align-items: center;
-  justify-content: space-around; }
-
-.image-wrapper .bg-image {
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center; }
+.centered-cell {
+  vertical-align: middle !important; }
 
 @media (min-width: 992px) {
   /* Sidebar admin */

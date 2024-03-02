@@ -52,7 +52,7 @@ class FormService
     {
         $createPostForm = new Form();
 
-        $createPostForm->startForm('post', 'create', ['class' => '', 'enctype' => 'multipart/form-data', 'id' => 'postCreateForm'])
+        $createPostForm->startForm('post', '', ['class' => '', 'enctype' => 'multipart/form-data', 'id' => 'createPostForm'])
 
             ->addLabelFor('title', 'Title', ['class' => 'mt-3'])
             ->addInput('text', 'title', ['class' => 'form-control', 'id' => 'title'])
@@ -68,23 +68,69 @@ class FormService
 
             ->startDiv(['class' => 'row'])
                 ->startDiv(['class' => 'col-md-6 mt-4'])
-                ->addSelect('category', ['Html' => 'Html', 'CSS' => 'CSS', 'Javascript' => 'Javascript'], 'category', ['class' => 'form-select', 'id' => 'category'])
+                ->addSelect('category', ['Html' => 'Html', 'CSS' => 'CSS', 'Javascript' => 'Javascript'], 'category', '', ['class' => 'form-select', 'id' => 'category'])
                 ->addError('categoryError', ['class' => 'text-danger'])
                 ->endDiv()
                 ->startDiv(['class' => 'col-md-6 mt-4'])
-                    ->addSelect('postStatus', ['Draft' => 'Draft', 'Waiting' => 'Waiting', 'Published' => 'Published', 'Archived' => 'Archived'], 'status', ['class' => 'form-select', 'id' => 'postStatus'])
+                    ->addSelect('postStatus', ['Draft' => 'Draft', 'Waiting' => 'Waiting', 'Published' => 'Published', 'Archived' => 'Archived'], 'status', '', ['class' => 'form-select', 'id' => 'postStatus'])
                     ->addError('postStatusError', ['class' => 'text-danger'])
                 ->endDiv()
             ->endDiv()
             ->startDiv(['class' => 'row'])
-                ->startDiv(['class' => 'col-md-6 mt-2'])
-                    ->addImageInput('postImage', ['class' => 'h75', 'id' => 'postImage'])
+                ->startDiv(['class' => 'col-md-6 mt-4'])
+                    ->addInput('file', 'postImage', ['class' => 'form-control', 'id' => 'postImage'])
+                    ->addError('postImageError', ['class' => 'text-danger'])
+                ->endDiv()
+                ->startDiv(['class' => 'col-md-6 mt-4'])
+                    ->imagePreview()
                 ->endDiv()
             ->endDiv()
-
             ->addButton('Submit', 'submit', 'submit', ['class' => 'btn btn-custom p-2', 'id' => 'submit'])
             ->endForm();
 
         return $createPostForm;
+    }
+
+    public function editPostService($post)
+    {
+        $editPostForm = new Form();
+
+        $editPostForm->startForm('post', '', ['class' => '', 'enctype' => 'multipart/form-data', 'id' => 'editPostForm'])
+
+        ->addLabelFor('title', 'Title', ['class' => 'mt-3'])
+        ->addInput('text', 'title', ['class' => 'form-control', 'id' => 'title', 'value' => $post->title])
+        ->addError('titleError', ['class' => 'text-danger'])
+
+        ->addLabelFor('introduction', 'Introduction', ['class' => 'mt-3'])
+        ->addInput('text', 'introduction', ['class' => 'form-control', 'id' => 'introduction', 'value' => $post->introduction])
+        ->addError('introductionError', ['class' => 'text-danger'])
+
+        ->addLabelFor('postContent', 'Content', ['class' => 'mt-3'])
+        ->addTextarea('postContent', $post->post_content, ['class' => 'form-control', 'id' => 'postContent'])
+        ->addError('postContentError', ['class' => 'text-danger'])
+
+        ->startDiv(['class' => 'row'])
+            ->startDiv(['class' => 'col-md-6 mt-4'])
+            ->addSelect('category', ['Html' => 'Html', 'CSS' => 'CSS', 'Javascript' => 'Javascript'], 'category', $post->category, ['class' => 'form-select', 'id' => 'category'])
+            ->addError('categoryError', ['class' => 'text-danger'])
+            ->endDiv()
+            ->startDiv(['class' => 'col-md-6 mt-4'])
+                ->addSelect('postStatus', ['Draft' => 'Draft', 'Waiting' => 'Waiting', 'Published' => 'Published', 'Archived' => 'Archived'], 'status', $post->post_status, ['class' => 'form-select', 'id' => 'postStatus'])
+                ->addError('postStatusError', ['class' => 'text-danger'])
+            ->endDiv()
+        ->endDiv()
+        ->startDiv(['class' => 'row'])
+            ->startDiv(['class' => 'col-md-6 mt-4'])
+                ->addInput('file', 'postImages', ['class' => 'form-control', 'id' => 'postImage'])
+                ->addError('postImageError', ['class' => 'text-danger'])
+            ->endDiv()
+            ->startDiv(['class' => 'col-md-6 mt-4'])
+                ->editImage($post->post_image, $post->post_image)
+            ->endDiv()
+        ->endDiv()
+        ->addButton('Submit', 'submit', 'submit', ['class' => 'btn btn-custom p-2', 'id' => 'submit'])
+        ->endForm();
+
+        return $editPostForm;
     }
 }

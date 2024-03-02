@@ -8,6 +8,7 @@ use src\Session\SessionManager;
 class UserModel extends Model
 {
     protected $id;
+    protected $username;
     protected $email;
     protected $password;
     protected $roles;
@@ -36,19 +37,11 @@ class UserModel extends Model
      */
     public function setSession()
     {
-        // Récupérer l'e-mail de l'utilisateur
-        $userEmail = $this->email;
-
-        // Diviser l'e-mail pour obtenir la partie avant le "@"
-        $parts = explode('@', $userEmail);
-        $username = $parts[0]; // Ceci contiendra la partie avant le "@" de l'e-mail
-
-        // Enregistrer l'ID de l'utilisateur et le nom d'utilisateur dans la session
+        // Enregistrer l'ID de l'utilisateur et le username dans la session
         $sessionManager = new SessionManager();
         $sessionManager->set('user', [
             'id' => $this->id,
-            'email' => $this->email,
-            'username' => $username
+            'username' => $this->username
         ]);
     }
 
@@ -68,6 +61,26 @@ class UserModel extends Model
     public function setId($id)
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of username
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * Set the value of username
+     *
+     * @return  self
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
 
         return $this;
     }
