@@ -13,6 +13,8 @@ return [
     '/registration' => ['controller' => SecurityController::class, 'action' => 'handleRegistration'],
     '/logout' => ['controller' => SecurityController::class, 'action' => 'logout'],
     '/admin/dashboard' => ['controller' => DashboardController::class, 'action' => 'index'],
+    '/admin/posts/index' => ['controller' => PostController::class, 'action' => 'index'],
     '/admin/posts/create' => ['controller' => PostController::class, 'action' => 'create'],
-
+    '/admin/posts/edit/' => ['controller' => PostController::class, 'action' => 'edit'],
+    '/admin/posts/delete/' => ['controller' => PostController::class, 'action' => 'delete'],
 ];

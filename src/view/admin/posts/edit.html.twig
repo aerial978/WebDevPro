@@ -1,29 +1,29 @@
 {% extends 'template/layouts/base_admin.html.twig' %}
 
-{% block title %}Posts Create
+{% block title %}Post Edit
 {% endblock %}
 
 {% block content %}
-	<main>
+    <main>
 		<div class="container-fluid px-4">
             <div class="row mt-4">
 				<div class="col-md-12">
 					<div class="card">
 						<div class="card-header d-flex justify-content-between">
-							<h4>Create Post</h4>
+							<h4>Edit Post</h4>
 							<a href="{{ base_path }}admin/posts/index" class="btn btn-danger">Back</a>
 						</div>
 						<div class="card-body">
-							{% if errors %}
-								<div class="alert alert-danger" role="alert">
-									<ul class="errors-list">
-										{% for error in errors %}
-											<li>{{ error }}</li>
-										{% endfor %}
-									</ul>
-								</div>
-							{% endif %}
-							{{ createPostForm|raw }}
+						{% if errors %}
+							<div class="alert alert-danger" role="alert">
+								<ul class="errors-list">
+									{% for error in errors %}
+										<li>{{ error }}</li>
+									{% endfor %}
+								</ul>
+							</div>
+						{% endif %}
+						{{ editPostForm|raw }}
 						</div>
 					</div>
 				</div>

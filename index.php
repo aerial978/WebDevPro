@@ -1,64 +1,60 @@
 <?php
-/*
-session_set_cookie_params([
-    'secure' => true, // Utiliser seulement pour les connexions HTTPS
-    'httponly' => true,
-    'samesite' => 'Lax', // Ajuster selon vos besoins
-]);
+require 'vendor/autoload.php';
 
-session_start();*/
-
-
-require  'vendor/autoload.php';
-
-//fonction de rappel anonyme afin de rechercher automatiquement le fichier de classe, le charger, et de l'utiliser.
 spl_autoload_register(function ($class) {
-    $baseDir = __DIR__ . '/'; // Chemin de base de votre application
+    $baseDir = __DIR__ . '/';
 
-    // Convertir le namespace en chemin de fichier.
     $classFile = str_replace('\\', '/', $class) . '.php';
     $classFile = $baseDir . $classFile;
 
     require_once $classFile;
-
 });
 
-// Inclure le fichier des routes.
 $routes = include 'config/route.php';
 
 $requestUri = isset($_SERVER['REQUEST_URI']) ? stripslashes($_SERVER['REQUEST_URI']) : null;
 
 if ($requestUri) {
-    // Extraction de l'URI.
-    //$requestUri = parse_url($requestUri, PHP_URL_PATH);
-
     $cleanedUri = filter_var($requestUri, FILTER_SANITIZE_URL);
-
     $uriSegments = explode('/webdevpro', $requestUri);
-
-    // Récupérez le dernier segment (c'est celui qui vous intéresse).
     $cleanedUri = end($uriSegments);
 
-    if(array_key_exists($cleanedUri, $routes)) {
-        $route = $routes[$cleanedUri];
+    $routeFound = false;
 
-        $controllerName = $route['controller'];
-        $controller = new $controllerName();
+    // Itérer sur toutes les routes pour trouver la correspondance
+    foreach ($routes as $routeUri => $route) {
+        // Générer une expression régulière pour la route
+        $pattern = str_replace('/', '\/', $routeUri);
+        $pattern = '/^' . $pattern . '\/?(\d+)?$/';
 
-        $action = $route['action'];
+        // Comparer l'URI avec le motif de la route
+        if (preg_match($pattern, $cleanedUri, $matches)) {
+            $routeFound = true;
 
-        if(method_exists($controller, $action)) {
-            $controller->$action();
-        } else {
-            http_response_code(404);
-            trigger_error("404 - Resource not found", E_USER_WARNING);
+            $controllerName = $route['controller'];
+            $controller = new $controllerName();
+
+            $action = $route['action'];
+
+            // Passer l'ID à l'action du contrôleur si défini dans les matches
+            if (isset($matches[1])) {
+                $id = $matches[1];
+                $controller->$action($id);
+            } else {
+                $controller->$action();
+            }
+
+            break; // Sortir de la boucle une fois la correspondance trouvée
         }
-    } else {
+    }
+
+    // Si aucune correspondance n'est trouvée, renvoyer une erreur 404
+    if (!$routeFound) {
         http_response_code(404);
         trigger_error("Sorry, the page you are looking for cannot be found", E_USER_WARNING);
     }
 } else {
-    // Gérer le cas où $_SERVER['REQUEST_URI'] n'est pas défini.
     http_response_code(500);
     trigger_error("Internal Server Error", E_USER_ERROR);
 }
+?>

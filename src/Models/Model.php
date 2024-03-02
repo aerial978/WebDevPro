@@ -77,7 +77,7 @@ class Model extends Db
      * @param Model $model Objet à créer
      * @return bool
      */
-    public function create()
+    public function create($includeDateTime = false)
     {
         $fields = [];
         $inter = [];
@@ -85,11 +85,18 @@ class Model extends Db
 
         // $this correspond à l'objet Model lui-meme
         foreach($this as $field => $value) {
-            if($value !== null && $field != 'db' && $field != 'table') {
+            if($value !== null && $field != 'db' && $field != 'table' && ($field != 'date' || $includeDateTime)) {
                 $fields[] = $field;
                 $inter[] = "?";
                 $values[] = $value;
             }
+        }
+
+        // Ajout de NOW() pour la colonne date si $includeDate est vrai
+        if ($includeDateTime) {
+            $fields[] = 'date';
+            $inter[] = '?';
+            $values[] = date('Y-m-d H:i:s');
         }
 
         $liste_champs = implode(', ', $fields);
