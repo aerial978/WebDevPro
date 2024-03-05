@@ -373,11 +373,14 @@ main {
 .card-body textarea {
   display: none; }
 
-.card-header {
+.card-header-post {
   background-color: #cee2fe; }
 
 .centered-cell {
   vertical-align: middle !important; }
+
+.card-header-category {
+  background-color: #d1e7dc; }
 
 @media (min-width: 992px) {
   /* Sidebar admin */

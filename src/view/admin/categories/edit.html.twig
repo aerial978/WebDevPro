@@ -1,17 +1,17 @@
 {% extends 'template/layouts/base_admin.html.twig' %}
 
-{% block title %}Posts Create
+{% block title %}Categories Edit
 {% endblock %}
 
 {% block content %}
-	<main>
+    <main>
 		<div class="container-fluid px-4">
             <div class="row mt-4">
 				<div class="col-md-12">
 					<div class="card">
-						<div class="card-header card-header-post d-flex justify-content-between">
-							<h4>Create Post</h4>
-							<a href="{{ base_path }}admin/posts/index" class="btn btn-danger">Back</a>
+						<div class="card-header card-header-category d-flex justify-content-between">
+							<h4>Edit Category</h4>
+							<a href="{{ base_path }}admin/categories/index" class="btn btn-danger">Back</a>
 						</div>
 						<div class="card-body">
 							{% if errors %}
@@ -23,11 +23,13 @@
 									</ul>
 								</div>
 							{% endif %}
-							{{ createPostForm|raw }}
+                            {{ editCategoryForm|raw }}
 						</div>
 					</div>
 				</div>
             </div>
 		</div>
 	</main>
+
+
 {% endblock %}

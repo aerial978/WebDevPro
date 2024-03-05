@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let isValid = true;
             let title = document.querySelector('#title').value;
             let introduction = document.querySelector('#introduction').value;
-            let postContent = document.querySelector('#postContent').value;
+            let postContent = document.querySelector('#editor').value;
             let category = document.querySelector('#category').value;
             let postStatus = document.querySelector('#postStatus').value;
             let postImage = document.querySelector('#postImage').value;
@@ -21,37 +21,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Validation du titre
             if (title.trim() === '') {
-                document.getElementById('titleError').textContent = 'The title field is required!';
+                document.getElementById('titleError').textContent = 'Title field is required !';
                 isValid = false;
             }
 
             // Validation de l'introduction
             if (introduction.trim() === '') {
-                document.getElementById('introductionError').textContent = 'The introduction field is required!';
+                document.getElementById('introductionError').textContent = 'Introduction field is required !';
                 isValid = false;
             }
 
             // Validation du contenu du message
             if (postContent.trim() === '') {
-                document.getElementById('postContentError').textContent = 'The content field is required!';
+                document.getElementById('postContentError').textContent = 'Content field is required !';
                 isValid = false;
             }
 
             // Validation de la catégorie
             if (category === '') {
-                document.getElementById('categoryError').textContent = 'Please select a category!';
+                document.getElementById('categoryError').textContent = 'Please select a category !';
                 isValid = false;
             }
 
             // Validation du statut du message
             if (postStatus === '') {
-                document.getElementById('postStatusError').textContent = 'Please select a status!';
+                document.getElementById('postStatusError').textContent = 'Please select a status !';
                 isValid = false;
             }
 
             // Validation de l'image (uniquement si un fichier est sélectionné dans le formulaire create post)
             if (postForm.id === 'createPostForm' && (postImage.trim() === '' || postImage === null)) {
-                document.getElementById('postImageError').textContent = 'Please upload an image!';
+                document.getElementById('postImageError').textContent = 'Please upload an image !';
                 isValid = false;
             }
 

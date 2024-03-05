@@ -5,6 +5,7 @@ use src\controller\PrivacyPolicyController;
 use src\controller\SecurityController;
 use src\controller\DashboardController;
 use src\controller\PostController;
+use src\controller\CategoryController;
 
 return [
     '/home' => ['controller' => HomeController::class, 'action' => 'index'],
@@ -17,4 +18,8 @@ return [
     '/admin/posts/create' => ['controller' => PostController::class, 'action' => 'create'],
     '/admin/posts/edit/' => ['controller' => PostController::class, 'action' => 'edit'],
     '/admin/posts/delete/' => ['controller' => PostController::class, 'action' => 'delete'],
+    '/admin/categories/index' => ['controller' => CategoryController::class, 'action' => 'index'],
+    '/admin/categories/create' => ['controller' => CategoryController::class, 'action' => 'create'],
+    '/admin/categories/edit/' => ['controller' => CategoryController::class, 'action' => 'edit'],
+    '/admin/categories/delete/' => ['controller' => CategoryController::class, 'action' => 'delete'],
 ];
