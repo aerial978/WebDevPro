@@ -9,7 +9,7 @@
             <div class="row mt-4">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header d-flex justify-content-between">
+                        <div class="card-header card-header-post d-flex justify-content-between">
                             <h4>Posts List</h4>
                             <a href="{{ base_path }}admin/posts/create" class="btn btn-success"><i class="bi bi-plus-circle"></i> Add Post</a>
                         </div>
@@ -68,7 +68,7 @@
                                                     <td class="centered-cell">{{ indexPost.username }}</td>
                                                     <td class="centered-cell"><img src="{{ base_path }}public/upload/{{ indexPost.post_image }}" alt="post-pic" width="100px;"></td>
                                                     <td class="centered-cell"></td>
-                                                    <td class="centered-cell">{{ indexPost.category }}</td>
+                                                    <td class="centered-cell">{{ indexPost.name_category }}</td>
                                                     <td class="centered-cell"></td>
                                                     <td class="centered-cell">{{ indexPost.post_status }}</td>
                                                 </tr>

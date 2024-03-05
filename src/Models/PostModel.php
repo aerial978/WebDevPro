@@ -10,7 +10,7 @@ class PostModel extends Model
     protected $title;
     protected $introduction;
     protected $post_content;
-    protected $category;
+    protected $category_id;
     protected $post_status;
     protected $post_image;
     protected $user_id;
@@ -25,7 +25,8 @@ class PostModel extends Model
     public function findAll()
     {
         $sql = "SELECT *, DATE_FORMAT(created_at_post, '%d/%m/%Y %H:%i:%s') AS date_create, post.id AS postId FROM {$this->table}
-                JOIN user ON post.user_id = user.id";
+                JOIN user ON post.user_id = user.id
+                JOIN category ON post.category_id = category.id";
 
         $query = $this->request($sql);
 
@@ -113,21 +114,21 @@ class PostModel extends Model
     }
 
     /**
-     * Get the value of category
+     * Get the value of category_id
      */
-    public function getCategory()
+    public function getCategory_id(): int
     {
-        return $this->category;
+        return $this->category_id;
     }
 
     /**
-     * Set the value of category
+     * Set the value of category_id
      *
      * @return  self
      */
-    public function setCategory($category)
+    public function setCategory_id(int $category_id)
     {
-        $this->category = $category;
+        $this->category_id = $category_id;
 
         return $this;
     }

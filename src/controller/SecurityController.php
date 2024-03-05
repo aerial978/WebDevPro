@@ -5,7 +5,7 @@ namespace src\controller;
 use src\Core\Form;
 use src\Models\UserModel;
 use src\Constants\ErrorMessage;
-use src\Service\FormService;
+use src\Service\SecurityFormService;
 
 class SecurityController extends BaseController
 {
@@ -57,8 +57,8 @@ class SecurityController extends BaseController
                 }
             }
 
-            $formService = new FormService();
-            $registrationForm = $formService->registrationService();
+            $securityFormService = new SecurityFormService();
+            $registrationForm = $securityFormService->registrationService();
 
             $this->twig->display('frontend/Security/registration.html.twig', [
                 'errors' => $errors,
@@ -104,8 +104,8 @@ class SecurityController extends BaseController
                 }
             }
 
-            $formService = new FormService();
-            $loginForm = $formService->loginService();
+            $securityFormService = new SecurityFormService();
+            $loginForm = $securityFormService->loginService();
 
             $this->twig->display('frontend/Security/login.html.twig', [
                 'errors' => $errors,

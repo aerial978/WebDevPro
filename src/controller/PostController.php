@@ -2,13 +2,18 @@
 
 namespace src\controller;
 
-use src\Core\Form;
 use src\Models\PostModel;
-use src\Service\FormService;
+use src\Models\CategoryModel;
 use src\Constants\ErrorMessage;
+use src\Service\PostFormService;
 
 class PostController extends BaseController
 {
+    /**
+     * Displays the list of articles in the admin interface.
+     *
+     * Retrieves all articles from the database and displays them in the corresponding view.
+     */
     public function index()
     {
         $postsModel = new PostModel();
@@ -19,11 +24,11 @@ class PostController extends BaseController
     }
 
     /**
-     * Gère la création d'un nouveau post.
-     * Effectue la validation des données et enregistre le post s'il n'y a pas d'erreurs.
-     * En cas d'erreur, affiche les messages ou redirige vers une page d'erreur.
-     *
-     * @throws \Exception En cas d'erreur, redirige vers la page d'erreur 500.
+    * Manages the creation of a new post.
+      * Performs data validation and saves the post if there are no errors.
+      * In case of error, displays messages or redirects to an error page.
+      *
+      * @throws \Exception On error, redirects to error page 500.
      *
      * @return void
      */
@@ -95,7 +100,7 @@ class PostController extends BaseController
                     $posts->setTitle($title)
                         ->setIntroduction($introduction)
                         ->setPostContent($postContent)
-                        ->setCategory($category)
+                        ->setCategory_id($category)
                         ->setPostStatus($postStatus)
                         ->setPostImage($postImage['name'])
                         ->setUser_id($_SESSION['user']['id'])
@@ -106,8 +111,16 @@ class PostController extends BaseController
                 }
             }
 
-            $formService = new FormService();
-            $createPostForm = $formService->createPostService();
+            $categoryModel = new CategoryModel();
+            $categories = $categoryModel->findAll();
+
+            $categoriesOptions = [];
+            foreach ($categories as $category) {
+                $categoriesOptions[$category->id] = $category->name_category;
+            }
+
+            $postFormService = new PostFormService();
+            $createPostForm = $postFormService->createPostService($categoriesOptions);
 
             $this->twig->display('admin/posts/create.html.twig', [
                 'errors' => $errors,
@@ -120,11 +133,13 @@ class PostController extends BaseController
     }
 
     /**
-     * Gère la modification d'un post.
-     * Effectue la validation des données et enregistre le post s'il n'y a pas d'erreurs.
-     * En cas d'erreur, affiche les messages ou redirige vers une page d'erreur.
-     *
-     * @throws \Exception En cas d'erreur, redirige vers la page d'erreur 500.
+      * Manages the modification of a post.
+      * Performs data validation and saves the post if there are no errors.
+      * In case of error, displays messages or redirects to an error page.
+      *
+      * @param int $id The ID of the post to edit.
+      *
+      * @throws \Exception On error, redirects to error page 500.
      *
      * @return void
      */
@@ -200,7 +215,7 @@ class PostController extends BaseController
                     $postsEdit->setTitle($title)
                         ->setIntroduction($introduction)
                         ->setPostContent($postContent)
-                        ->setCategory($category)
+                        ->setCategory_id($category)
                         ->setPostStatus($postStatus)
                         ->setUser_id($_SESSION['user']['id'])
                         ->setUpdated_at_post();
@@ -214,8 +229,16 @@ class PostController extends BaseController
                 }
             }
 
-            $formService = new FormService();
-            $editPostForm = $formService->editPostService($post);
+            $categoryModel = new CategoryModel();
+            $categories = $categoryModel->findAll();
+
+            $categoriesOptions = [];
+            foreach ($categories as $category) {
+                $categoriesOptions[$category->id] = $category->name_category;
+            }
+
+            $postFormService = new PostFormService();
+            $editPostForm = $postFormService->editPostService($categoriesOptions, $post);
 
             $this->twig->display('admin/posts/edit.html.twig', [
                 'errors' => $errors,
@@ -229,13 +252,13 @@ class PostController extends BaseController
     }
 
     /**
-     * Gère la suppression d'un post.
-     * Recherche le post à supprimer, effectue la suppression dans le modèle, puis redirige vers la liste des posts.
-     *
-     * @param int $id L'identifiant du post à supprimer.
-     *
-     * @throws \Exception En cas d'erreur, redirige vers la page d'erreur 500.
-     *
+      * Manages the deletion of a post.
+      * Finds the post to delete, performs the deletion in the template, then redirects to the list of posts.
+      *
+      * @param int $id The ID of the post to delete.
+      *
+      * @throws \Exception On error, redirects to error page 500.
+      *
      * @return void
      */
     public function delete(int $id)
