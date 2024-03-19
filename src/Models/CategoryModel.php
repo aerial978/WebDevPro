@@ -9,23 +9,36 @@ class CategoryModel extends Model
     protected $id;
     protected $name_category;
     protected $description_category;
-    protected $created_at_category;
-    protected $updated_at_category;
 
     public function __construct()
     {
         $this->table = "Category";
     }
 
-    public function findAllCount()
+    public function findAllCategory()
     {
-        $sql = "SELECT *, DATE_FORMAT(created_at_category, '%d/%m/%Y %H:%i:%s') AS date_create, COUNT(post.id) AS post_count, category.id AS categoryId FROM category
+        $sql = "SELECT *, COUNT(post.id) AS post_count, category.id AS categoryId FROM {$this->table}
         LEFT JOIN post ON category.id = post.category_id
         GROUP BY category.id";
 
         $query = $this->request($sql);
 
         return $query->fetchAll();
+    }
+
+    public function createCategory()
+    {
+        $sql = "INSERT INTO {$this->table} (name_category, description_category)
+        VALUES (:nameCategory, :descriptionCategory)";
+
+        $attributs = [
+            ':nameCategory' => $this->name_category,
+            ':descriptionCategory' => $this->description_category,
+        ];
+
+        $query = $this->request($sql, $attributs);
+
+        return $query;
     }
 
     /**
@@ -87,45 +100,4 @@ class CategoryModel extends Model
 
         return $this;
     }
-
-    /**
-     * Get the value of date
-     */
-    public function getCreatedAtCategory()
-    {
-        return $this->created_at_category;
-    }
-
-    /**
-     * Set the value of date
-     *
-     * @return  self
-     */
-    public function setCreatedAtCategory()
-    {
-        $this->created_at_category = date('Y-m-d H:i:s');
-
-        return $this;
-    }
-
-    /**
-     * Get the value of update
-     */
-    public function getUpdated_at_category()
-    {
-        return $this->updated_at_category;
-    }
-
-    /**
-     * Set the value of update
-     *
-     * @return  self
-     */
-    public function setUpdated_at_category()
-    {
-        $this->updated_at_category = date('Y-m-d H:i:s');
-
-        return $this;
-    }
-
 }

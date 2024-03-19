@@ -382,6 +382,9 @@ main {
 .card-header-category {
   background-color: #d1e7dc; }
 
+.card-header-tag {
+  background-color: #e5cce5; }
+
 @media (min-width: 992px) {
   /* Sidebar admin */
   #offcanvasExample {
