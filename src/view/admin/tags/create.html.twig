@@ -1,6 +1,6 @@
 {% extends 'template/layouts/base_admin.html.twig' %}
 
-{% block title %}Categories Create
+{% block title %}Tags Create
 {% endblock %}
 
 {% block content %}
@@ -9,9 +9,9 @@
             <div class="row mt-4">
 				<div class="col-md-12">
 					<div class="card">
-						<div class="card-header card-header-category d-flex justify-content-between">
-							<h4>Create Category</h4>
-							<a href="{{ base_path }}admin/categories/index" class="btn btn-danger">Back</a>
+						<div class="card-header card-header-tag d-flex justify-content-between">
+							<h4>Create Tag</h4>
+							<a href="{{ base_path }}admin/tags/index" class="btn btn-danger">Back</a>
 						</div>
 						<div class="card-body">
 							{% if errors %}
@@ -23,7 +23,7 @@
 									</ul>
 								</div>
 							{% endif %}
-                            {{ createCategoryForm|raw }}
+                            {{ createTagForm|raw }}
 						</div>
 					</div>
 				</div>

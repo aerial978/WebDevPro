@@ -20,4 +20,7 @@ class ErrorMessage
     public const NAMECATEGORY_INVALID = 'Category name field is required !';
     public const DESCRIPTIONCATEGORY_INVALID = 'Category description field is required !';
     public const UNIQUENAMECATEGORY_INVALID = 'Category name already exists !';
+    public const NAMETAG_INVALID = 'Tag name field is required !';
+    public const DESCRIPTIONTAG_INVALID = 'Tag description field is required !';
+    public const UNIQUENAMETAG_INVALID = 'Tag name already exists !';
 }

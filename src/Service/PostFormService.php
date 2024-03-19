@@ -6,7 +6,7 @@ use src\Core\Form;
 
 class PostFormService
 {
-    public function createPostService($categoriesOptions)
+    public function createPostService($categoriesOptions, $tagsOptions)
     {
         $createPostForm = new Form();
 
@@ -35,6 +35,10 @@ class PostFormService
                 ->endDiv()
             ->endDiv()
 
+            ->startDiv(['class' => 'row mt-4'])
+                    ->addSelectMultiple('tags[]', $tagsOptions, '', ['class' => 'js-example-basic-multiple form-select', 'multiple' => 'multiple', 'id' => 'id_multiple'])
+            ->endDiv()
+
             ->startDiv(['class' => 'row'])
                 ->startDiv(['class' => 'col-md-6 mt-4'])
                     ->addInput('file', 'postImage', ['class' => 'form-control', 'id' => 'postImage'])
@@ -45,14 +49,14 @@ class PostFormService
                 ->endDiv()
             ->endDiv()
 
-            ->addButton('Submit', 'submit', 'submit', ['class' => 'btn btn-custom p-2', 'id' => 'submit'])
+            ->addButton('Submit', 'submit', 'submit', ['class' => 'btn btn-custom p-2', 'id' => 'submitForm'])
 
             ->endForm();
 
         return $createPostForm;
     }
 
-    public function editPostService($categoriesOptions, $post)
+    public function editPostService($categoriesOptions, $post, $tagsOptions, $tagsForPost)
     {
         $editPostForm = new Form();
 
@@ -79,6 +83,16 @@ class PostFormService
                 ->addSelect('postStatus', ['Draft' => 'Draft', 'Waiting' => 'Waiting', 'Published' => 'Published', 'Archived' => 'Archived'], 'status', $post->post_status, ['class' => 'form-select', 'id' => 'postStatus'])
                 ->addError('postStatusError', ['class' => 'text-danger'])
             ->endDiv()
+        ->endDiv()
+
+        ->startDiv(['class' => 'row'])
+            ->startDiv(['class' => 'col-md-6 mt-4'])
+                ->addTagsLabel($tagsForPost)
+            ->endDiv()
+        ->endDiv()
+
+        ->startDiv(['class' => 'row mt-3'])
+                ->addSelectMultiple('tags[]', $tagsOptions, '', ['class' => 'js-example-basic-multiple form-select', 'multiple' => 'multiple', 'id' => 'id_multiple'])
         ->endDiv()
 
         ->startDiv(['class' => 'row'])

@@ -18,7 +18,7 @@ class CategoryController extends BaseController
     {
         $categoriesModel = new CategoryModel();
 
-        $indexCategories = $categoriesModel->findAllCount();
+        $indexCategories = $categoriesModel->findAllCategory();
 
         $this->twig->display('admin/categories/index.html.twig', compact('indexCategories'));
     }
@@ -66,10 +66,9 @@ class CategoryController extends BaseController
                     $posts = new CategoryModel();
 
                     $posts->setNameCategory($nameCategory)
-                        ->setDescriptionCategory($descriptionCategory)
-                        ->setCreatedAtCategory();
+                        ->setDescriptionCategory($descriptionCategory);
 
-                    $posts->create();
+                    $posts->createCategory();
                     header('Location: index');
                 }
             }
@@ -127,8 +126,7 @@ class CategoryController extends BaseController
                     $posts = new CategoryModel();
 
                     $posts->setNameCategory($nameCategory)
-                        ->setDescriptionCategory($descriptionCategory)
-                        ->setCreatedAtCategory();
+                        ->setDescriptionCategory($descriptionCategory);
 
                     $posts->update($id);
                     header('Location: ../index');
@@ -171,7 +169,7 @@ class CategoryController extends BaseController
             $categorie = $categoriesModel->find($id);
 
             if (!$categorie) {
-                // Le post n'existe pas, vous pouvez gérer cette situation
+                // La categorie n'existe pas, vous pouvez gérer cette situation
                 // Redirection vers une page d'erreur ou autre
                 header('Location: /error-page-404');
                 exit;

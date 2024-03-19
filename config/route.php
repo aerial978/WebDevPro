@@ -1,11 +1,13 @@
 <?php
 
 use src\controller\HomeController;
-use src\controller\PrivacyPolicyController;
+use src\controller\PostController;
+use src\controller\TestController;
+use src\controller\CategoryController;
 use src\controller\SecurityController;
 use src\controller\DashboardController;
-use src\controller\PostController;
-use src\controller\CategoryController;
+use src\controller\TagController;
+use src\controller\PrivacyPolicyController;
 
 return [
     '/home' => ['controller' => HomeController::class, 'action' => 'index'],
@@ -22,4 +24,9 @@ return [
     '/admin/categories/create' => ['controller' => CategoryController::class, 'action' => 'create'],
     '/admin/categories/edit/' => ['controller' => CategoryController::class, 'action' => 'edit'],
     '/admin/categories/delete/' => ['controller' => CategoryController::class, 'action' => 'delete'],
+    '/admin/tags/index' => ['controller' => TagController::class, 'action' => 'index'],
+    '/admin/tags/create' => ['controller' => TagController::class, 'action' => 'create'],
+    '/admin/tags/edit/' => ['controller' => TagController::class, 'action' => 'edit'],
+    '/admin/tags/delete/' => ['controller' => TagController::class, 'action' => 'delete'],
+    //'/test/addTagsToPost' => ['controller' => TestController::class, 'action' => 'testAddTagsToPost']
 ];

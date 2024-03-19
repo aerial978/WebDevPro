@@ -160,7 +160,36 @@ class Form
         }
 
         // On ferme le select
-        $this->formCode .= '</select>';
+        $this->formCode .= "</select>";
+
+        return $this;
+    }
+
+    public function addTagsLabel(array $tags): self
+    {
+        $this->formCode .= "<label for='tags'>Tags associated with the post : ";
+
+        foreach ($tags as $tag) {
+            $this->formCode .= "<div class='badge bg-primary me-1'>" . $tag['tag_name'] . "</div>";
+        }
+
+        $this->formCode .= "</label>";
+
+        return $this;
+    }
+
+    public function addSelectMultiple(string $name, array $options, $selectedValue = '', array $attributes = []): self
+    {
+        $this->formCode .= "<select name='$name'";
+
+        $this->formCode .= $attributes ? $this->addAttributes($attributes) . '>' : '>';
+
+        foreach ($options as $value => $text) {
+            $selected = $value == $selectedValue ? 'selected' : '';
+            $this->formCode .= "<option value=\"$value\" $selected>$text</option>";
+        }
+
+        $this->formCode .= "</select>";
 
         return $this;
     }

@@ -22,7 +22,7 @@ class PostModel extends Model
         $this->table = "Post";
     }
 
-    public function findAll()
+    public function findAllPost()
     {
         $sql = "SELECT *, DATE_FORMAT(created_at_post, '%d/%m/%Y %H:%i:%s') AS date_create, post.id AS postId FROM {$this->table}
                 JOIN user ON post.user_id = user.id
@@ -32,6 +32,36 @@ class PostModel extends Model
 
         return $query->fetchAll();
     }
+
+    public function createPost()
+    {
+        $sql = "INSERT INTO {$this->table} (title, introduction, post_content, category_id, post_status, post_image, user_id, created_at_post)
+        VALUES (:title, :introduction, :postContent, :category, :postStatus, :postImage, :user_id, NOW())";
+
+        $attributs = [
+            ':title' => $this->title,
+            ':introduction' => $this->introduction,
+            ':postContent' => $this->post_content,
+            ':category' => $this->category_id,
+            ':postStatus' => $this->post_status,
+            ':postImage' => $this->post_image,
+            ':user_id' => $this->user_id,
+        ];
+
+        $query = $this->request($sql, $attributs);
+
+        return $query;
+    }
+
+    public function getLastInsertedPostId()
+    {
+        $sql = "SELECT id FROM {$this->table} ORDER BY id DESC LIMIT 1";
+        $query = $this->request($sql);
+        $result = $query->fetch();
+
+        return ($result) ? $result->id : null;
+    }
+
 
     /**
      * Get the value of id
