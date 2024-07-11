@@ -5,4 +5,5 @@ import './imagePreviewCreate.js';
 import './imagePreviewEdit.js';
 import './category_admin.js';
 import './tag_admin.js';
-import './select.js';
+import './tag_label.js';
+import './highlight.js';

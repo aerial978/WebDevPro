@@ -16,10 +16,6 @@ class PostFormService
             ->addInput('text', 'title', ['class' => 'form-control', 'id' => 'title'])
             ->addError('titleError', ['class' => 'text-danger'])
 
-            ->addLabelFor('introduction', 'Introduction', ['class' => 'mt-3'])
-            ->addInput('text', 'introduction', ['class' => 'form-control', 'id' => 'introduction'])
-            ->addError('introductionError', ['class' => 'text-danger'])
-
             ->addLabelFor('postContent', 'Content', ['class' => 'mt-3'])
             ->addTextarea('postContent', '', ['class' => 'form-control', 'id' => 'editor'])
             ->addError('postContentError', ['class' => 'text-danger'])
@@ -34,13 +30,22 @@ class PostFormService
                     ->addError('postStatusError', ['class' => 'text-danger'])
                 ->endDiv()
             ->endDiv()
-
+/*
             ->startDiv(['class' => 'row mt-4'])
-                    ->addSelectMultiple('tags[]', $tagsOptions, '', ['class' => 'js-example-basic-multiple form-select', 'multiple' => 'multiple', 'id' => 'id_multiple'])
+                    ->addSelectMultiple('tags[]', $tagsOptions, '', ['class' => 'js-example-basic-multiple form-select', 'multiple' => 'multiple', 'id' => 'postTag'])
+                    ->addError('postTagError', ['class' => 'text-danger'])
+            ->endDiv()*/
+
+            ->startDiv(['class' => 'row mt-3'])
+            ->startDiv(['class' => 'col-md-12'])
+            ->addLabelFor('tags', 'Tags')
+                    ->addTagInputCreate('tags', $tagsOptions)
+                ->endDiv()
             ->endDiv()
 
             ->startDiv(['class' => 'row'])
                 ->startDiv(['class' => 'col-md-6 mt-4'])
+                    ->addLabelFor('postImage', 'Image')
                     ->addInput('file', 'postImage', ['class' => 'form-control', 'id' => 'postImage'])
                     ->addError('postImageError', ['class' => 'text-danger'])
                 ->endDiv()
@@ -58,6 +63,8 @@ class PostFormService
 
     public function editPostService($categoriesOptions, $post, $tagsOptions, $tagsForPost)
     {
+        $selectedTagsIds = array_column($tagsForPost, 'tag_name');
+
         $editPostForm = new Form();
 
         $editPostForm->startForm('post', '', ['class' => '', 'enctype' => 'multipart/form-data', 'id' => 'editPostForm'])
@@ -66,33 +73,28 @@ class PostFormService
         ->addInput('text', 'title', ['class' => 'form-control', 'id' => 'title', 'value' => $post->title])
         ->addError('titleError', ['class' => 'text-danger'])
 
-        ->addLabelFor('introduction', 'Introduction', ['class' => 'mt-3'])
-        ->addInput('text', 'introduction', ['class' => 'form-control', 'id' => 'introduction', 'value' => $post->introduction])
-        ->addError('introductionError', ['class' => 'text-danger'])
-
         ->addLabelFor('postContent', 'Content', ['class' => 'mt-3'])
         ->addTextarea('postContent', $post->post_content, ['class' => 'form-control', 'id' => 'editor'])
         ->addError('postContentError', ['class' => 'text-danger'])
 
         ->startDiv(['class' => 'row'])
             ->startDiv(['class' => 'col-md-6 mt-4'])
-            ->addSelect('category', $categoriesOptions, 'category', $post->category_id, ['class' => 'form-select', 'id' => 'category'])
-            ->addError('categoryError', ['class' => 'text-danger'])
+                ->addLabelFor('category', 'Category')
+                ->addSelect('category', $categoriesOptions, 'category', $post->category_id, ['class' => 'form-select', 'id' => 'category'])
+                ->addError('categoryError', ['class' => 'text-danger'])
             ->endDiv()
             ->startDiv(['class' => 'col-md-6 mt-4'])
+                ->addLabelFor('status', 'Status')
                 ->addSelect('postStatus', ['Draft' => 'Draft', 'Waiting' => 'Waiting', 'Published' => 'Published', 'Archived' => 'Archived'], 'status', $post->post_status, ['class' => 'form-select', 'id' => 'postStatus'])
                 ->addError('postStatusError', ['class' => 'text-danger'])
             ->endDiv()
         ->endDiv()
 
-        ->startDiv(['class' => 'row'])
-            ->startDiv(['class' => 'col-md-6 mt-4'])
-                ->addTagsLabel($tagsForPost)
-            ->endDiv()
-        ->endDiv()
-
         ->startDiv(['class' => 'row mt-3'])
-                ->addSelectMultiple('tags[]', $tagsOptions, '', ['class' => 'js-example-basic-multiple form-select', 'multiple' => 'multiple', 'id' => 'id_multiple'])
+            ->startDiv(['class' => 'col-md-12'])
+                ->addLabelFor('tags', 'Tags')
+                ->addTagInputEdit('tags', $tagsForPost, $tagsOptions, $selectedTagsIds)
+            ->endDiv()
         ->endDiv()
 
         ->startDiv(['class' => 'row'])

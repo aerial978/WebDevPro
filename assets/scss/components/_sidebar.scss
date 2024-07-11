@@ -1,0 +1,75 @@
+.widget-title {
+    font-style: italic;
+    font-weight: bold;
+    text-align: center;
+    padding-bottom: 10px;
+    border-bottom: 2px solid $primary-color;
+}
+
+/* Categories widget */
+
+.badge-pill {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background-color: $primary-color;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-list a {
+    font-weight: bold;
+    padding: 0 5px 0 5px;
+}
+
+.category-list .category-link {
+    display: flex;
+    justify-content: space-between;
+}
+
+.category-list .category-link:hover {
+    background-color: $button-light-color;
+    color: $white-color;
+    border-radius: 5px; 
+}
+
+/* Tags widget */
+
+.tag-cloud {
+    text-align: center;
+    margin: 0 10px 0 10px;
+}
+
+.tag-cloud .tag {
+    font-weight: bold;
+}
+
+.tag-cloud .tag:hover {
+    color: $button-light-color;
+}
+
+.tag-color-dark {
+    color: $secondary-color;
+}
+
+.tag-color-green {
+    color: $primary-color;
+}
+
+/* Latest posts &  widget */
+
+.link-more-posts .bi-arrow-right {
+    color: #2980B9;
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.link-more-posts:hover,
+.link-more-posts:hover .bi-arrow-right {
+    color: #94BFDC;
+}
+
+
+

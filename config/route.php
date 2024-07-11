@@ -28,5 +28,6 @@ return [
     '/admin/tags/create' => ['controller' => TagController::class, 'action' => 'create'],
     '/admin/tags/edit/' => ['controller' => TagController::class, 'action' => 'edit'],
     '/admin/tags/delete/' => ['controller' => TagController::class, 'action' => 'delete'],
-    //'/test/addTagsToPost' => ['controller' => TestController::class, 'action' => 'testAddTagsToPost']
+    '/posts' => ['controller' => PostController::class, 'action' => 'postList'],
+    '/test/addTagsToPost' => ['controller' => TestController::class, 'action' => 'testAddTagsToPost']
 ];

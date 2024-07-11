@@ -15,8 +15,10 @@ $routes = include 'config/route.php';
 $requestUri = isset($_SERVER['REQUEST_URI']) ? stripslashes($_SERVER['REQUEST_URI']) : null;
 
 if ($requestUri) {
+    $parsedUrl = parse_url($requestUri);//////
+    $path = isset($parsedUrl['path']) ? $parsedUrl['path'] : '/';//////
     $cleanedUri = filter_var($requestUri, FILTER_SANITIZE_URL);
-    $uriSegments = explode('/webdevpro', $requestUri);
+    $uriSegments = explode('/webdevpro', $path);
     $cleanedUri = end($uriSegments);
 
     $routeFound = false;
@@ -24,7 +26,7 @@ if ($requestUri) {
     // Itérer sur toutes les routes pour trouver la correspondance
     foreach ($routes as $routeUri => $route) {
         // Générer une expression régulière pour la route
-        $pattern = str_replace('/', '\/', $routeUri);
+        $pattern = str_replace('/', '\/', $routeUri);///////
         $pattern = '/^' . $pattern . '\/?(\d+)?$/';
 
         // Comparer l'URI avec le motif de la route

@@ -3,12 +3,14 @@
 namespace src\Models;
 
 use src\Models\Model;
+use DateTime;
+use HTMLPurifier;
+use HTMLPurifier_Config;
 
 class PostModel extends Model
 {
     protected $id;
     protected $title;
-    protected $introduction;
     protected $post_content;
     protected $category_id;
     protected $post_status;
@@ -22,6 +24,7 @@ class PostModel extends Model
         $this->table = "Post";
     }
 
+    // PostController => index()
     public function findAllPost()
     {
         $sql = "SELECT *, DATE_FORMAT(created_at_post, '%d/%m/%Y %H:%i:%s') AS date_create, post.id AS postId FROM {$this->table}
@@ -33,14 +36,14 @@ class PostModel extends Model
         return $query->fetchAll();
     }
 
+    // PostController => create()
     public function createPost()
     {
-        $sql = "INSERT INTO {$this->table} (title, introduction, post_content, category_id, post_status, post_image, user_id, created_at_post)
-        VALUES (:title, :introduction, :postContent, :category, :postStatus, :postImage, :user_id, NOW())";
+        $sql = "INSERT INTO {$this->table} (title, post_content, category_id, post_status, post_image, user_id, created_at_post)
+        VALUES (:title, :postContent, :category, :postStatus, :postImage, :user_id, NOW())";
 
         $attributs = [
             ':title' => $this->title,
-            ':introduction' => $this->introduction,
             ':postContent' => $this->post_content,
             ':category' => $this->category_id,
             ':postStatus' => $this->post_status,
@@ -53,6 +56,17 @@ class PostModel extends Model
         return $query;
     }
 
+    // ??????????????????
+    // Assainir le contenu HTML de postContent (CkEditor) pour prévenir les attaques XSS avec HTMLPurifier
+    public function sanitizeContent($content)
+    {
+        $config = HTMLPurifier_Config::createDefault();
+        $purifier = new HTMLPurifier($config);
+
+        return $purifier->purify($content);
+    }
+
+    // PostController => create()
     public function getLastInsertedPostId()
     {
         $sql = "SELECT id FROM {$this->table} ORDER BY id DESC LIMIT 1";
@@ -62,6 +76,86 @@ class PostModel extends Model
         return ($result) ? $result->id : null;
     }
 
+    // HomeController => index() & PostController => create()
+    public function getPosts($offset = 0, $limit = 10)
+    {
+        $sql = "SELECT *, DATE_FORMAT(updated_at_post, '%d/%m') AS date_update, post.id AS postId 
+                FROM {$this->table}  
+                LEFT JOIN category ON post.category_id = category.id
+                GROUP BY post.id ORDER BY date_update ASC
+                LIMIT $offset, $limit";
+
+        $query = $this->request($sql);
+
+        return $query->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    // PostController => PostList()
+    public function countPosts()
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table}";
+        $query = $this->request($sql);
+
+        return $query->fetchColumn();
+    }
+
+    // PostController => PostList()
+    public function timeElapsedString($datetime, $full = false)
+    {
+        if (is_null($datetime)) {
+            return 'unknown';
+        }
+
+        $now = new DateTime();
+        $ago = new DateTime($datetime);
+        $diff = $now->diff($ago);
+
+        $string = array(
+            'y' => 'year',
+            'm' => 'month',
+            'd' => 'day',
+            'h' => 'hour',
+            'i' => 'minute',
+            's' => 'second',
+        );
+
+        foreach ($string as $k => &$v) {
+            if ($diff->$k) {
+                $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+            } else {
+                unset($string[$k]);
+            }
+        }
+
+        if ($diff->d >= 7) {
+            $weeks = floor($diff->d / 7);
+            $string['w'] = $weeks . ' week' . ($weeks > 1 ? 's' : '');
+        }
+
+        if (!$full) {
+            $string = array_slice($string, 0, 1);
+        }
+
+        return $string ? implode(', ', $string) . ' ago' : 'just now';
+    }
+
+    // PostController => PostList()
+    public function searchPosts($keyword, $offset = 0, $limit = 10)
+    {
+        $keyword = $_GET['search'];
+
+        $sql = "SELECT *, DATE_FORMAT(updated_at_post, '%d/%m') AS date_update, post.id AS postId
+                FROM {$this->table}
+                LEFT JOIN category ON post.category_id = category.id
+                WHERE post.title LIKE '%$keyword%'
+                   OR post.post_content LIKE '%$keyword%'
+                GROUP BY post.id
+                ORDER BY date_update ASC LIMIT $offset, $limit";
+
+        $query = $this->request($sql);
+
+        return $query->fetchAll(\PDO::FETCH_ASSOC);
+    }
 
     /**
      * Get the value of id
@@ -104,28 +198,8 @@ class PostModel extends Model
     }
 
     /**
-     * Get the value of introduction
+     * Get the value of content
      */
-    public function getIntroduction()
-    {
-        return $this->introduction;
-    }
-
-    /**
-     * Set the value of introduction
-     *
-     * @return  self
-     */
-    public function setIntroduction($introduction)
-    {
-        $this->introduction = $introduction;
-
-        return $this;
-    }
-
-    /**
-    * Get the value of content
-    */
     public function getPostContent()
     {
         return $this->post_content;
@@ -184,8 +258,8 @@ class PostModel extends Model
     }
 
     /**
-    * Get the value of postImage
-    */
+     * Get the value of postImage
+     */
     public function getPostImage()
     {
         return $this->post_image;
