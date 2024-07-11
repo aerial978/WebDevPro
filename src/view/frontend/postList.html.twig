@@ -1,0 +1,119 @@
+{% extends 'template/layouts/base_frontend.html.twig' %}
+
+{% block title %}Post List
+{% endblock %}
+
+{% block content %}
+<div class="container posts-list">
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-9">
+        {% if search %}
+            <h3 class="page-section__heading underline mb-3">Search results for "{{ search }}"</h3>
+            {% else %}
+            <h3 class="page-section__heading underline mb-3">All posts</h3>
+        {% endif %}
+        {% if posts is not empty %}
+            <div class="row" id="post-list">
+                <!-- Example Post -->
+                {% for post in posts %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card card-blog shadow h-100 d-flex flex-column">
+                            <div class="blog-image">
+                                <img src="public/img/image1.jpg" class="card-img-top">
+                                <div class="blog-date">{{ post.updated_at_post|date('j F') }}</div>
+                                <div class="blog-category">{{ post.name_category }}</div>
+                            </div>
+                            <div class="blog-body flex-grow-1">
+                                <div class="blog-post my-2 d-flex justify-content-between">
+                                    <span>
+                                        <i class="bi bi-clock-fill"></i>
+                                        {{ post.time_elapsed }}</span>
+                                    <span>
+                                        <i class="bi bi-chat-fill"></i>
+                                        35 comments</span>
+                                </div>
+                                {% if search %}
+                                    <div class="blog-title">{{ post.excerpt_title|raw }}</div>
+                                    <p class="blog-start">{{ post.excerpt_content|raw }}
+                                        <a href="{{ base_path }}frontend/postSingle/" class="fw-bold">Read More</a>
+                                    </p>
+                                {% else %}
+                                    <div class="blog-title">{{ post.title }}</div>
+                                    <p class="blog-start">{{ post.post_content|truncate_words(20)|raw }}
+                                        <a href="{{ base_path }}frontend/postSingle/" class="fw-bold">Read More</a>
+                                    </p>
+                                {% endif %}
+                            </div>
+                            <div class="blog-footer mt-auto">
+                                <div class="blog-avatar">
+                                    <img src="public/img/avatar1.png">
+                                </div>
+                                <div>
+                                    <span class="blog-author">Author</span>
+                                </div>
+                                <button class="btn btn-sm">
+                                    <i class="bi bi-share-fill"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% embed "template/_partials/_pagination.html.twig" %}{% endembed %}
+        {% else %}
+            <p>Post list is empty</p>
+        {% endif %}
+        </div>
+        <!-- Sidebar -->
+        <div class="col-lg-3">
+            {% embed "template/_partials/_aside.html.twig" %}{% endembed %}
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Fonction pour échapper les caractères spéciaux d'une chaîne
+    function escapeRegExp(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    // Fonction pour mettre en évidence les termes recherchés dans les nœuds de texte
+    function highlightText(element, searchTerms) {
+        // Parcourt chaque terme de recherche
+        searchTerms.forEach(str => {
+            let regex = new RegExp(`(${escapeRegExp(str)})`, 'gi');
+            highlight(element, regex);
+        });
+    }
+
+    // Fonction récursive pour parcourir les nœuds et mettre en évidence le texte
+    function highlight(node, regex) {
+        if (node.nodeType === 3) { // Node de texte
+            let match = node.nodeValue.match(regex);
+            if (match) {
+                let span = document.createElement('span');
+                span.innerHTML = node.nodeValue.replace(regex, '<span class="highlight">$1</span>');
+                node.replaceWith(span);
+            }
+        } else if (node.nodeType === 1 && node.childNodes && !/(script|style)/i.test(node.tagName)) {
+            node.childNodes.forEach(child => highlight(child, regex));
+        }
+    }
+
+    // Récupère les termes de recherche depuis la variable Twig et les convertit en format JSON
+    let searchTerms = {{ searchTerms|json_encode|raw }};
+    
+    // Sélectionne l'élément HTML avec l'ID 'post-list' qui contient les posts
+    let postsContainer = document.getElementById('post-list');
+    
+    // Met en évidence les termes de recherche dans les nœuds de texte des posts
+    highlightText(postsContainer, searchTerms);
+});
+</script>
+<style>
+    .highlight {
+        background-color: yellow;
+    }
+</style>
+{% endblock %}

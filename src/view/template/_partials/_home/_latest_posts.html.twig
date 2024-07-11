@@ -9,71 +9,51 @@
 			</div>
 			<div class="separator-block__line separator-block__line--dark"></div>
 		</div>
-		<div
-			class="row">
-			<!-- Latest Post 1 -->
-			<div class="col-lg-4 col-sm-6 mb-4">
-				<div class="card h-100">
-					<img class="card-img-top" src="public/img/cabin.png" alt="Post 1">
-					<div class="card-body">
-						<h5 class="card-title">Titre de l'article</h5>
-						<p class="card-text">Description succincte de l'article.</p>
-					</div>
-					<ul class="list-group list-group-flush">
-						<li class="list-group-item">Catégorie : Technologie</li>
-					</ul>
-					<div class="card-body">
-						<a href="#" class="card-link">Lire l'article</a>
-					</div>
-					<div class="card-footer">
-						Tags :
-						<a href="#" class="badge bg-primary">Technologie</a>
-						<a href="#" class="badge bg-primary">Développement Web</a>
+		<div class="row">
+			<div class="col-12 d-flex justify-content-end">
+				<a href="{{ base_path}}posts">
+					<h5 class="link-post">View all</h5>
+				</a>
+			</div>
+		</div>
+		<div class="row mt-1">
+			{% for post in posts|slice(0, 3) %}
+				<div class="col-lg-4 col-md-6 mb-sm-4">
+					<div class="card card-blog shadow h-100 d-flex flex-column">
+						<div class="blog-image">
+							<img src="public/img/image1.jpg" class="card-img-top">
+							<div class="blog-date">{{ post.updated_at_post|date('jF') }}</div>
+							<div class="blog-category">{{ post.name_category }}</div>
+						</div>
+						<div class="blog-body flex-grow-1">
+							<div class="blog-post my-2 d-flex justify-content-between">
+								<span>
+									<i class="bi bi-clock-fill"></i>
+									{{ post.time_elapsed }}</span>
+								<span>
+									<i class="bi bi-chat-fill"></i>
+									35 comments</span>
+							</div>
+							<div class="blog-title">{{ post.title }}</div>
+							<p class="blog-start">{{ post.post_content|truncate_words(30)|raw }}
+								<a href="{{ base_path }}frontend/postSingle/" class="fw-bold">Read More</a>
+							</p>
+						</div>
+						<div class="blog-footer mt-auto">
+							<div class="blog-avatar">
+								<img src="public/img/avatar1.png">
+							</div>
+							<div>
+								<span class="blog-author">Author</span>
+							</div>
+							<button class="btn btn-sm">
+								<i class="bi bi-share-fill"></i>
+							</button>
+						</div>
 					</div>
 				</div>
-			</div>
-			<!-- Latest Post 2 -->
-			<div class="col-lg-4 col-sm-6 mb-4">
-				<div class="card h-100">
-					<img class="card-img-top" src="public/img/cabin.png" alt="Post 2">
-					<div class="card-body">
-						<h5 class="card-title">Titre de l'article</h5>
-						<p class="card-text">Description succincte de l'article.</p>
-					</div>
-					<ul class="list-group list-group-flush">
-						<li class="list-group-item">Catégorie : Technologie</li>
-					</ul>
-					<div class="card-body">
-						<a href="#" class="card-link">Lire l'article</a>
-					</div>
-					<div class="card-footer">
-						Tags :
-						<a href="#" class="badge bg-primary">Technologie</a>
-						<a href="#" class="badge bg-primary">Développement Web</a>
-					</div>
-				</div>
-			</div>
-			<!-- Latest Post 3 -->
-			<div class="col-lg-4 col-sm-6 mb-4">
-				<div class="card h-100">
-					<img class="card-img-top" src="public/img/cabin.png" alt="Post 3">
-					<div class="card-body">
-						<h5 class="card-title">Titre de l'article</h5>
-						<p class="card-text">Description succincte de l'article.</p>
-					</div>
-					<ul class="list-group list-group-flush">
-						<li class="list-group-item">Catégorie : Technologie</li>
-					</ul>
-					<div class="card-body">
-						<a href="#" class="card-link">Lire l'article</a>
-					</div>
-					<div class="card-footer">
-						Tags :
-						<a href="#" class="badge bg-primary">Technologie</a>
-						<a href="#" class="badge bg-primary">Développement Web</a>
-					</div>
-				</div>
-			</div>
+			{% endfor %}
 		</div>
 	</div>
 </section>
+<style></style>

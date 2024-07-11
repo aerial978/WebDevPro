@@ -5,9 +5,11 @@ namespace src\controller;
 use src\Models\TagModel;
 use src\Models\PostModel;
 use src\Models\PostTagModel;
+use src\Service\PostService;
 use src\Models\CategoryModel;
 use src\Constants\ErrorMessage;
 use src\Service\PostFormService;
+use src\service\TagCloudService;
 
 class PostController extends BaseController
 {
@@ -39,21 +41,15 @@ class PostController extends BaseController
         $errors = [];
 
         try {
-
             if (isset($_POST['submit'])) {
                 $title = trim(htmlspecialchars($_POST['title'], ENT_QUOTES, 'UTF-8'));
-                $introduction = trim(htmlspecialchars($_POST['introduction'], ENT_QUOTES, 'UTF-8'));
-                $postContent = trim(htmlspecialchars($_POST['postContent'], ENT_QUOTES, 'UTF-8'));
+                $postContent = $_POST['postContent']; // contenu brut, sera assaini plus tard avant enregistrement
                 $category = isset($_POST['category']) ? $_POST['category'] : '';
                 $postStatus = isset($_POST['postStatus']) ? $_POST['postStatus'] : '';
                 $postImage = $_FILES['postImage'];
 
                 if (empty($title)) {
                     $errors['title'] = ErrorMessage::TITLE_INVALID;
-                }
-
-                if (empty($introduction)) {
-                    $errors['introduction'] = ErrorMessage::INTRODUCTION_INVALID;
                 }
 
                 if (empty($postContent)) {
@@ -101,7 +97,6 @@ class PostController extends BaseController
                     $posts = new PostModel();
 
                     $posts->setTitle($title)
-                        ->setIntroduction($introduction)
                         ->setPostContent($postContent)
                         ->setCategory_id($category)
                         ->setPostStatus($postStatus)
@@ -110,37 +105,37 @@ class PostController extends BaseController
                         ->setCreated_at_post();
 
                     $posts->createPost();
+
+                    // Récupérer l'ID du post nouvellement créé
+                    $postId = $posts->getLastInsertedPostId();
+
+                    $selectedTags = isset($_POST['tags']) ? $_POST['tags'] : [];
+                    $selectedTagsArray = explode(',', $selectedTags);
+
+                    $tagsModel = new TagModel();
+                    $postTagModel = new PostTagModel();
+
+                    if (!empty($selectedTags)) {
+                        $existingTagNames = $tagsModel->getAllTagNames();
+                        $tagsToAdd = array_values(array_diff($selectedTagsArray, $existingTagNames));
+
+                        foreach ($tagsToAdd as $tagAdd) {
+                            $tagData = ['tag_name' => $tagAdd];
+                            $tagsModel->setTagName($tagData['tag_name']);
+                            $tagsModel->create($tagData);
+                        }
+
+                        foreach ($selectedTagsArray as $tag) {
+                            $tagId = $tagsModel->getTagIdByTagName($tag);
+
+                            $postTag = $postTagModel->getByPostAndTag($postId, $tagId->id);
+                            if (!$postTag) {
+                                $postTagModel->addTagsToPost($postId, [$tagId->id]);
+                            }
+                        }
+                    }
+
                     header('Location: index');
-                }
-            }
-
-            $tagModel = new TagModel();
-            $tags = isset($_POST['tags']) ? $_POST['tags'] : [];
-
-            $postModel = new PostModel();
-            $getLastInsertedPostId = $postModel->getLastInsertedPostId();
-
-            foreach ($tags as $tag) {
-                if (is_numeric($tag)) {
-                    $criteria = ['id' => $tag];
-
-                    $postTagModel = new PostTagModel();
-                    $postTagModel->addTagsToPost($getLastInsertedPostId, $criteria);
-                } else {
-                    $criteria = ['tag_name' => $tag];
-                }
-
-                $existingTags = $tagModel->findBy($criteria);
-
-                if (empty($existingTags)) {
-                    $tagData = ['tag_name' => $tag];
-                    $tagModel->setTagName($tagData['tag_name']);
-                    $tagModel->create($tagData);
-
-                    $getLastInsertedTagId = [$tagModel->getLastInsertedTagId()];
-
-                    $postTagModel = new PostTagModel();
-                    $postTagModel->addTagsToPost($getLastInsertedPostId, $getLastInsertedTagId);
                 }
             }
 
@@ -173,6 +168,7 @@ class PostController extends BaseController
         }
     }
 
+
     /**
      * Manages the modification of a post.
      * Performs data validation and saves the post if there are no errors.
@@ -195,18 +191,13 @@ class PostController extends BaseController
 
             if (isset($_POST['submit'])) {
                 $title = trim(htmlspecialchars($_POST['title'], ENT_QUOTES, 'UTF-8'));
-                $introduction = trim(htmlspecialchars($_POST['introduction'], ENT_QUOTES, 'UTF-8'));
-                $postContent = trim(htmlspecialchars($_POST['postContent'], ENT_QUOTES, 'UTF-8'));
+                $postContent = $_POST['postContent']; // contenu brut, sera assaini plus tard avant enregistrement
                 $category = isset($_POST['category']) ? $_POST['category'] : '';
                 $postStatus = isset($_POST['postStatus']) ? $_POST['postStatus'] : '';
                 $postImage = $_FILES['postImages'];
 
                 if (empty($title)) {
                     $errors['title'] = ErrorMessage::TITLE_INVALID;
-                }
-
-                if (empty($introduction)) {
-                    $errors['introduction'] = ErrorMessage::INTRODUCTION_INVALID;
                 }
 
                 if (empty($postContent)) {
@@ -253,7 +244,6 @@ class PostController extends BaseController
                     $postsEdit = new PostModel();
 
                     $postsEdit->setTitle($title)
-                        ->setIntroduction($introduction)
                         ->setPostContent($postContent)
                         ->setCategory_id($category)
                         ->setPostStatus($postStatus)
@@ -268,34 +258,39 @@ class PostController extends BaseController
 
                     $selectedTags = isset($_POST['tags']) ? $_POST['tags'] : [];
 
-                    $tagsModel = new TagModel();
-                    $currentTags = $tagsModel->getTagsForPost($id);
+                    $selectedTagsArray = explode(',', $selectedTags);
 
-                    $currentTagIds = array_column($currentTags, 'tag_id');
+                    $tagsModel = new TagModel();
+                    $postTagModel = new PostTagModel();
 
                     if (!empty($selectedTags)) {
-                        $tagsToAdd = array_values(array_diff($selectedTags, $currentTagIds));
-                        $tagsToRemove = array_values(array_diff($currentTagIds, $selectedTags));
+                        $existingTagNames = $tagsModel->getAllTagNames();
 
-                        foreach ($tagsToAdd as $tagId) {
-                            if (!is_numeric($tagId)) {
-                                $tagName = ucfirst($tagId);
-                                $tagData = ['tag_name' => $tagName];
-                                $tagsModel->setTagName($tagData['tag_name']);
-                                $tagsModel->create($tagData);
+                        $tagsToAdd = array_values(array_diff($selectedTagsArray, $existingTagNames));
 
-                                $tagId = $tagsModel->getLastInsertedTagId();
-                            }
+                        $postTagModel->removeTagsFromPost($id);
 
-                            $postTagModel = new PostTagModel();
-                            $postTagModel->addTagsToPost($id, [$tagId]);
+                        foreach ($tagsToAdd as $tagAdd) {
+                            $tagData = ['tag_name' => $tagAdd];
+
+                            $tagsModel->setTagName($tagData['tag_name']);
+
+                            $tagsModel->create($tagData);
                         }
 
-                        foreach ($tagsToRemove as $tagId) {
-                            $postTagModel = new PostTagModel();
-                            $postTagModel->removeTagsFromPost($id, [$tagId]);
+                        foreach($selectedTagsArray as $tag) {
+
+                            // récupére l'ID d'un tag en fonction de son nom
+                            $tagId = $tagsModel->getTagIdByTagName($tag);
+
+                            $postTag = $postTagModel->getByPostAndTag($id, $tagId->id);
+                            if(!$postTag) {
+                                // récupère l'id de postTag si un tag est déjà associé à un post
+                                $postTagModel->addTagsToPost($id, [$tagId->id]);
+                            }
                         }
                     }
+
                     header('Location: ../index');
                 }
             }
@@ -319,13 +314,16 @@ class PostController extends BaseController
             $tagsModel = new TagModel();
             $tagsForPost = $tagsModel->getTagsForPost($id);
 
+            $selectedTagsIds = array_column($tagsForPost, 'tag_name');
+
             $postFormService = new PostFormService();
             $editPostForm = $postFormService->editPostService($categoriesOptions, $post, $tagsOptions, $tagsForPost);
 
             $this->twig->display('admin/posts/edit.html.twig', [
                 'errors' => $errors,
                 'editPostForm' => $editPostForm->create(),
-                'tagsForPost' => $tagsForPost
+                'tagsForPost' => $tagsForPost,
+                'selectedTagsIds' => $selectedTagsIds
             ]);
         } catch (\Exception $e) {
             header('Location: /error-page-500');
@@ -364,5 +362,75 @@ class PostController extends BaseController
             header('Location: /error-page-500');
             exit;
         }
+    }
+
+    public function postList()
+    {
+        $postModel = new PostModel();
+        $postService = new PostService();
+
+        $search = isset($_GET['search']) ? trim($_GET['search']) : null;
+
+        $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+        // Nombre de posts par page
+        $limit = 2;
+        // Calcul de l'offset pour la pagination, qui détermine combien d'éléments (posts) doivent être ignorés avant de récupérer les résultats pour la page courante
+        $offset = ($page - 1) * $limit;
+
+        if ($search) {
+            $posts = $postModel->searchPosts($search, $offset, $limit);
+            // calcul du nombre total de posts
+            $totalPosts = count($posts);
+        } else {
+            $posts = $postModel->getPosts($offset, $limit);
+            // calcul du nombre total de posts
+            $totalPosts = $postModel->countPosts();
+        }
+
+        if ($search) {
+            $posts = $postModel->searchPosts($search, $offset, $limit);
+            $totalPosts = count($posts);
+            foreach ($posts as &$post) {
+                $post['time_elapsed'] = $postModel->timeElapsedString($post['updated_at_post']);
+                $post['excerpt_title'] = $postService->getExcerpt($post['title'], $search);
+                $post['excerpt_content'] = $postService->getExcerpt($post['post_content'], $search);
+            }
+        } else {
+            $posts = $postModel->getPosts($offset, $limit);
+            $totalPosts = $postModel->countPosts();
+            foreach ($posts as &$post) {
+                $post['time_elapsed'] = $postModel->timeElapsedString($post['updated_at_post']);
+            }
+        }
+
+        $categoryModel = new CategoryModel();
+        $categories = $categoryModel->findAllCategory();
+
+        // Récupére les fréquences des tags
+        $tagModel = new TagModel();
+        $tags = $tagModel->getTagFrequencies();
+
+        // Calcule les tailles des tags
+        $tagCloudService = new TagCloudService();
+        $tagSizes = $tagCloudService->calculateTagSizes($tags);
+
+        $latestPosts = $postModel->getPosts();
+
+        // Pagination, calcul du nombre total de pages
+        $totalPages = ceil($totalPosts / $limit);
+
+        $searchTerms = $search ? explode(' ', $search) : [];
+
+        $this->twig->display('frontend/postList.html.twig', [
+            'posts' => $posts,
+            'search' => $search,
+            'searchTerms' => $searchTerms,
+            'categories' => $categories,
+            'tagSizes' => $tagSizes,
+            'latestPosts' => $latestPosts,
+            'showSeeMoreLinks' => false,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+        ]);
     }
 }

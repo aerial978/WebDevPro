@@ -3,7 +3,13 @@ footer {
     color: $white-color;
 }
 
-footer .menu-footer {
+footer .menu-footer li a {
     color: $primary-color;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+footer .menu-footer li a:hover {
+    color: $white-color;
 }
 

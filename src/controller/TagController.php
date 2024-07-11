@@ -18,7 +18,7 @@ class TagController extends BaseController
     {
         $tagsModel = new TagModel();
 
-        $indexTags = $tagsModel->findAllTag();
+        $indexTags = $tagsModel->findTagList();
 
         $this->twig->display('admin/tags/index.html.twig', compact('indexTags'));
     }

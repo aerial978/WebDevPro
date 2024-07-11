@@ -13,11 +13,6 @@ section {
     padding: 0 20px;
 }
 
-.portfolio, .contact {
-    background-color: $primary-light-color;
-    color: $secondary-color;
-}
-
 .separator-block {
     display: flex;
     justify-content: center;
@@ -48,6 +43,29 @@ section {
     background-color: $secondary-color;
 }
 
+.portfolio, .latest-posts {
+    background-color: $primary-light-color;
+    color: $secondary-color;
+}
+
 .page-section {
     padding: 6rem 0;
 }
+
+.page-section__heading {
+    font-family: $primary-font;
+}
+
+.posts-list {
+    margin-top: 120px;
+}
+
+.underline {
+    border-bottom: 3px solid $primary-color;
+}
+
+.card {
+    border: none;
+}
+
+

@@ -165,34 +165,57 @@ class Form
         return $this;
     }
 
-    public function addTagsLabel(array $tags): self
+    public function addTagInputCreate(string $name, array $tagsOptions = []): self
     {
-        $this->formCode .= "<label for='tags'>Tags associated with the post : ";
+        $this->formCode .= "<input type='hidden' name='$name' id='hidden-tag' value=''>
+        <div class='tag-input-container' id='tag-input-container'>
+            <div id='tag-container' class='tag-container'>";
 
-        foreach ($tags as $tag) {
-            $this->formCode .= "<div class='badge bg-primary me-1'>" . $tag['tag_name'] . "</div>";
+        $this->formCode .= "<input id='add-newtag' type='text' placeholder='Enter a tag' style='border: none; border-radius: 3px; background-color: #F2F2F2;'>";
+
+        // Ajout des options des tags existants
+        $this->formCode .= "</div>
+                <select id='all-tags' hidden class='form-select tag-select'>
+                    <option value='' disabled selected>Select a tag</option>";
+
+        foreach ($tagsOptions as $tag) {
+            $this->formCode .= "<option value='{$tag}'>{$tag}</option>";
         }
 
-        $this->formCode .= "</label>";
+        $this->formCode .= "</select>
+        </div><div id='tagError' class='text-danger'></div>";
 
         return $this;
     }
 
-    public function addSelectMultiple(string $name, array $options, $selectedValue = '', array $attributes = []): self
+    public function addTagInputEdit(string $name, array $tagsForPost = [], array $tagsOptions = [], array $selectedTagsIds = []): self
     {
-        $this->formCode .= "<select name='$name'";
+        $this->formCode .= "<input type='hidden' name='$name' id='hidden-tag' value='" . implode(',', $selectedTagsIds) . "'>
+        <div class='tag-input-container' id='tag-input-container'>
+            <div id='tag-container' class='tag-container'>";
 
-        $this->formCode .= $attributes ? $this->addAttributes($attributes) . '>' : '>';
-
-        foreach ($options as $value => $text) {
-            $selected = $value == $selectedValue ? 'selected' : '';
-            $this->formCode .= "<option value=\"$value\" $selected>$text</option>";
+        // Ajout des tags déjà sélectionnés
+        foreach ($tagsForPost as $tag) {
+            $this->formCode .= "<span class='tag-label' data-tag='{$tag['tag_name']}'>{$tag['tag_name']} <span class='remove-tag'>x</span></span>";
         }
 
-        $this->formCode .= "</select>";
+        $this->formCode .= "<input id='add-newtag' type='text' placeholder='Enter a tag' style='border: none; border-radius: 3px; background-color: #F2F2F2;'>";
+
+        // Ajout des options des tags existants
+        $this->formCode .= "</div>
+                <select id='all-tags' hidden class='form-select tag-select'>
+                    <option value='' disabled selected>Select a tag</option>";
+
+        foreach ($tagsOptions as $tag) {
+            $this->formCode .= "<option value='{$tag}'>{$tag}</option>";
+        }
+
+        $this->formCode .= "</select>
+        </div><div id='tagError' class='text-danger'></div>";
 
         return $this;
     }
+
 
     public function addButton(string $text, string $type, string $name, array $attributes = []): self
     {

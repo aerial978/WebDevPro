@@ -8,6 +8,10 @@
 
 @import 'components/buttons';
 
+@import 'components/sidebar';
+
+@import 'components/pagination';
+
 @import 'front_end/sections/navbar_front_end';
 
 @import 'front_end/sections/footer';
@@ -15,6 +19,8 @@
 @import 'front_end/sections/hero';
 
 @import 'front_end/sections/portfolio';
+
+@import 'front_end/sections/latest_posts';
 
 @import 'front_end/sections/about';
 
@@ -36,4 +42,5 @@
 
 @import 'admin/_responsive_admin';
 
+@import 'front_end/pages/posts_list';
 

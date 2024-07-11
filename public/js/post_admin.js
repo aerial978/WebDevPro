@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
         postForm.addEventListener('submit', function(event) {
             let isValid = true;
             let title = document.querySelector('#title').value;
-            let introduction = document.querySelector('#introduction').value;
             let postContent = document.querySelector('#editor').value;
             let category = document.querySelector('#category').value;
             let postStatus = document.querySelector('#postStatus').value;
@@ -13,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Reset error messages
             document.getElementById('titleError').textContent = '';
-            document.getElementById('introductionError').textContent = '';
             document.getElementById('postContentError').textContent = '';
             document.getElementById('categoryError').textContent = '';
             document.getElementById('postStatusError').textContent = '';
@@ -22,12 +20,6 @@ document.addEventListener('DOMContentLoaded', function() {
             // Validation du titre
             if (title.trim() === '') {
                 document.getElementById('titleError').textContent = 'Title field is required !';
-                isValid = false;
-            }
-
-            // Validation de l'introduction
-            if (introduction.trim() === '') {
-                document.getElementById('introductionError').textContent = 'Introduction field is required !';
                 isValid = false;
             }
 

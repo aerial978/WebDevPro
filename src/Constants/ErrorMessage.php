@@ -9,7 +9,6 @@ class ErrorMessage
     public const PASSWORD_MISMATCH = 'Passwords do not match !';
     public const EMAIL_ALREADYEXISTS = 'Email address already exists !';
     public const TITLE_INVALID = 'Title field is required !';
-    public const INTRODUCTION_INVALID = 'Introduction field is required !';
     public const CONTENT_INVALID = 'Content field is required !';
     public const CATEGORY_INVALID = 'Please select a category !';
     public const STATUS_INVALID = 'Please select a status !';

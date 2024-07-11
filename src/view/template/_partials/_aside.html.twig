@@ -1,0 +1,123 @@
+<div class="sidebar">
+    <!-- Search -->
+    <div class="mb-4">
+        <h5 class="widget-title mb-3">Search</h5>
+        <form action="{{ base_path }}posts" method="GET">
+            <div class="input-group">
+               <input type="search" name="search" placeholder="Search" aria-label="Search" class="form-control" required>
+            </div>
+        </form>
+    </div>
+    <!-- Categories -->
+    <div class="mb-4">
+        <h5 class="widget-title">Categories</h5>
+        <ul class="category-list">
+            {% for category in categories %}
+                <li class="list-group-item">
+                    <a href="#" class="category-link">{{ category.name_category }}
+                        <span class="badge badge-pill">{{ category.post_count }}</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="list-group-item">
+                    <p class="mb-1">No categories found.</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <!-- Latest Posts -->
+    <div class="mb-4">
+        <h5 class="widget-title">Latest Posts</h5>
+        {% for latestPost in latestPosts|slice(0, 3) %}
+            <div class="latest-list mb-3">
+                <div class="card bg-dark text-white">
+                    <img src="public/img/image1.jpg" class="card-img" alt="{{ latestPost.title }}">
+                    <div class="card-img-overlay d-flex align-items-end p-0">
+                        <div class="card-title w-100 text-center p-2" style="background-color: rgba(0, 0, 0, 0.4);">
+                            <a href="#" class="text-white text-decoration-none">{{ latestPost.title }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <li class="list-group-item">
+                <p class="mb-1">No latest posts found.</p>
+            </li>
+        {% endfor %}
+        {% if showSeeMoreLink %}
+                <div class="text-end mt-4">
+                    <a href="#" class="link-more-posts">See more posts <i class="bi bi-arrow-right"></i></a>
+                </div>
+        {% endif %}
+    </div>
+    <!-- Latest Comments -->
+    <div class="mb-4">
+        <h5 class="widget-title mb-3">Latest Comments</h5>
+        <ul class="list-group list-group-flush">
+            {% for comment in comments %}
+                <li class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1">{{ comment.author }}</h6>
+                        <small>{{ comment.date|date('j M, Y H:i') }}</small>
+                    </div>
+                    <p class="mb-1">{{ comment.content|slice(0, 50) ~ '...' }}</p>
+                    <small>on <a href="{{ base_path }}post/{{ comment.post_id }}">post title</a></small>
+                </li>
+            {% else %}
+                <li class="list-group-item">
+                    <p class="mb-1">No comments found.</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <!-- Popular Posts -->
+    <div class="mb-4">
+        <h5 class="widget-title">Popular Posts</h5>
+        {% for popularPost in popularPosts|slice(0, 3) %}
+            <div class="latest-list mb-3">
+                <div class="card bg-dark text-white">
+                    <img src="public/img/image1.jpg" class="card-img" alt="{{ popularPost.title }}">
+                    <div class="card-img-overlay d-flex align-items-end p-0">
+                        <div class="card-title w-100 text-center p-2" style="background-color: rgba(0, 0, 0, 0.4);">
+                            <a href="#" class="text-white text-decoration-none">{{ popularPost.title }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <li class="list-group-item">
+                <p class="mb-1">No popular posts found.</p>
+            </li>
+        {% endfor %}
+        {% if showSeeMoreLink %}
+                <div class="text-end mt-4">
+                    <a href="#" class="link-more-posts">See more posts <i class="bi bi-arrow-right"></i></a>
+                </div>
+        {% endif %}
+    </div>
+    <!-- Tags -->
+    <div class="tags-list mb-4">
+        <h5 class="widget-title">Tags</h5>
+        <div class="tag-cloud">
+            {% for tag, size in tagSizes %}
+                {% set colorClass = loop.index is odd ? 'tag-color-dark' : 'tag-color-green' %}
+                <a href="#" class="tag {{ colorClass }}" style="font-size: {{ size }}px">{{ tag }}</a>
+            {% else %}
+            <li class="list-group-item">
+                <p class="mb-1">No tags found.</p>
+            </li>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Archives -->
+    <div class="mb-4">
+        <h5 class="widget-title">Archives</h5>
+        <ul class="list-group">
+            <li class="list-group-item">January 2021</li>
+            <li class="list-group-item">December 2020</li>
+            <li class="list-group-item">November 2020</li>
+        </ul>
+    </div>
+</div>
+
