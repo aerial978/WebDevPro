@@ -4,9 +4,11 @@ namespace src\Constants;
 
 class ErrorMessage
 {
+    public const USERNAME_INVALID = 'Username must be at least 12 characters long and include at least one lowercase letter, one uppercase letter, one number and one special character.';
     public const EMAIL_INVALID = 'Email address is invalid ! ';
     public const PASSWORD_INVALID = 'Password must be at least 12 characters long and include at least one lowercase letter, one uppercase letter, one number and one special character.';
     public const PASSWORD_MISMATCH = 'Passwords do not match !';
+    public const USERNAME_ALREADYEXISTS = 'Username already exists !';
     public const EMAIL_ALREADYEXISTS = 'Email address already exists !';
     public const TITLE_INVALID = 'Title field is required !';
     public const CONTENT_INVALID = 'Content field is required !';

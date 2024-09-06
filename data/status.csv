@@ -1,0 +1,7 @@
+id;name_status;description_status
+1;Published;The item is published and visible to everyone.
+2;Draft;The item is a draft and not yet published.
+3;Pending;The item is pending review or approval.
+4;Archived;The item is archived and not publicly visible.
+5;Rejected;The item is rejected and will not be published.
+6;Trashed;The item is deleted and moved to trash.

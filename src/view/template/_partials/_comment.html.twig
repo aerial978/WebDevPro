@@ -1,0 +1,29 @@
+<div class="card-body py-4 m-3" style="background-color:#D1F2EB">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex flex-column flex-sm-row py-2">
+                    <!-- Section de l'avatar -->
+                    <div class="d-flex align-items-center justify-content-center justify-content-sm-start mb-3 mb-sm-0">
+                        {% if comment.profile_picture %}
+                            <img class="rounded-circle shadow-1-strong me-sm-3" src="{{ base_path }}public/upload/avatar/{{ comment.profile_picture }}" alt="avatar" width="60" height="60"/>
+                        {% else %}
+                            <img class="rounded-circle shadow-1-strong me-sm-3" src="{{ base_path }}public/img/default.png" alt="avatar" width="60" height="60"/>
+                        {% endif %}
+                    </div>
+                    <!-- Section des détails du commentaire -->
+                    <div>
+                        <div class="d-flex flex-column flex-sm-row align-items-center align-items-sm-center">
+                            <p class="mb-1 mb-sm-0 me-sm-2 fw-bold">{{ comment.username }}</p>
+                            <p class="mb-0 text-muted">{{ comment.created_at_comment|date('d-m-Y H:i:s') }}</p>
+                        </div>
+                        <div class="bg-white p-3 my-3 rounded-2 w-100">
+                            <p class="mb-0">{{ comment.comment_content }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>          
+</div>
+

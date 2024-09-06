@@ -4,14 +4,22 @@ document.addEventListener('DOMContentLoaded', function() {
     if (registrationForm !== null) {
     registrationForm.addEventListener('submit', function(event) {
         let isValid = true;
+        let username = document.querySelector('#registrationForm #username').value;
         let email = document.querySelector('#registrationForm #email').value;
         let password = document.querySelector('#registrationForm #password').value;
         let confirmPassword = document.getElementById('confirm_password').value;
 
         // Reset error messages
+        document.getElementById('usernameError').textContent = '';
         document.getElementById('emailError').textContent = '';
         document.getElementById('passwordError').textContent = '';
         document.getElementById('confirmPasswordError').textContent = '';
+
+        const usernameRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$#!%*?&])[A-Za-z\d@$#!%*?&]{12,}$/;
+        if (!usernameRegex.test(username)) {
+            document.getElementById('usernameError').textContent = 'The username must be at least 12 characters long and include at least one lowercase letter, one uppercase letter, one number and one special character.';
+            isValid = false;
+        }
 
         // Validation de l'adresse e-mail
         const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;

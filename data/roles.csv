@@ -1,0 +1,6 @@
+id;name_role;description_role
+1;admin;Has full control over the site.
+2;editor;Can write their articles and comments, edit, and publish all articles and all comments.
+3;author;Can write, edit, and publish their articles and comments.
+4;contributor;Can write and edit their articles and comments.
+5;subscriber;Can write comments.

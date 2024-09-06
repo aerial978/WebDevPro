@@ -1,4 +1,12 @@
 RewriteEngine On
+
+# Assurez-vous que le chemin de base est défini correctement
+RewriteBase /webdevpro/
+
+# Ne pas réécrire si le fichier ou le dossier existe
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ /webdevpro/index.php [L,QSA]
+
+# Rediriger toutes les autres requêtes vers index.php
+RewriteRule ^ index.php [L,QSA]
+

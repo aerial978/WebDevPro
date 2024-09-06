@@ -8,6 +8,31 @@
             </div>
         </form>
     </div>
+    <!-- Latest Posts -->
+    <div class="mb-4">
+        <h5 class="widget-title">Latest Posts</h5>
+        {% for latestPost in latestPosts|slice(0, 3) %}
+            <div class="latest-list mb-3">
+                <div class="card bg-dark text-white">
+                    <img src="{{ base_path }}public/upload/{{ latestPost.post_image }}" class="card-img" alt="{{ latestPost.title }}">
+                    <div class="card-img-overlay d-flex align-items-end p-0">
+                        <div class="card-title w-100 text-center p-2" style="background-color: rgba(0, 0, 0, 0.4);">
+                            <a href="#" class="fs-5 text-white text-decoration-none">{{ latestPost.title }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <li class="list-group-item">
+                <p class="mb-1">No latest posts found.</p>
+            </li>
+        {% endfor %}
+        {% if showSeeMoreLink %}
+                <div class="text-end mt-4">
+                    <a href="#" class="link-more-posts">See more posts <i class="bi bi-arrow-right"></i></a>
+                </div>
+        {% endif %}
+    </div>
     <!-- Categories -->
     <div class="mb-4">
         <h5 class="widget-title">Categories</h5>
@@ -25,43 +50,15 @@
             {% endfor %}
         </ul>
     </div>
-    <!-- Latest Posts -->
-    <div class="mb-4">
-        <h5 class="widget-title">Latest Posts</h5>
-        {% for latestPost in latestPosts|slice(0, 3) %}
-            <div class="latest-list mb-3">
-                <div class="card bg-dark text-white">
-                    <img src="public/img/image1.jpg" class="card-img" alt="{{ latestPost.title }}">
-                    <div class="card-img-overlay d-flex align-items-end p-0">
-                        <div class="card-title w-100 text-center p-2" style="background-color: rgba(0, 0, 0, 0.4);">
-                            <a href="#" class="text-white text-decoration-none">{{ latestPost.title }}</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% else %}
-            <li class="list-group-item">
-                <p class="mb-1">No latest posts found.</p>
-            </li>
-        {% endfor %}
-        {% if showSeeMoreLink %}
-                <div class="text-end mt-4">
-                    <a href="#" class="link-more-posts">See more posts <i class="bi bi-arrow-right"></i></a>
-                </div>
-        {% endif %}
-    </div>
     <!-- Latest Comments -->
     <div class="mb-4">
         <h5 class="widget-title mb-3">Latest Comments</h5>
         <ul class="list-group list-group-flush">
-            {% for comment in comments %}
+            {% for latestComment in latestComments %}
                 <li class="list-group-item">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h6 class="mb-1">{{ comment.author }}</h6>
-                        <small>{{ comment.date|date('j M, Y H:i') }}</small>
-                    </div>
-                    <p class="mb-1">{{ comment.content|slice(0, 50) ~ '...' }}</p>
-                    <small>on <a href="{{ base_path }}post/{{ comment.post_id }}">post title</a></small>
+                    <div class="w-100">
+                    <span class="mb-1">{{ latestComment.username }}</span> on
+                    <a href="" class="comment-title fw-bold">{{ latestComment.post_title|slice(0, 45) }}{{ latestComment.post_title|length > 45 ? '...' : '' }}</a>
                 </li>
             {% else %}
                 <li class="list-group-item">
@@ -73,10 +70,10 @@
     <!-- Popular Posts -->
     <div class="mb-4">
         <h5 class="widget-title">Popular Posts</h5>
-        {% for popularPost in popularPosts|slice(0, 3) %}
+        {% for popularPost in mostViewedPosts %}
             <div class="latest-list mb-3">
                 <div class="card bg-dark text-white">
-                    <img src="public/img/image1.jpg" class="card-img" alt="{{ popularPost.title }}">
+                    <img src="{{ base_path }}public/upload/{{ popularPost.post_image }}" class="card-img" alt="{{ popularPost.title }}">
                     <div class="card-img-overlay d-flex align-items-end p-0">
                         <div class="card-title w-100 text-center p-2" style="background-color: rgba(0, 0, 0, 0.4);">
                             <a href="#" class="text-white text-decoration-none">{{ popularPost.title }}</a>
@@ -101,15 +98,19 @@
         <div class="tag-cloud">
             {% for tag, size in tagSizes %}
                 {% set colorClass = loop.index is odd ? 'tag-color-dark' : 'tag-color-green' %}
-                <a href="#" class="tag {{ colorClass }}" style="font-size: {{ size }}px">{{ tag }}</a>
+            <a href="#" class="tag {{ colorClass }} {{ loop.index > 50 ? 'd-none' : '' }}" style="font-size: {{ size }}px">{{ tag }}</a>
             {% else %}
             <li class="list-group-item">
                 <p class="mb-1">No tags found.</p>
             </li>
             {% endfor %}
         </div>
+        {% if tagSizes|length > 10 %}
+            <div class="d-flex justify-content-end tag-cloud-end mt-2">
+                <button id="show-more-tags" class="btn fw-bold p-0">More tags</button>
+            </div>
+        {% endif %}
     </div>
-    
     <!-- Archives -->
     <div class="mb-4">
         <h5 class="widget-title">Archives</h5>
@@ -120,4 +121,27 @@
         </ul>
     </div>
 </div>
+<style>
+    .tags-list .tag-cloud-end button {
+        color: #2980B9;
+    }
+
+    .tags-list .tag-cloud-end button:hover {
+        color: #94BFDC;
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const moreButton = document.getElementById('show-more-tags');
+        const hiddenTags = document.querySelectorAll('.tag-cloud .d-none');
+
+        moreButton.addEventListener('click', function () {
+            hiddenTags.forEach(tag => {
+                tag.classList.remove('d-none');
+            });
+            moreButton.style.display = 'none';
+        });
+    });
+</script>
+
 

@@ -1,0 +1,131 @@
+id;name_tag
+1;Collaboration
+2;REST
+3;Sketch
+4;CSS
+5;Callback
+6;Test
+7;Terraform
+8;ORM
+9;CDN
+10;Observer
+11;OOP
+12;Prometheus
+13;WCAG
+14;Gtmetrix
+15;Component
+16;Responsive
+17;MVC
+18;Cassandra
+19;Templates
+20;Closures
+21;Branching
+22;Encapsulation
+23;Joomla
+24;Containers
+25;Workflow
+26;Django
+27;Google
+28;Promise
+29;Factory
+30;Layout
+31;Vue.js
+32;CSRF
+33;Social Login
+34;CRUD
+35;Library
+36;GraphQL
+37;NoSQL
+38;Media Queries
+39;Utility first
+40;Webpagetest
+41;ARIA
+42;Figma
+43;DOM
+44;CI/CD
+45;Orchestration
+46;CI integration
+47;Laravel
+48;SQL injection
+49;Docker
+50;Merge
+51;Git flow
+52;SASS
+53;SQL
+54;Wave
+55;MongoDB
+56;Apollo Client
+57;Design patterns
+58;HTTPS
+59;Themes
+60;HTML
+61;Tailwind
+62;XSS
+63;Scalability
+64;Lottie
+65;Controller
+66;Oauth2
+67;Wordpress
+68;E-commerce
+69;My SQL
+70;Queries
+71;Journey maps
+72;Grafana
+73;Express.js
+74;Secure APIs
+75;Flask
+76;Synchronous code
+77;Flexbox
+78;Jenkins
+79;Adobe XD
+80;Authorization
+81;Angular
+82;Gulp
+83;Authentication
+84;Backlinks
+85;Polymorphism
+86;UseEffect
+87;Microinteractions
+88;Commit
+89;View
+90;HTTP
+91;Redux
+92;ES6
+93;HSTS
+94;Off-page SEO
+95;Production
+96;Async/await
+97;Travis CI
+98;Singleton
+99;Mocking
+100;Fluid Layouts
+101;SSR
+102;MFA
+103;Advanced PHP
+104;Event-driven
+105;Github actions
+106;Wireframe
+107;WPO
+108;Facebook
+109;Kubernetes
+110;HTTP requests
+111;CSP
+112;NeoAj
+113;UseState
+114;SPA
+115;Audits
+116;Jest
+117;TDD
+118;Plugins
+119;WAF
+120;Webpack
+121;Hooks
+122;Grid
+123;IAC
+124;Github flow
+125;PostgreSQL
+126;Stateless
+127;Prototyping
+128;On-page SEO
+129;Mobile-first
+130;Middleware

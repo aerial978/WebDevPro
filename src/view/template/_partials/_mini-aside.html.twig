@@ -1,0 +1,29 @@
+<div class="sidebar">
+    <!-- Popular Posts -->
+    <div class="mb-4">
+        <h5 class="widget-title">Popular Posts</h5>
+        {% for popularPost in mostViewedPosts %}
+            <div class="latest-list mb-3">
+                <div class="card bg-dark text-white">
+                    <img src="{{ base_path }}public/upload/{{ popularPost.post_image }}" class="card-img" alt="popular-img">
+                    <div class="card-img-overlay d-flex align-items-end p-0">
+                        <div class="card-title w-100 text-center p-2" style="background-color: rgba(0, 0, 0, 0.4);">
+                            <a href="#" class="fs-5 text-white text-decoration-none">{{ popularPost.title }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <li class="list-group-item">
+                <p class="mb-1">No popular posts found.</p>
+            </li>
+        {% endfor %}
+        {% if showSeeMoreLink %}
+            <div class="text-end mt-4">
+                <a href="{{ base_path }}popular-posts" class="link-more-posts">See more posts <i class="bi bi-arrow-right"></i></a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+

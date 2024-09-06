@@ -17,9 +17,9 @@ class TagModel extends Model
     // TagController => index()
     public function findTagList()
     {
-        $sql = "SELECT tag_name, COUNT(post_tag.post_id) AS post_count, tag.id AS tagId FROM {$this->table}
+        $sql = "SELECT name_tag, COUNT(post_tag.post_id) AS post_count, tag.id AS tagId FROM {$this->table}
         LEFT JOIN post_tag ON tag.id = post_tag.tag_id
-        GROUP BY tag_name ORDER BY tag_name ASC";
+        GROUP BY name_tag ORDER BY name_tag ASC";
 
         $query = $this->request($sql);
 
@@ -41,31 +41,31 @@ class TagModel extends Model
         return $tags;
     }
 
-    // PostController => edit()
+    // PostBackController => edit()
     public function getAllTagNames()
     {
-        $sql = "SELECT tag_name FROM {$this->table}";
+        $sql = "SELECT name_tag FROM {$this->table}";
         $query = $this->request($sql);
         return $query->fetchAll(\PDO::FETCH_COLUMN, 0);
     }
 
-    // PostController => edit()
+    // PostBackController => edit()
     public function getTagIdByTagName($tag_name)
     {
-        $sql = "SELECT id FROM {$this->table} WHERE tag_name = :tag_name";
-        $params = [':tag_name' => $tag_name];
+        $sql = "SELECT id FROM {$this->table} WHERE name_tag = :name_tag";
+        $params = [':name_tag' => $tag_name];
         $query = $this->request($sql, $params);
         return $query->fetch();
     }
 
-    // PostController => postList()
+    // PostFrontController => postList() & singlePost()
     public function getTagFrequencies()
     {
         // Requête SQL pour obtenir le nom de chaque tag et le nombre de fois où il est utilisé, y compris les tags non utilisés
-        $sql = "SELECT tag_name, COUNT(post_tag.tag_id) as frequency 
+        $sql = "SELECT name_tag, COUNT(post_tag.tag_id) as frequency 
                 FROM {$this->table} 
                 LEFT JOIN post_tag ON tag.id = post_tag.tag_id 
-                GROUP BY tag_name";
+                GROUP BY name_tag";
 
         // Exécution de la requête
         $query = $this->request($sql);
@@ -100,7 +100,7 @@ class TagModel extends Model
     /**
      * Get the value of tag_name
      */
-    public function getTagName()
+    public function getNameTag()
     {
         return $this->tag_name;
     }
@@ -110,7 +110,7 @@ class TagModel extends Model
      *
      * @return  self
      */
-    public function setTagName($tag_name)
+    public function setNameTag($tag_name)
     {
         $this->tag_name = strtolower($tag_name);
 

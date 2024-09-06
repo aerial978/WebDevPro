@@ -1,6 +1,8 @@
 <?php
 require 'vendor/autoload.php';
 
+use src\controller\ErrorController;
+
 spl_autoload_register(function ($class) {
     $baseDir = __DIR__ . '/';
 
@@ -40,8 +42,8 @@ if ($requestUri) {
 
             // Passer l'ID à l'action du contrôleur si défini dans les matches
             if (isset($matches[1])) {
-                $id = $matches[1];
-                $controller->$action($id);
+                $slug = $matches[1];
+                $controller->$action($slug);
             } else {
                 $controller->$action();
             }
@@ -52,11 +54,11 @@ if ($requestUri) {
 
     // Si aucune correspondance n'est trouvée, renvoyer une erreur 404
     if (!$routeFound) {
-        http_response_code(404);
-        trigger_error("Sorry, the page you are looking for cannot be found", E_USER_WARNING);
+        $errorController = new ErrorController();
+        $errorController->notFound(); 
     }
 } else {
-    http_response_code(500);
-    trigger_error("Internal Server Error", E_USER_ERROR);
+    $errorController = new ErrorController();
+    $errorController->serverError(); 
 }
 ?>

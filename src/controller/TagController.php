@@ -60,7 +60,7 @@ class TagController extends BaseController
 
                     $tags = new TagModel();
 
-                    $tags->setTagName($nameTag);
+                    $tags->setNameTag($nameTag);
 
                     $tags->create();
                     header('Location: index');
@@ -124,7 +124,7 @@ class TagController extends BaseController
 
                     $tags = new TagModel();
 
-                    $tags->setTagName($nameTag);
+                    $tags->setNameTag($nameTag);
 
                     $tags->update($id);
                     header('Location: ../index');

@@ -15,7 +15,7 @@ class PostTagModel extends Model
         $this->table = "Post_tag";
     }
 
-    // PostController => edit()
+    // PostBackController => edit()
     public function addTagsToPost($postId, $tagIds)
     {
         $results = []; // Un tableau pour stocker les résultats de chaque insertion
@@ -31,7 +31,7 @@ class PostTagModel extends Model
         return $results; // Retourner le tableau des résultats
     }
 
-    // PostController => edit()
+    // PostBackController => edit()
     public function removeTagsFromPost($postId)
     {
         $sql = "DELETE FROM post_tag WHERE post_id = :post_id";
@@ -40,7 +40,7 @@ class PostTagModel extends Model
         return true;
     }
 
-    // PostController => edit()
+    // PostBackController => edit()
     public function getByPostAndTag($postId, $tagId)
     {
         $sql = "SELECT id FROM {$this->table} WHERE post_id = $postId AND tag_id = $tagId";

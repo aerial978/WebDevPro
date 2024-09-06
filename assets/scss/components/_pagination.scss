@@ -1,11 +1,26 @@
+.pagination-post-list .page-item:first-child .page-link,
+.pagination-post-list .page-item:last-child .page-link {
+    color: #fff;
+    background-color: #2980B9;
+    border-color: #2980B9;
+}
+
+
+.pagination-single-post .page-item:first-child .page-link,
+.pagination-single-post .page-item:last-child .page-link {
+    color: #2980B9;
+    background-color: inherit;
+    border-color: #2980B9;
+}
+
 .pagination .page-item .page-link {
     color: #2980B9;
     border-color: #2980B9;
 }
 
 .pagination .page-item .page-link:hover {
-    color: #0056b3;
-    background-color: #e9ecef;
+    color: #fff;
+    background-color: #94BFDC!important;
 }
 
 .pagination .page-item.active .page-link {
@@ -17,5 +32,11 @@
 .pagination .page-item.disabled .page-link {
     color: #94BFDC;   
     background-color: #fff; 
+    border-color: #2980B9;
+}
+
+.pagination .page-item:last-child.disabled .page-link {
+    color: #2980B9;
+    background-color: #fff;
     border-color: #2980B9;
 }
