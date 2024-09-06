@@ -196,7 +196,7 @@ class Form
 
         // Ajout des tags déjà sélectionnés
         foreach ($tagsForPost as $tag) {
-            $this->formCode .= "<span class='tag-label' data-tag='{$tag['tag_name']}'>{$tag['tag_name']} <span class='remove-tag'>x</span></span>";
+            $this->formCode .= "<span class='tag-label' data-tag='{$tag['name_tag']}'>{$tag['name_tag']} <span class='remove-tag'>x</span></span>";
         }
 
         $this->formCode .= "<input id='add-newtag' type='text' placeholder='Enter a tag' style='border: none; border-radius: 3px; background-color: #F2F2F2;'>";

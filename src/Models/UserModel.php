@@ -12,6 +12,7 @@ class UserModel extends Model
     protected $email;
     protected $password;
     protected $roles;
+    protected $profile_picture;
 
     public function __construct()
     {
@@ -19,10 +20,25 @@ class UserModel extends Model
     }
 
     /**
+     * Récupèrer un user à partir de son username
+     * @param string $username
+     * @return void
+     */
+    // SecurityController => handleRegistration()
+    public function findOneByUsername(string $username)
+    {
+        $query = $this->request("SELECT * FROM {$this->table} WHERE username = ?", [$username]);
+
+        return $query->fetch();
+    }
+
+
+    /**
      * Récupèrer un user à partir de son e-mail
      * @param string $email
      * @return void
      */
+    // SecurityController => handleRegistration()
     public function findOneByEmail(string $email)
     {
         $query = $this->request("SELECT * FROM {$this->table} WHERE email = ?", [$email]);
@@ -35,13 +51,15 @@ class UserModel extends Model
      *
      * @return void
      */
+    // SecurityController => handleLogin()
     public function setSession()
     {
         // Enregistrer l'ID de l'utilisateur et le username dans la session
         $sessionManager = new SessionManager();
         $sessionManager->set('user', [
             'id' => $this->id,
-            'username' => $this->username
+            'username' => $this->username,
+            'profile_picture' => $this->profile_picture
         ]);
     }
 
@@ -104,6 +122,28 @@ class UserModel extends Model
 
         return $this;
     }
+
+    /**
+     * Get the value of profile_picture
+     */
+    public function getProfile_picture()
+    {
+        return $this->profile_picture;
+    }
+
+    /**
+     * Set the value of profile_picture
+     *
+     * @return  self
+     */
+    public function setProfile_picture($profile_picture)
+    {
+        $this->profile_picture = $profile_picture;
+
+        return $this;
+    }
+
+
 
     /**
      * Get the value of password

@@ -4,6 +4,333 @@
 {% endblock %}
 
 {% block content %}
+	<div class="container post-single">
+		<div class="row">
+			<!-- Contenu Principal -->
+			<div class="col-lg-9">
+				<span class="post-category">{{ postDetail.name_category }}</span>
+				<!-- Titre du Post -->
+				<h3 class="fw-bold my-2">{{ postDetail.title }}</h3>
+				 <div class="post-meta d-flex justify-content-between align-items-center underline pb-2 mb-2">
+                            <div class="post-author-info d-flex align-items-center">
+                                <img src="{{ base_path }}public/upload/avatar/{{ postDetail.profile_picture}}" alt="{{ postDetail.author }}" class="author-avatar rounded-5 me-2">
+                                <span class="me-1">{{ postDetail.username }}</span>
+                                <span class="divider me-1">|</span>
+                                <span class="me-1">{{ postDetail.updated_at_post|date('m/d/Y') }}</span>
+                            </div>
+                            <div class="post-comments">
+                                <span>{{ postDetail.total }} comments</span>
+									<span class="divider">|</span>
+								 <span>{{ postDetail.view_count }} views</span>
+                            </div>
+                        </div>
+				<!-- Image du Post -->
+				<div class="post-image underline pb-2 mb-2">
+					<img src="{{ base_path }}public/upload/{{ postDetail.post_image }}" alt="{{ post.title }}" class="post-image-fixed">
+				</div>	
+				<!-- Tags -->
+				<div class="post-tags">
+					<span class="fw-bold me-1">Tags :</span>
+					{% for tag in postDetail.tag %}
+						<a href="{{ base_path }}tag/{{ tag }}" class="tag text-white badge text-bg-primary my-3">{{ tag }}</a>
+					{% endfor %}
+				</div>
+				<!-- Contenu du Post -->
+				<div class="post-content">
+					{{ postDetail.post_content|raw }}
+				</div>
+				<!-- Appel au partage -->
+				<div class="post-share text-center my-5">
+					<p class="fw-bold mb-4">SHARE THIS POST</p>
+					<div class="row">
+						<div class="col-lg-12">
+							<a href="#" class="btn btn-facebook"><i class="bi bi-facebook"></i> Facebook</a>
+							<a href="#" class="btn btn-pinterest"><i class="bi bi-pinterest"></i> Pinterest</a>
+							<a href="#" class="btn btn-linkedin"><i class="bi bi-linkedin"></i> LinkedIn</a>
+							<a href="#" class="btn btn-reddit"><i class="bi bi-reddit"></i> Reddit</a>
+							<a href="#" class="btn btn-twitter"><i class="bi bi-twitter-x"></i> Twitter</a>
+						</div>
+					</div>
+				</div>
+				<!-- Section des Commentaires -->
+				<div class="comment-area mt-5 mb-5" id="comments">
+                    <div class="d-flex justify-content-between">
+                        <div class="fw-bolder">
+                            <h5 class="comment-number">{{ postDetail.total }} comment(s)</h5>
+                        </div>
+                    </div>
+					<hr>
+					<div class="card text-dark shadow mb-1" id="card-message">
+						{% if session.user.id != postDetail.user_id %}
+							{% if session.user is not null %}
+								{#<div class="d-flex add-comment py-3 my-3">
+									<img src="{{ base_path }}public/upload/avatar/{{ session.user.profile_picture }}" alt="user-pic" class="img-fluid img-responsive rounded-circle mx-3 rounded-5" width="60" height="60">
+									<form method="post" action="" id="comment-form">
+										<textarea class="form-control" name="comment" id="comment" placeholder="Add your comment..." required></textarea>
+										<button type="submit" class="btn btn-lg mx-3 p-3">Send</button>
+									</form>
+								</div>#}
+								<div class="add-comment py-4 m-3">
+									<div class="d-flex align-items-center">
+										<img src="{{ base_path }}public/upload/avatar/{{ session.user.profile_picture }}" alt="user-pic" class="img-fluid rounded-circle me-3" width="60" height="60">
+										<form method="post" action="{{ base_path }}addcomment" id="comment-form" class="d-flex align-items-center w-100">
+											<input type="hidden" name="post_id" value="{{ postDetail.postId }}">
+											<textarea class="form-control me-3" name="comment" id="comment" placeholder="Add your comment..." required></textarea>
+											<button type="submit" class="btn btn-lg p-3">Send</button>
+										</form>
+									</div>
+								</div>
+							{% endif %}
+						{% endif %}	
+						<div id="comments-list" data-total-pages="{{ totalPages }}">
+							{% for commentByPost in commentByPosts %}
+								<!-- comments list -->
+								{% include 'template/_partials/_comment.html.twig' with {'comment': commentByPost} %}
+							{% endfor %}
+						</div>
+						<!-- Pagination -->
+						{% embed "template/_partials/_pagination.html.twig" %}{% endembed %}
+						{#<nav class="mt-3 mb-4">
+							<ul class="pagination justify-content-center">
+								{% if totalPages != 1 %}
+									{% if currentPage > 1 %}
+										<li class="page-item">
+											<a class="page-link pagination-link" id="previous" href="#" data-page="{{ currentPage - 1 }}">Previous</a>
+										</li>
+									{% else %}
+										<li class="page-item disabled">
+											<a class="page-link" href="#">Previous</a>
+										</li>
+									{% endif %}
+									{% for i in 1..totalPages %}
+										<li class="page-item {% if i == currentPage %}active{% endif %}">
+											<a class="page-link pagination-link" href="#" data-page="{{ i }}">{{ i }}</a>
+										</li>
+									{% endfor %}
+										<li class="page-item">
+											<a class="page-link pagination-link" id="next" href="#" data-page="{{ currentPage + 1 }}">Next</a>
+										</li>
+								{% endif %}
+							</ul>
+						</nav>#}
+					</div>
+                </div>
+				<div class="navigation-links d-flex justify-content-between align-items-center mb-5">
+					{% if previousPostId %}
+						<a href="{{ base_path }}postsingle/{{ previousPostId }}" class="fw-bold text-decoration-none" style="flex-grow: 1; text-align: left;">
+							<i class="bi bi-chevron-double-left"></i> 
+							Previous	
+						</a>
+					{% endif %}
+					{% if nextPostId %}
+						<a href="{{ base_path }}postsingle/{{ nextPostId }}" class="fw-bold text-decoration-none" style="flex-grow: 1; text-align: right;">
+							Next
+							<i class="bi bi-chevron-double-right"></i>
+						</a>
+					{% endif %}
+				</div>
+			</div>
+			<!-- Sidebar -->
+			<div class="col-lg-3">
+				{% embed "template/_partials/_aside.html.twig" %}{% endembed %}
+			</div>
+		</div>
+	</div>
+<style>
+.post-category {	
+	text-align: center;
+	text-transform: uppercase;
+	font-size: 15px;
+	font-weight: 500;
+	padding: 5px;
+	border-radius: 5px;
+	background-color: #1aBC9C;
+	color: white;
+}
 
+.divider{
+	color: #1aBC9C;
+	font-weight: bold;
+}
 
+.post-image-fixed {
+	max-width: auto; /* largeur maximale */
+	max-height: 600px; /* hauteur maximale */
+	width: 100%; /* S'assure que l'image ne dépasse pas 100% de la largeur du conteneur parent */
+	height: auto; /* Ajuste la hauteur automatiquement pour maintenir le rapport d'aspect */
+	object-fit: cover; /* pour que l'image couvre l'espace défini sans distorsion majeure */
+	display: block;
+	margin: 0 auto;
+}
+
+.author-avatar {
+	width: 40px;
+}
+
+/* Styles pour les boutons de partage */
+.btn {
+	color: #fff;
+	text-decoration: none;
+	padding: 0.5rem 1rem;
+	border-radius: 0.25rem;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.btn-facebook {
+	background-color: #3b5998;
+}
+
+.btn-facebook:hover {
+	background-color: #4c70ba;
+}
+
+.btn-pinterest {
+	background-color: #bd081c;
+}
+
+.btn-pinterest:hover {
+	background-color: #d91a2c;
+}
+
+.btn-linkedin {
+	background-color: #0077b5;
+}
+
+.btn-linkedin:hover {
+	background-color: #0088cc;
+}
+
+.btn-reddit {
+	background-color: #ff4500;
+}
+
+.btn-reddit:hover {
+	background-color: #ff5733;
+}
+
+.btn-twitter {
+	background-color: #1da1f2;
+}
+
+.btn-twitter:hover {
+	background-color: #33b5ff;
+}
+
+.add-comment button {
+	background-color: #2980B9;
+}
+
+.add-comment button:hover {
+	background-color: #94BFDC;
+}
+/*
+.form-group.fl_icon .icon {
+	position: absolute;
+	top: 1px;
+	left: 16px;
+	width: 48px;
+	height: 48px;
+	background: #f6f6f7;
+	color: #b5b8c2;
+	text-align: center;
+	line-height: 50px;
+	-webkit-border-top-left-radius: 2px;
+	-webkit-border-bottom-left-radius: 2px;
+	-moz-border-radius-topleft: 2px;
+	-moz-border-radius-bottomleft: 2px;
+	border-top-left-radius: 2px;
+	border-bottom-left-radius: 2px;
+}
+
+.form-group .form-input {
+	font-size: 13px;
+	line-height: 50px;
+	font-weight: 400;
+	color: #b4b7c1;
+	width: 100%;
+	height: 50px;
+	padding-left: 20px;
+	padding-right: 20px;
+	border: 1px solid #edeff2;
+	border-radius: 3px;
+}
+
+.form-group.fl_icon .form-input {
+	padding-left: 70px;
+}
+
+.form-group textarea.form-input {
+	height: 150px;
+}
+*/
+a.text-decoration-none {
+	color: #2980B9;
+	font-size: 20px;
+}
+
+a.text-decoration-none:hover {
+	color: #0056b3;
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Sélectionne tous les éléments avec la classe page-link
+    let paginationLinks = document.querySelectorAll('.pagination .page-link');
+    // Sélectionne l'élément avec l'ID 'comments-list' où les commentaires seront affichés
+    const commentsList = document.getElementById('comments-list');
+    // Récupère le numéro de la page actuelle depuis l'URL, ou 1 si aucun paramètre 'page' n'est présent
+    const currentPage = new URLSearchParams(window.location.search).get('page') || 1;
+
+    // Initialiser l'état de la pagination
+    updatePagination(currentPage);
+
+    // Pour chaque lien de pagination, on ajoute un écouteur d'événement 'click'
+    paginationLinks.forEach(link => {
+        link.addEventListener('click', function (event) {
+            // Empêche le comportement par défaut du lien (qui est de naviguer)
+            event.preventDefault();
+            // Récupère le numéro de page à partir de l'attribut 'data-page' du lien cliqué
+            const page = this.getAttribute('data-page');
+
+            // Effectue une requête GET pour récupérer les commentaires de la page sélectionnée
+            fetch(`${window.location.origin}${window.location.pathname}?page=${page}`, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest' // Indique que la requête est effectuée en AJAX
+                }
+            })
+            .then(response => response.text()) // Convertir la réponse en texte
+            .then(data => {
+                // Crée un nouveau document HTML à partir du texte de la réponse
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data, 'text/html');
+                // Sélectionne la nouvelle liste de commentaires dans le document retourné
+                const newCommentsList = doc.querySelector('#comments-list');
+                // Remplace le contenu HTML de `commentsList` par le contenu HTML de `newCommentsList`.
+                commentsList.innerHTML = newCommentsList.innerHTML;
+                // Mise à jour de l'état de la pagination
+                updatePagination(page);
+                // Mise à jour de l'URL sans recharger la page
+                window.history.pushState({}, '', `${window.location.pathname}?page=${page}`);
+            });
+        });
+    });
+        
+    // Fonction pour mettre à jour l'état de la pagination en fonction de la page actuelle
+    function updatePagination(currentPage) {
+        paginationLinks.forEach(link => {
+            // Récupère le numéro de page associé au lien
+            const page = link.getAttribute('data-page');
+            // Active le lien correspondant à la page actuelle, désactive les autres
+            if (page == currentPage) {
+                link.parentElement.classList.add('active');
+            } else {
+                link.parentElement.classList.remove('active');
+            }
+        });
+    }
+});
+</script>
 {% endblock %}

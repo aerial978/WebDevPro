@@ -72,6 +72,18 @@ class Model extends Db
         return $query->fetchAll();
     }
 
+    /**
+     * Méthode qui récupère l'ID du dernier enregistrement inséré.
+     * @return string|null ID du dernier enregistrement inséré ou null en cas d'échec.
+     */
+    public function getLastInsertedId()
+    {
+        if ($this->db) {
+            return $this->db->lastInsertId();
+        }
+        return null;
+    }
+
     public function create()
     {
         $fields = [];

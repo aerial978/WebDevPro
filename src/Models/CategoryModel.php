@@ -15,6 +15,7 @@ class CategoryModel extends Model
         $this->table = "Category";
     }
 
+    // PostFrontController => PostList() & singlePost()
     public function findAllCategory()
     {
         $sql = "SELECT *, COUNT(post.id) AS post_count, category.id AS categoryId FROM {$this->table}
@@ -26,6 +27,7 @@ class CategoryModel extends Model
         return $query->fetchAll();
     }
 
+    // CategoryController => Create()
     public function createCategory()
     {
         $sql = "INSERT INTO {$this->table} (name_category, description_category)

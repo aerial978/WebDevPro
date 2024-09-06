@@ -12,6 +12,7 @@ class PostModel extends Model
     protected $id;
     protected $title;
     protected $post_content;
+    protected $slug;
     protected $category_id;
     protected $post_status;
     protected $post_image;
@@ -24,27 +25,44 @@ class PostModel extends Model
         $this->table = "Post";
     }
 
-    // PostController => index()
+    // PostBackController => index()
     public function findAllPost()
     {
         $sql = "SELECT *, DATE_FORMAT(created_at_post, '%d/%m/%Y %H:%i:%s') AS date_create, post.id AS postId FROM {$this->table}
                 JOIN user ON post.user_id = user.id
-                JOIN category ON post.category_id = category.id";
+                JOIN category ON post.category_id = category.id ORDER BY updated_at_post DESC";
 
         $query = $this->request($sql);
 
         return $query->fetchAll();
     }
 
-    // PostController => create()
+    // PostFrontController => postSingle()
+    public function singlePost($slug)
+    {
+        $req = "SELECT *, DATE_FORMAT(created_at_post, '%d/%m/%Y %H:%i:%s') AS date_create, (SELECT COUNT(*) FROM comment WHERE comment.post_id = post.id) AS total, GROUP_CONCAT(tag.name_tag SEPARATOR ', ') AS tag, post.id AS postId FROM {$this->table}
+                JOIN category ON post.category_id = category.id
+                JOIN user ON post.user_id = user.id
+                LEFT JOIN post_tag ON post.id = post_tag.post_id
+                LEFT JOIN tag ON post_tag.tag_id = tag.id
+                WHERE slug = :slug
+                GROUP BY post.id";
+
+        $query = $this->request($req, [':slug' => $slug]);
+
+        return $query->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    // PostBackController => create()
     public function createPost()
     {
-        $sql = "INSERT INTO {$this->table} (title, post_content, category_id, post_status, post_image, user_id, created_at_post)
-        VALUES (:title, :postContent, :category, :postStatus, :postImage, :user_id, NOW())";
+        $sql = "INSERT INTO {$this->table} (title, post_content, slug, category_id, post_status, post_image, user_id, created_at_post)
+        VALUES (:title, :postContent, :slug, :category, :postStatus, :postImage, :user_id, NOW())";
 
         $attributs = [
             ':title' => $this->title,
             ':postContent' => $this->post_content,
+            ':slug' => $this->slug,
             ':category' => $this->category_id,
             ':postStatus' => $this->post_status,
             ':postImage' => $this->post_image,
@@ -66,7 +84,7 @@ class PostModel extends Model
         return $purifier->purify($content);
     }
 
-    // PostController => create()
+    // PostBackController => create()
     public function getLastInsertedPostId()
     {
         $sql = "SELECT id FROM {$this->table} ORDER BY id DESC LIMIT 1";
@@ -76,12 +94,13 @@ class PostModel extends Model
         return ($result) ? $result->id : null;
     }
 
-    // HomeController => index() & PostController => create()
+    // HomeController => index() & PostFrontController => postList() & singlePost()
     public function getPosts($offset = 0, $limit = 10)
     {
         $sql = "SELECT *, DATE_FORMAT(updated_at_post, '%d/%m') AS date_update, post.id AS postId 
                 FROM {$this->table}  
-                LEFT JOIN category ON post.category_id = category.id
+                JOIN category ON post.category_id = category.id
+                JOIN user ON post.user_id = user.id
                 GROUP BY post.id ORDER BY date_update ASC
                 LIMIT $offset, $limit";
 
@@ -90,7 +109,7 @@ class PostModel extends Model
         return $query->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    // PostController => PostList()
+    // PostFrontController => PostList()
     public function countPosts()
     {
         $sql = "SELECT COUNT(*) FROM {$this->table}";
@@ -99,7 +118,7 @@ class PostModel extends Model
         return $query->fetchColumn();
     }
 
-    // PostController => PostList()
+    // PostFrontController => PostList()
     public function timeElapsedString($datetime, $full = false)
     {
         if (is_null($datetime)) {
@@ -139,13 +158,14 @@ class PostModel extends Model
         return $string ? implode(', ', $string) . ' ago' : 'just now';
     }
 
-    // PostController => PostList()
+    // PostFrontController => PostList()
     public function searchPosts($keyword, $offset = 0, $limit = 10)
     {
         $keyword = $_GET['search'];
 
         $sql = "SELECT *, DATE_FORMAT(updated_at_post, '%d/%m') AS date_update, post.id AS postId
                 FROM {$this->table}
+                LEFT JOIN user ON post.user_id = user.id
                 LEFT JOIN category ON post.category_id = category.id
                 WHERE post.title LIKE '%$keyword%'
                    OR post.post_content LIKE '%$keyword%'
@@ -156,6 +176,56 @@ class PostModel extends Model
 
         return $query->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    // PostFrontController => PostList()
+    public function countSearchPosts($search)
+    {
+        // Implémentez cette méthode pour retourner le nombre total de posts correspondant à la recherche
+        // Par exemple :
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE title LIKE :search OR post_content LIKE :search";
+        $query = $this->request($sql, ['search' => '%' . $search . '%']);
+        return $query->fetchColumn();
+    }
+
+    // PostFrontController => singlePost()
+    public function getNextPostId($currentPostId)
+    {
+        $sql = "SELECT slug FROM {$this->table} WHERE id > ? ORDER BY id ASC LIMIT 1";
+        $query = $this->request($sql, [$currentPostId]);
+        $result = $query->fetch(\PDO::FETCH_ASSOC);
+        return $result ? $result['slug'] : null;
+    }
+
+    // PostFrontController => singlePost()
+    public function getPreviousPostId($currentPostId)
+    {
+        $sql = "SELECT slug FROM {$this->table} WHERE id < ? ORDER BY id DESC LIMIT 1";
+        $query = $this->request($sql, [$currentPostId]);
+        $result = $query->fetch(\PDO::FETCH_ASSOC);
+        return $result ? $result['slug'] : null;
+    }
+
+    // PostFrontController => singlePost()
+    public function incrementViewCount($id)
+    {
+        $sql = "UPDATE {$this->table} SET view_count = view_count + 1 WHERE id = :id";
+        $this->request($sql, [':id' => $id]);
+    }
+
+    // PostFrontController => postList() & singlePost()
+    public function getMostViewedPosts($limit = 3)
+    {
+        // Il est important de ne pas utiliser de paramètres liés pour LIMIT en SQL, car LIMIT prend des valeurs numériques directes.
+        $sql = "SELECT *, DATE_FORMAT(updated_at_post, '%d/%m') AS date_update, post.id AS postId 
+            FROM {$this->table}
+            ORDER BY view_count DESC
+            LIMIT $limit";  // Utilisation de la variable directement dans la requête
+
+        $query = $this->request($sql);
+
+        return $query->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
 
     /**
      * Get the value of id
@@ -193,6 +263,26 @@ class PostModel extends Model
     public function setTitle($title)
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of slug
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * Set the value of slug
+     *
+     * @return  self
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
 
         return $this;
     }

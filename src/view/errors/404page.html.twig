@@ -1,0 +1,34 @@
+{% extends 'template/layouts/base_error.html.twig' %}
+
+{% block title %}Page Not Found - 404{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="error-section">
+        <div class="text-center mt-4">
+            <div class="error-status">
+                <h1 class="mb-2">404</h1>
+                <h2>Oops ! Page not found !</h2>
+                <img src="{{ base_path }}public/img/avatar-sad.png" alt="avatar-sad" class="img-fluid mb-4">
+                <h3 class="mb-5">We can't find the page you're looking for.</h3>
+
+                <a href="{{ base_path }}home" class="btn btn-lg">Go to homepage</a>
+                <a href="javascript:history.back()" class="btn btn-lg">Go back</a>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+.error-section .error-status h1 {
+    color: #1aBC9C;
+    font-size: 100px;
+}
+
+.error-section .error-status .btn-lg {
+    background-color: #2980B9;
+    color: #F6F6F6;
+    font-size: 25px;
+}
+
+</style>
+{% endblock %}

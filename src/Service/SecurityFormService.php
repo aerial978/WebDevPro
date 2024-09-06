@@ -12,6 +12,10 @@ class securityFormService
 
         $registrationForm->startForm('post', 'registration', ['id' => 'registrationForm'])
 
+            ->addLabelFor('username', 'Username', ['class' => 'mt-3'])
+            ->addInput('username', 'username', ['class' => 'form-control', 'id' => 'username'])
+            ->addError('usernameError', ['class' => 'text-danger'])
+
             ->addLabelFor('email', 'Email', ['class' => 'mt-3'])
             ->addInput('email', 'email', ['class' => 'form-control', 'id' => 'email'])
             ->addError('emailError', ['class' => 'text-danger'])

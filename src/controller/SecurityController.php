@@ -22,11 +22,16 @@ class SecurityController extends BaseController
         $errors = [];
 
         try {
-            if (isset($_POST['email'], $_POST['password'], $_POST['confirm_password'])) {
-                if (Form::validate($_POST, ['email', 'password'])) {
+            if (isset($_POST['username'],$_POST['email'], $_POST['password'], $_POST['confirm_password'])) {
+                if (Form::validate($_POST, ['username', 'email', 'password'])) {
+                    $username = trim(htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8'));
                     $email = trim(htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8'));
                     $password = trim(htmlspecialchars($_POST['password'], ENT_QUOTES, 'UTF-8'));
                     $confirmPassword = trim($_POST['confirm_password']);
+
+                    if (empty($username) || !preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$#!%*?&])[A-Za-z\d@$#!%*?&]{12,}$/', $username)) {
+                        $errors['username'] = ErrorMessage::USERNAME_INVALID;
+                    }
 
                     if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
                         $errors['email'] = ErrorMessage::EMAIL_INVALID;
@@ -43,15 +48,24 @@ class SecurityController extends BaseController
 
                     if (empty($errors)) {
                         $user = new UserModel();
+
+                        if ($user->findOneByUsername($username)) {
+                            $errors['usernameexist'] = ErrorMessage::USERNAME_ALREADYEXISTS;
+                        }
+
                         if ($user->findOneByEmail($email)) {
                             $errors['emailexist'] = ErrorMessage::EMAIL_ALREADYEXISTS;
-                        } else {
+                        }
+
+                        if (empty($errors)) {
                             $password = password_hash($_POST['password'], PASSWORD_ARGON2I);
 
-                            $user->setEmail($email)
+                            $user->setUsername($username)
+                                ->setEmail($email)
                                 ->setPassword($password);
 
                             $user->create();
+                            header('Location: login');
                         }
                     }
                 }
@@ -94,13 +108,13 @@ class SecurityController extends BaseController
                             $user->setSession();
                             header('Location: admin/dashboard');
                         } else {
-                            $errors['error'] = 'Invalid email address or/and password !';
+                            $errors['error'] = 'Invalid email address or/and password1 !';
                         }
                     } else {
-                        $errors['error'] = 'Invalid email address or/and password !';
+                        $errors['error'] = 'Invalid email address or/and password2 !';
                     }
                 } else {
-                    $errors['error'] = 'Invalid email address or/and password !';
+                    $errors['error'] = 'Invalid email address or/and password3 !';
                 }
             }
 

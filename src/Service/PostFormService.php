@@ -22,8 +22,8 @@ class PostFormService
 
             ->startDiv(['class' => 'row'])
                 ->startDiv(['class' => 'col-md-6 mt-4'])
-                ->addSelect('category', $categoriesOptions, 'category', '', ['class' => 'form-select', 'id' => 'category'])
-                ->addError('categoryError', ['class' => 'text-danger'])
+                    ->addSelect('category', $categoriesOptions, 'category', '', ['class' => 'form-select', 'id' => 'category'])
+                    ->addError('categoryError', ['class' => 'text-danger'])
                 ->endDiv()
                 ->startDiv(['class' => 'col-md-6 mt-4'])
                     ->addSelect('postStatus', ['Draft' => 'Draft', 'Waiting' => 'Waiting', 'Published' => 'Published', 'Archived' => 'Archived'], 'status', '', ['class' => 'form-select', 'id' => 'postStatus'])

@@ -20,8 +20,9 @@
                     <div class="col-md-6 mb-4">
                         <div class="card card-blog shadow h-100 d-flex flex-column">
                             <div class="blog-image">
-                                <img src="public/img/image1.jpg" class="card-img-top">
-                                <div class="blog-date">{{ post.updated_at_post|date('j F') }}</div>
+                                <img src="{{ base_path }}public/upload/{{ post.post_image }}" class="card-img-top fixed-height">
+                                <div class="blog-date">{{ post.updated_at_post|date('j') }}</br>{{ post.updated_at_post|date('F')|slice(0, 3) }}</div>
+
                                 <div class="blog-category">{{ post.name_category }}</div>
                             </div>
                             <div class="blog-body flex-grow-1">
@@ -35,22 +36,22 @@
                                 </div>
                                 {% if search %}
                                     <div class="blog-title">{{ post.excerpt_title|raw }}</div>
-                                    <p class="blog-start">{{ post.excerpt_content|raw }}
-                                        <a href="{{ base_path }}frontend/postSingle/" class="fw-bold">Read More</a>
+                                    <p class="blog-content">{{ post.excerpt_content|raw }}
+                                        <a href="{{ base_path }}postsingle/{{ post.slug }}" class="fw-bold">Read More</a>
                                     </p>
                                 {% else %}
                                     <div class="blog-title">{{ post.title }}</div>
-                                    <p class="blog-start">{{ post.post_content|truncate_words(20)|raw }}
-                                        <a href="{{ base_path }}frontend/postSingle/" class="fw-bold">Read More</a>
+                                    <p class="blog-content">{{ post.post_content|truncate_words(20)|raw }}
+                                        <a href="{{ base_path }}postsingle/{{ post.slug }}" class="fw-bold">Read More</a>
                                     </p>
                                 {% endif %}
                             </div>
                             <div class="blog-footer mt-auto">
                                 <div class="blog-avatar">
-                                    <img src="public/img/avatar1.png">
+                                    <img src="{{ base_path }}public/upload/avatar/{{ post.profile_picture}}">
                                 </div>
                                 <div>
-                                    <span class="blog-author">Author</span>
+                                    <span class="blog-author">{{ post.username }}</span>
                                 </div>
                                 <button class="btn btn-sm">
                                     <i class="bi bi-share-fill"></i>
@@ -62,7 +63,9 @@
             </div>
             {% embed "template/_partials/_pagination.html.twig" %}{% endembed %}
         {% else %}
-            <p>Post list is empty</p>
+            <div class="alert alert-danger show" role="alert">
+                <h4 class="text-center"><i class="bi bi-exclamation-triangle-fill"></i> Posts list is empty !</h4>  
+            </div> 
         {% endif %}
         </div>
         <!-- Sidebar -->
@@ -73,6 +76,11 @@
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    // Récupère les termes de recherche depuis la variable Twig et les convertit en format JSON
+    let searchTerms = {{ searchTerms|json_encode|raw }};
+    // Sélectionne l'élément HTML avec l'ID 'post-list' qui contient les posts
+    let postsContainer = document.getElementById('post-list');
+
     // Fonction pour échapper les caractères spéciaux d'une chaîne
     function escapeRegExp(string) {
         return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -82,6 +90,9 @@ document.addEventListener('DOMContentLoaded', function () {
     function highlightText(element, searchTerms) {
         // Parcourt chaque terme de recherche
         searchTerms.forEach(str => {
+            // gi : combinaison d'indicateurs
+            // g (global) : permet à l'expression régulière de trouver toutes les correspondances dans le texte, pas seulement la première
+            // i (ignore case) :  permet à l'expression régulière de faire des correspondances insensibles à la casse
             let regex = new RegExp(`(${escapeRegExp(str)})`, 'gi');
             highlight(element, regex);
         });
@@ -89,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Fonction récursive pour parcourir les nœuds et mettre en évidence le texte
     function highlight(node, regex) {
-        if (node.nodeType === 3) { // Node de texte
+        if (node.nodeType === 3) { // Noeud de texte
             let match = node.nodeValue.match(regex);
             if (match) {
                 let span = document.createElement('span');
@@ -101,19 +112,27 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Récupère les termes de recherche depuis la variable Twig et les convertit en format JSON
-    let searchTerms = {{ searchTerms|json_encode|raw }};
-    
-    // Sélectionne l'élément HTML avec l'ID 'post-list' qui contient les posts
-    let postsContainer = document.getElementById('post-list');
-    
-    // Met en évidence les termes de recherche dans les nœuds de texte des posts
-    highlightText(postsContainer, searchTerms);
+    // Sélectionner les éléments de titre et de contenu pour chaque post
+    let postTitles = postsContainer.querySelectorAll('.blog-title');
+    let postContents = postsContainer.querySelectorAll('.blog-content');
+
+    // Mettre en évidence les termes de recherche dans les titres
+    postTitles.forEach(title => highlightText(title, searchTerms));
+
+    // Mettre en évidence les termes de recherche dans les contenus
+    postContents.forEach(content => highlightText(content, searchTerms));
 });
 </script>
 <style>
     .highlight {
         background-color: yellow;
     }
+
+    .fixed-height {
+        height: 250px; 
+        object-fit: cover;
+        width: 100%;
+    }
+    
 </style>
 {% endblock %}

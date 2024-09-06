@@ -58,7 +58,7 @@
     color: $primary-color;
 }
 
-/* Latest posts &  widget */
+/* Latest posts & widget */
 
 .link-more-posts .bi-arrow-right {
     color: #2980B9;
@@ -69,6 +69,12 @@
 .link-more-posts:hover,
 .link-more-posts:hover .bi-arrow-right {
     color: #94BFDC;
+}
+
+/* Latest Comments widget */
+
+.comment-title {
+    color: $primary-color;
 }
 
 

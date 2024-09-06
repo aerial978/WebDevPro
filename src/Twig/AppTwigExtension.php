@@ -23,4 +23,6 @@ class AppTwigExtension extends AbstractExtension
         }
         return $text;
     }
+
+
 }

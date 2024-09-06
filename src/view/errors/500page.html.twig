@@ -1,0 +1,33 @@
+{% extends 'template/layouts/base_error.html.twig' %}
+
+{% block title %}Internal Server Error - 500{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="error-section">
+        <div class="text-center mt-4">
+            <div class="error-status">
+                <h1 class="mb-2">500</h1>
+                <h2>Oops! Something went wrong on our end.</h2>
+                <img src="{{ base_path }}public/img/avatar-sad.png" alt="avatar-sad" class="img-fluid mb-4">
+                <h3 class="mb-5">We're experiencing some technical difficulties. Please try again later.</h3>
+                <p>If this issue persists, you can <a href="{{ base_path }}contact">contact our support team</a> for assistance.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+.error-section .error-status h1 {
+    color: #1aBC9C;
+    font-size: 100px;
+}
+
+.error-section .error-status .btn-lg {
+    background-color: #2980B9;
+    color: #F6F6F6;
+    font-size: 25px;
+}
+
+</style>
+{% endblock %}
+
