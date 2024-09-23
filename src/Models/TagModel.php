@@ -7,7 +7,7 @@ use src\Models\Model;
 class TagModel extends Model
 {
     protected $id;
-    protected $tag_name;
+    protected $name_tag;
 
     public function __construct()
     {
@@ -50,10 +50,10 @@ class TagModel extends Model
     }
 
     // PostBackController => edit()
-    public function getTagIdByTagName($tag_name)
+    public function getTagIdByTagName($name_tag)
     {
         $sql = "SELECT id FROM {$this->table} WHERE name_tag = :name_tag";
-        $params = [':name_tag' => $tag_name];
+        $params = [':name_tag' => $name_tag];
         $query = $this->request($sql, $params);
         return $query->fetch();
     }
@@ -62,20 +62,28 @@ class TagModel extends Model
     public function getTagFrequencies()
     {
         // Requête SQL pour obtenir le nom de chaque tag et le nombre de fois où il est utilisé, y compris les tags non utilisés
-        $sql = "SELECT name_tag, COUNT(post_tag.tag_id) as frequency 
+        $sql = "SELECT name_tag, slug_tag, COUNT(post_tag.tag_id) as frequency 
                 FROM {$this->table} 
                 LEFT JOIN post_tag ON tag.id = post_tag.tag_id 
-                GROUP BY name_tag";
+                GROUP BY name_tag, slug_tag";
 
         // Exécution de la requête
         $query = $this->request($sql);
 
         // Récupération des résultats en tant que tableau associatif [ 'tag1' => 10, 'tag2' => 20, ...] et
         // Retourne le tableau des tags avec leurs fréquences
-        return $query->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $tags = $query->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $tags;
     }
 
+    public function getTagBySlug($slug)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE slug_tag = :slugTag";
+        $query = $this->request($sql, [':slugTag' => $slug]);
 
+        return $query->fetch(\PDO::FETCH_ASSOC);
+    }
 
     /**
      * Get the value of id
@@ -102,7 +110,7 @@ class TagModel extends Model
      */
     public function getNameTag()
     {
-        return $this->tag_name;
+        return $this->name_tag;
     }
 
     /**
@@ -110,9 +118,9 @@ class TagModel extends Model
      *
      * @return  self
      */
-    public function setNameTag($tag_name)
+    public function setNameTag($name_tag)
     {
-        $this->tag_name = strtolower($tag_name);
+        $this->name_tag = strtolower($name_tag);
 
         return $this;
     }

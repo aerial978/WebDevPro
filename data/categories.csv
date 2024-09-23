@@ -1,16 +1,16 @@
-id;name_category;description_category
-1;PHP;Learn about the PHP programming language, including best practices, frameworks, and tools for web development.
-2;Versioning;Explore version control systems, techniques, and best practices for managing code changes and collaborating with teams.
-3;UX/UI Design;Discover principles and practices for creating user-friendly and aesthetically pleasing user interfaces and experiences.
-4;Styling;Learn about CSS, preprocessors, and modern techniques for styling web applications to create responsive and visually appealing designs.
-5;Security;Understand how to protect web applications from vulnerabilities and attacks, including best practices for data security and authentication.
-6;CMS;Explore content management systems (CMS) such as WordPress, Joomla, and Drupal, and how to effectively manage and publish content.
-7;Accessibility;Learn how to make web applications accessible to all users, including those with disabilities, by following best practices and standards.
-8;Framework;Discover various web development frameworks and how to use them to build robust and scalable web applications.
-9;Javascript;Learn about JavaScript, its ecosystem, and modern techniques for building interactive and dynamic web applications.
-10;Database;Understand database design, management, and optimization techniques for efficient data storage and retrieval.
-11;Performance;Learn how to optimize web applications for speed and performance, including best practices for front-end and back-end optimization.
-12;React;Explore the React library, including how to build and manage complex user interfaces using its component-based architecture.
-13;Référencement/S;Learn about search engine optimization (SEO) techniques to improve the visibility and ranking of web applications in search engines.
-14;API;Discover how to design, build, and consume APIs (Application Programming Interfaces) for integrating different systems and services.
-15;DevOps;Learn about DevOps practices, tools, and methodologies for continuous integration, deployment, and efficient collaboration between development and operations teams.
+id;name_category;slug_category;description_category
+1;PHP;php;Learn about the PHP programming language, including best practices, frameworks, and tools for web development.
+2;Versioning;versioning;Explore version control systems, techniques, and best practices for managing code changes and collaborating with teams.
+3;UX/UI Design;ux-ui-design;Discover principles and practices for creating user-friendly and aesthetically pleasing user interfaces and experiences.
+4;Styling;styling;Learn about CSS, preprocessors, and modern techniques for styling web applications to create responsive and visually appealing designs.
+5;Security;security;Understand how to protect web applications from vulnerabilities and attacks, including best practices for data security and authentication.
+6;CMS;cms;Explore content management systems (CMS) such as WordPress, Joomla, and Drupal, and how to effectively manage and publish content.
+7;Accessibility;accessibility;Learn how to make web applications accessible to all users, including those with disabilities, by following best practices and standards.
+8;Framework;framework;Discover various web development frameworks and how to use them to build robust and scalable web applications.
+9;Javascript;javascript;Learn about JavaScript, its ecosystem, and modern techniques for building interactive and dynamic web applications.
+10;Database;database;Understand database design, management, and optimization techniques for efficient data storage and retrieval.
+11;Performance;performance;Learn how to optimize web applications for speed and performance, including best practices for front-end and back-end optimization.
+12;React;react;Explore the React library, including how to build and manage complex user interfaces using its component-based architecture.
+13;Référencement/S;referencement-seo;Learn about search engine optimization (SEO) techniques to improve the visibility and ranking of web applications in search engines.
+14;API;api;Discover how to design, build, and consume APIs (Application Programming Interfaces) for integrating different systems and services.
+15;DevOps;devops;Learn about DevOps practices, tools, and methodologies for continuous integration, deployment, and efficient collaboration between development and operations teams.

@@ -33,5 +33,9 @@ return [
     '/posts' => ['controller' => PostFrontController::class, 'action' => 'postList'],
     '/postsingle/([a-zA-Z0-9_-]+)' => ['controller' => PostFrontController::class, 'action' => 'postSingle'],
     '/addcomment' => ['controller' => CommentController::class, 'action' => 'addComment'],
+    '/category/([a-zA-Z0-9_-]+)' => ['controller' => PostFrontController::class, 'action' => 'postsByCategory'],
+    '/tag/([a-zA-Z0-9_-]+)' => ['controller' => PostFrontController::class, 'action' => 'postsByTag'],
+    '/user/([a-zA-Z0-9_-]+)' => ['controller' => PostFrontController::class, 'action' => 'postsByUser'],
+    '/archive/([0-9]{4})/([0-9]{1,2})' => ['controller' => PostFrontController::class, 'action' => 'postsByArchive'],
     '/test/addTagsToPost' => ['controller' => TestController::class, 'action' => 'testAddTagsToPost']
 ];

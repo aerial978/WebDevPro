@@ -1,0 +1,56 @@
+<div class="row" id="post-list">
+    {% for post in posts %}
+        <div class="col-md-6 mb-4">
+            <div class="card card-blog shadow h-100 d-flex flex-column">
+                <div class="blog-image">
+                    <img src="{{ base_path }}public/upload/{{ post.post_image }}" class="card-img-top fixed-height">
+                    <div class="blog-date">{{ post.updated_at_post|date('j') }}</br>{{ post.updated_at_post|date('F')|slice(0, 3) }}</div>
+                    <a href="{{ base_path }}category/{{ post.slug_category }}" class="blog-category-link">
+                        <span class="blog-category">{{ post.name_category }}</span>
+                    </a>
+                </div>
+                <div class="blog-body flex-grow-1">
+                    <div class="blog-post my-2 d-flex justify-content-between">
+                        <span>
+                            <i class="bi bi-clock-fill"></i>
+                            {{ post.time_elapsed }}</span>
+                        <span>
+                            <i class="bi bi-chat-fill"></i>
+                            {{ post.total }}</span>
+                    </div>
+                    {% if search %}
+                        <div class="blog-title">{{ post.excerpt_title|raw }}</div>
+                        <p class="blog-content">{{ post.excerpt_content|raw }}
+                            <a href="{{ base_path }}postsingle/{{ post.slug_post }}" class="more-link fw-bold">Read More</a>
+                        </p>
+                    {% else %}
+                        <div class="blog-title">{{ post.title }}</div>
+                        <p class="blog-content">{{ post.post_content|truncate_words(20)|raw }}
+                            <a href="{{ base_path }}postsingle/{{ post.slug_post }}" class="more-link fw-bold">Read More</a>
+                        </p>
+                    {% endif %}
+                </div>
+                <div class="blog-footer mt-auto">
+                    <div class="blog-avatar">
+                        <img src="{{ base_path }}public/upload/avatar/{{ post.profile_picture }}">
+                    </div>
+                    <div>
+                        <a href="{{ base_path }}user/{{ post.slug_username }}">
+                            <span class="blog-author">{{ post.username }}</span>
+                        </a>
+                    </div>
+                    <button class="btn btn-sm">
+                        <i class="bi bi-share-fill"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-danger show" role="alert">
+            <h4 class="text-center"><i class="bi bi-exclamation-triangle-fill"></i> No posts found !</h4>
+        </div>
+    {% endfor %}
+</div>
+
+{% embed "template/_partials/_pagination.html.twig" %}
+{% endembed %}

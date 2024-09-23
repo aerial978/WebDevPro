@@ -23,7 +23,9 @@
 						<div class="blog-image">
 							<img src="{{ base_path }}public/upload/{{ post.post_image }}" class="card-img-top fixed-height">
 							<div class="blog-date">{{ post.updated_at_post|date('j') }}</br>{{ post.updated_at_post|date('F')|slice(0, 3) }}</div>
-							<div class="blog-category">{{ post.name_category }}</div>
+							<a href="{{ base_path }}category/{{ post.slug_category }}" class="blog-category-link">
+								<span class="blog-category">{{ post.name_category }}</span>
+							</a>
 						</div>
 						<div class="blog-body flex-grow-1">
 							<div class="blog-post my-2 d-flex justify-content-between">
@@ -32,11 +34,11 @@
 									{{ post.time_elapsed }}</span>
 								<span>
 									<i class="bi bi-chat-fill"></i>
-									35 comments</span>
+									{{ post.total }}</span>
 							</div>
 							<div class="blog-title">{{ post.title |raw}}</div>
 							<p class="blog-start">{{ post.post_content|truncate_words(30)|raw }}
-								<a href="{{ base_path }}postsingle/{{ post.slug }}" class="fw-bold">Read More</a>
+								<a href="{{ base_path }}postsingle/{{ post.slug_post }}" class="more-link fw-bold">Read More</a>
 							</p>
 						</div>
 						<div class="blog-footer mt-auto">
@@ -44,7 +46,9 @@
 								<img src="{{ base_path }}public/upload/avatar/{{ post.profile_picture}}">
 							</div>
 							<div>
-								<span class="blog-author">{{ post.username }}</span>
+								<a href="{{ base_path }}user/{{ post.slug_username }}">
+									<span class="blog-author">{{ post.username }}</span>
+								</a>
 							</div>
 							<button class="btn btn-sm">
 								<i class="bi bi-share-fill"></i>

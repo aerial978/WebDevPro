@@ -8,13 +8,17 @@
 		<div class="row">
 			<!-- Contenu Principal -->
 			<div class="col-lg-9">
-				<span class="post-category">{{ postDetail.name_category }}</span>
+				<a href="{{ base_path }}category/{{ postDetail.slug_category }}">
+					<span class="post-category">{{ postDetail.name_category }}</span>
+				</a>
 				<!-- Titre du Post -->
 				<h3 class="fw-bold my-2">{{ postDetail.title }}</h3>
 				 <div class="post-meta d-flex justify-content-between align-items-center underline pb-2 mb-2">
                             <div class="post-author-info d-flex align-items-center">
                                 <img src="{{ base_path }}public/upload/avatar/{{ postDetail.profile_picture}}" alt="{{ postDetail.author }}" class="author-avatar rounded-5 me-2">
-                                <span class="me-1">{{ postDetail.username }}</span>
+                                <a href="{{ base_path }}user/{{ postDetail.slug_username }}">
+									<span class="blog-author me-1">{{ postDetail.username }}</span>
+								</a>
                                 <span class="divider me-1">|</span>
                                 <span class="me-1">{{ postDetail.updated_at_post|date('m/d/Y') }}</span>
                             </div>
@@ -32,7 +36,7 @@
 				<div class="post-tags">
 					<span class="fw-bold me-1">Tags :</span>
 					{% for tag in postDetail.tag %}
-						<a href="{{ base_path }}tag/{{ tag }}" class="tag text-white badge text-bg-primary my-3">{{ tag }}</a>
+						<a href="{{ base_path }}tag/{{ tag.slug }}" class="tag text-white badge text-bg-primary my-3">{{ tag.name }}</a>
 					{% endfor %}
 				</div>
 				<!-- Contenu du Post -->
@@ -63,13 +67,6 @@
 					<div class="card text-dark shadow mb-1" id="card-message">
 						{% if session.user.id != postDetail.user_id %}
 							{% if session.user is not null %}
-								{#<div class="d-flex add-comment py-3 my-3">
-									<img src="{{ base_path }}public/upload/avatar/{{ session.user.profile_picture }}" alt="user-pic" class="img-fluid img-responsive rounded-circle mx-3 rounded-5" width="60" height="60">
-									<form method="post" action="" id="comment-form">
-										<textarea class="form-control" name="comment" id="comment" placeholder="Add your comment..." required></textarea>
-										<button type="submit" class="btn btn-lg mx-3 p-3">Send</button>
-									</form>
-								</div>#}
 								<div class="add-comment py-4 m-3">
 									<div class="d-flex align-items-center">
 										<img src="{{ base_path }}public/upload/avatar/{{ session.user.profile_picture }}" alt="user-pic" class="img-fluid rounded-circle me-3" width="60" height="60">
@@ -90,29 +87,6 @@
 						</div>
 						<!-- Pagination -->
 						{% embed "template/_partials/_pagination.html.twig" %}{% endembed %}
-						{#<nav class="mt-3 mb-4">
-							<ul class="pagination justify-content-center">
-								{% if totalPages != 1 %}
-									{% if currentPage > 1 %}
-										<li class="page-item">
-											<a class="page-link pagination-link" id="previous" href="#" data-page="{{ currentPage - 1 }}">Previous</a>
-										</li>
-									{% else %}
-										<li class="page-item disabled">
-											<a class="page-link" href="#">Previous</a>
-										</li>
-									{% endif %}
-									{% for i in 1..totalPages %}
-										<li class="page-item {% if i == currentPage %}active{% endif %}">
-											<a class="page-link pagination-link" href="#" data-page="{{ i }}">{{ i }}</a>
-										</li>
-									{% endfor %}
-										<li class="page-item">
-											<a class="page-link pagination-link" id="next" href="#" data-page="{{ currentPage + 1 }}">Next</a>
-										</li>
-								{% endif %}
-							</ul>
-						</nav>#}
 					</div>
                 </div>
 				<div class="navigation-links d-flex justify-content-between align-items-center mb-5">
@@ -148,17 +122,21 @@
 	color: white;
 }
 
+.post-category:hover{
+	background-color: #94BFDC;
+}
+
 .divider{
 	color: #1aBC9C;
 	font-weight: bold;
 }
 
 .post-image-fixed {
-	max-width: auto; /* largeur maximale */
-	max-height: 600px; /* hauteur maximale */
-	width: 100%; /* S'assure que l'image ne dépasse pas 100% de la largeur du conteneur parent */
-	height: auto; /* Ajuste la hauteur automatiquement pour maintenir le rapport d'aspect */
-	object-fit: cover; /* pour que l'image couvre l'espace défini sans distorsion majeure */
+	max-width: auto;
+	max-height: 600px;
+	width: 100%;
+	height: auto;
+	object-fit: cover;
 	display: block;
 	margin: 0 auto;
 }
@@ -167,7 +145,10 @@
 	width: 40px;
 }
 
-/* Styles pour les boutons de partage */
+.post-tags .tag:hover {
+	background-color: #94BFDC!important;
+}
+
 .btn {
 	color: #fff;
 	text-decoration: none;
@@ -225,46 +206,7 @@
 .add-comment button:hover {
 	background-color: #94BFDC;
 }
-/*
-.form-group.fl_icon .icon {
-	position: absolute;
-	top: 1px;
-	left: 16px;
-	width: 48px;
-	height: 48px;
-	background: #f6f6f7;
-	color: #b5b8c2;
-	text-align: center;
-	line-height: 50px;
-	-webkit-border-top-left-radius: 2px;
-	-webkit-border-bottom-left-radius: 2px;
-	-moz-border-radius-topleft: 2px;
-	-moz-border-radius-bottomleft: 2px;
-	border-top-left-radius: 2px;
-	border-bottom-left-radius: 2px;
-}
 
-.form-group .form-input {
-	font-size: 13px;
-	line-height: 50px;
-	font-weight: 400;
-	color: #b4b7c1;
-	width: 100%;
-	height: 50px;
-	padding-left: 20px;
-	padding-right: 20px;
-	border: 1px solid #edeff2;
-	border-radius: 3px;
-}
-
-.form-group.fl_icon .form-input {
-	padding-left: 70px;
-}
-
-.form-group textarea.form-input {
-	height: 150px;
-}
-*/
 a.text-decoration-none {
 	color: #2980B9;
 	font-size: 20px;

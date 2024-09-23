@@ -63,6 +63,14 @@ class UserModel extends Model
         ]);
     }
 
+    public function getUserBySlug($slug)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE slug_username = :slugUsername";
+        $query = $this->request($sql, [':slugUsername' => $slug]);
+
+        return $query->fetch(\PDO::FETCH_ASSOC);
+    }
+
     /**
      * Get the value of id
      */

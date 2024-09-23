@@ -1,131 +1,131 @@
-id;name_tag
-1;Collaboration
-2;REST
-3;Sketch
-4;CSS
-5;Callback
-6;Test
-7;Terraform
-8;ORM
-9;CDN
-10;Observer
-11;OOP
-12;Prometheus
-13;WCAG
-14;Gtmetrix
-15;Component
-16;Responsive
-17;MVC
-18;Cassandra
-19;Templates
-20;Closures
-21;Branching
-22;Encapsulation
-23;Joomla
-24;Containers
-25;Workflow
-26;Django
-27;Google
-28;Promise
-29;Factory
-30;Layout
-31;Vue.js
-32;CSRF
-33;Social Login
-34;CRUD
-35;Library
-36;GraphQL
-37;NoSQL
-38;Media Queries
-39;Utility first
-40;Webpagetest
-41;ARIA
-42;Figma
-43;DOM
-44;CI/CD
-45;Orchestration
-46;CI integration
-47;Laravel
-48;SQL injection
-49;Docker
-50;Merge
-51;Git flow
-52;SASS
-53;SQL
-54;Wave
-55;MongoDB
-56;Apollo Client
-57;Design patterns
-58;HTTPS
-59;Themes
-60;HTML
-61;Tailwind
-62;XSS
-63;Scalability
-64;Lottie
-65;Controller
-66;Oauth2
-67;Wordpress
-68;E-commerce
-69;My SQL
-70;Queries
-71;Journey maps
-72;Grafana
-73;Express.js
-74;Secure APIs
-75;Flask
-76;Synchronous code
-77;Flexbox
-78;Jenkins
-79;Adobe XD
-80;Authorization
-81;Angular
-82;Gulp
-83;Authentication
-84;Backlinks
-85;Polymorphism
-86;UseEffect
-87;Microinteractions
-88;Commit
-89;View
-90;HTTP
-91;Redux
-92;ES6
-93;HSTS
-94;Off-page SEO
-95;Production
-96;Async/await
-97;Travis CI
-98;Singleton
-99;Mocking
-100;Fluid Layouts
-101;SSR
-102;MFA
-103;Advanced PHP
-104;Event-driven
-105;Github actions
-106;Wireframe
-107;WPO
-108;Facebook
-109;Kubernetes
-110;HTTP requests
-111;CSP
-112;NeoAj
-113;UseState
-114;SPA
-115;Audits
-116;Jest
-117;TDD
-118;Plugins
-119;WAF
-120;Webpack
-121;Hooks
-122;Grid
-123;IAC
-124;Github flow
-125;PostgreSQL
-126;Stateless
-127;Prototyping
-128;On-page SEO
-129;Mobile-first
-130;Middleware
+id;name_tag;slug_tag
+1;Collaboration;collaboration
+2;REST;rest
+3;Sketch;sketch
+4;CSS;css
+5;Callback;callback
+6;Test;test
+7;Terraform;terraform
+8;ORM;orm
+9;CDN;cdn
+10;Observer;observer
+11;OOP;oop
+12;Prometheus;prometheus
+13;WCAG;wcag
+14;Gtmetrix;gtmetrix
+15;Component;component
+16;Responsive;responsive
+17;MVC;mvc
+18;Cassandra;cassandra
+19;Templates;templates
+20;Closures;closures
+21;Branching;branching
+22;Encapsulation;encapsulation
+23;Joomla;joomla
+24;Containers;containers
+25;Workflow;workflow
+26;Django;django
+27;Google;google
+28;Promise;promise
+29;Factory;factory
+30;Layout;layout
+31;Vue.js;vue-js
+32;CSRF;csrf
+33;Social Login;social-login
+34;CRUD;crud
+35;Library;library
+36;GraphQL;graphql
+37;NoSQL;nosql
+38;Media Queries;media-queries
+39;Utility first;utility-first
+40;Webpagetest;webpagetest
+41;ARIA;aria
+42;Figma;figma
+43;DOM;dom
+44;CI/CD;ci-cd
+45;Orchestration;orchestration
+46;CI integration;ci-integration
+47;Laravel;laravel
+48;SQL injection;sql-injection
+49;Docker;docker
+50;Merge;merge
+51;Git flow;git-flow
+52;SASS;sass
+53;SQL;sql
+54;Wave;wave
+55;MongoDB;mongodb
+56;Apollo Client;apollo-client
+57;Design patterns;design-patterns
+58;HTTPS;https
+59;Themes;themes
+60;HTML;html
+61;Tailwind;tailwind
+62;XSS;xss
+63;Scalability;scalability
+64;Lottie;lottie
+65;Controller;controller
+66;Oauth2;oauth2
+67;Wordpress;wordpress
+68;E-commerce;e-commerce
+69;My SQL;my-sql
+70;Queries;queries
+71;Journey maps;journey-maps
+72;Grafana;grafana
+73;Express.js;express-js
+74;Secure APIs;secure-apis
+75;Flask;flask
+76;Synchronous code;synchronous-code
+77;Flexbox;flexbox
+78;Jenkins;jenkins
+79;Adobe XD;adobe-xd
+80;Authorization;authorization
+81;Angular;angular
+82;Gulp;gulp
+83;Authentication;authentication
+84;Backlinks;backlinks
+85;Polymorphism;polymorphism
+86;UseEffect;useeffect
+87;Microinteractions;microinteractions
+88;Commit;commit
+89;View;view
+90;HTTP;http
+91;Redux;redux
+92;ES6;es6
+93;HSTS;hsts
+94;Off-page SEO;off-page-seo
+95;Production;production
+96;Async/await;async-await
+97;Travis CI;travis-ci
+98;Singleton;singleton
+99;Mocking;mocking
+100;Fluid Layouts;fluid-layouts
+101;SSR;ssr
+102;MFA;mfa
+103;Advanced PHP;advanced-php
+104;Event-driven;event-driven
+105;Github actions;github-actions
+106;Wireframe;wireframe
+107;WPO;wpo
+108;Facebook;facebook
+109;Kubernetes;kubernetes
+110;HTTP requests;http-requests
+111;CSP;csp
+112;NeoAj;neoaj
+113;UseState;usestate
+114;SPA;spa
+115;Audits;audits
+116;Jest;jest
+117;TDD;tdd
+118;Plugins;plugins
+119;WAF;waf
+120;Webpack;webpack
+121;Hooks;hooks
+122;Grid;grid
+123;IAC;iac
+124;Github flow;github-flow
+125;PostgreSQL;postgresql
+126;Stateless;stateless
+127;Prototyping;prototyping
+128;On-page SEO;on-page-seo
+129;Mobile-first;mobile-first
+130;Middleware;middleware

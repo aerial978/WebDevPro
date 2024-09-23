@@ -43,6 +43,14 @@ class CategoryModel extends Model
         return $query;
     }
 
+    public function getCategoryBySlug($slug)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE slug_category = :slugCategory";
+        $query = $this->request($sql, [':slugCategory' => $slug]);
+
+        return $query->fetch(\PDO::FETCH_ASSOC);
+    }
+
     /**
      * Get the value of id
      */
