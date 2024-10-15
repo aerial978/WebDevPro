@@ -41,137 +41,137 @@ class PostBackController extends BaseController
     {
         $errors = [];
 
-        try {
-            if (isset($_POST['submit'])) {
-                $title = trim(htmlspecialchars($_POST['title'], ENT_QUOTES, 'UTF-8'));
-                $postContent = $_POST['postContent']; // contenu brut, sera assaini plus tard avant enregistrement
-                $category = isset($_POST['category']) ? $_POST['category'] : '';
-                $postStatus = isset($_POST['postStatus']) ? $_POST['postStatus'] : '';
-                $postImage = $_FILES['postImage'];
+        //try {
+        if (isset($_POST['submit'])) {
+            $title = trim(htmlspecialchars($_POST['title'], ENT_QUOTES, 'UTF-8'));
+            $postContent = $_POST['postContent']; // contenu brut, sera assaini plus tard avant enregistrement
+            $category = isset($_POST['category']) ? $_POST['category'] : '';
+            $postStatus = isset($_POST['postStatus']) ? $_POST['postStatus'] : '';
+            $postImage = $_FILES['postImage'];
 
-                if (empty($title)) {
-                    $errors['title'] = ErrorMessage::TITLE_INVALID;
+            if (empty($title)) {
+                $errors['title'] = ErrorMessage::TITLE_INVALID;
+            }
+
+            if (empty($postContent)) {
+                $errors['content'] = ErrorMessage::CONTENT_INVALID;
+            }
+
+            if (empty($category)) {
+                $errors['category'] = ErrorMessage::CATEGORY_INVALID;
+            }
+
+            if (empty($postStatus)) {
+                $errors['postStatus'] = ErrorMessage::STATUS_INVALID;
+            }
+
+            if (empty($postImage['name'])) {
+                $errors['postImage'] = ErrorMessage::IMAGEPOST_INVALID;
+            } elseif (isset($_FILES['postImage']) && $_FILES['postImage']['size'] > 0) {
+                $error = $_FILES['postImage']['error'];
+                if ($error > 0) {
+                    $errors['transfert'] = ErrorMessage::TRANSFERT_INVALID;
                 }
 
-                if (empty($postContent)) {
-                    $errors['content'] = ErrorMessage::CONTENT_INVALID;
+                $image_tmp_name = $_FILES['postImage']['tmp_name'];
+                $image_size = $_FILES['postImage']['size'];
+                $upload_path = "public/upload/";
+
+                $maxsize = 2 * 1024 * 1024;
+
+                if ($image_size >= $maxsize) {
+                    $errors['size'] = ErrorMessage::SIZE_INVALID;
                 }
 
-                if (empty($category)) {
-                    $errors['category'] = ErrorMessage::CATEGORY_INVALID;
-                }
+                $image_ext = pathinfo($postImage['name'], PATHINFO_EXTENSION);
+                $image_ext_min = strtolower($image_ext);
+                $allowed_ext = array('jpg', 'jpeg', 'png', 'gif');
 
-                if (empty($postStatus)) {
-                    $errors['postStatus'] = ErrorMessage::STATUS_INVALID;
+                if (!in_array($image_ext_min, $allowed_ext)) {
+                    $errors['extension'] = ErrorMessage::EXTENSION_INVALID;
                 }
+            }
 
-                if (empty($postImage['name'])) {
-                    $errors['postImage'] = ErrorMessage::IMAGEPOST_INVALID;
-                } elseif (isset($_FILES['postImage']) && $_FILES['postImage']['size'] > 0) {
-                    $error = $_FILES['postImage']['error'];
-                    if ($error > 0) {
-                        $errors['transfert'] = ErrorMessage::TRANSFERT_INVALID;
+            if (empty($errors)) {
+                move_uploaded_file($image_tmp_name, $upload_path . $postImage['name']);
+
+                // Générer le slug à partir du titre
+                $slugService = new SlugService();
+                $slugPost = $slugService->generateSlug($title);
+
+                $posts = new PostModel();
+
+                $posts->setTitle($title)
+                    ->setPostContent($postContent)
+                    ->setSlugPost($slugPost)
+                    ->setCategory_id($category)
+                    ->setStatus_id($postStatus)
+                    ->setPostImage($postImage['name'])
+                    ->setUser_id($_SESSION['user']['id'])
+                    ->setCreated_at_post();
+
+                $posts->createPost();
+
+                // Récupérer l'ID du post nouvellement créé
+                $postId = $posts->getLastInsertedPostId();
+
+                $selectedTags = isset($_POST['tags']) ? $_POST['tags'] : [];
+                $selectedTagsArray = explode(',', $selectedTags);
+
+                $tagsModel = new TagModel();
+                $postTagModel = new PostTagModel();
+
+                if (!empty($selectedTags)) {
+                    $existingTagNames = $tagsModel->getAllTagNames();
+                    $tagsToAdd = array_values(array_diff($selectedTagsArray, $existingTagNames));
+
+                    foreach ($tagsToAdd as $tagAdd) {
+                        $tagData = ['name_tag' => $tagAdd];
+                        $tagsModel->setNameTag($tagData['name_tag']);
+                        $tagsModel->create($tagData);
                     }
 
-                    $image_tmp_name = $_FILES['postImage']['tmp_name'];
-                    $image_size = $_FILES['postImage']['size'];
-                    $upload_path = "public/upload/";
+                    foreach ($selectedTagsArray as $tag) {
+                        $tagId = $tagsModel->getTagIdByTagName($tag);
 
-                    $maxsize = 2 * 1024 * 1024;
-
-                    if ($image_size >= $maxsize) {
-                        $errors['size'] = ErrorMessage::SIZE_INVALID;
-                    }
-
-                    $image_ext = pathinfo($postImage['name'], PATHINFO_EXTENSION);
-                    $image_ext_min = strtolower($image_ext);
-                    $allowed_ext = array('jpg', 'jpeg', 'png', 'gif');
-
-                    if (!in_array($image_ext_min, $allowed_ext)) {
-                        $errors['extension'] = ErrorMessage::EXTENSION_INVALID;
-                    }
-                }
-
-                if (empty($errors)) {
-                    move_uploaded_file($image_tmp_name, $upload_path . $postImage['name']);
-
-                    // Générer le slug à partir du titre
-                    $slugService = new SlugService();
-                    $slug = $slugService->generateSlug($title);
-
-                    $posts = new PostModel();
-
-                    $posts->setTitle($title)
-                        ->setPostContent($postContent)
-                        ->setSlug($slug)
-                        ->setCategory_id($category)
-                        ->setPostStatus($postStatus)
-                        ->setPostImage($postImage['name'])
-                        ->setUser_id($_SESSION['user']['id'])
-                        ->setCreated_at_post();
-
-                    $posts->createPost();
-
-                    // Récupérer l'ID du post nouvellement créé
-                    $postId = $posts->getLastInsertedPostId();
-
-                    $selectedTags = isset($_POST['tags']) ? $_POST['tags'] : [];
-                    $selectedTagsArray = explode(',', $selectedTags);
-
-                    $tagsModel = new TagModel();
-                    $postTagModel = new PostTagModel();
-
-                    if (!empty($selectedTags)) {
-                        $existingTagNames = $tagsModel->getAllTagNames();
-                        $tagsToAdd = array_values(array_diff($selectedTagsArray, $existingTagNames));
-
-                        foreach ($tagsToAdd as $tagAdd) {
-                            $tagData = ['tag_name' => $tagAdd];
-                            $tagsModel->setNameTag($tagData['tag_name']);
-                            $tagsModel->create($tagData);
+                        $postTag = $postTagModel->getByPostAndTag($postId, $tagId->id);
+                        if (!$postTag) {
+                            $postTagModel->addTagsToPost($postId, [$tagId->id]);
                         }
-
-                        foreach ($selectedTagsArray as $tag) {
-                            $tagId = $tagsModel->getTagIdByTagName($tag);
-
-                            $postTag = $postTagModel->getByPostAndTag($postId, $tagId->id);
-                            if (!$postTag) {
-                                $postTagModel->addTagsToPost($postId, [$tagId->id]);
-                            }
-                        }
                     }
-
-                    header('Location: index');
                 }
+
+                header('Location: index');
             }
+        }
 
-            $categoryModel = new CategoryModel();
-            $categories = $categoryModel->findAll();
+        $categoryModel = new CategoryModel();
+        $categories = $categoryModel->findAll();
 
-            $categoriesOptions = [];
-            foreach ($categories as $category) {
-                $categoriesOptions[$category->id] = $category->name_category;
-            }
+        $categoriesOptions = [];
+        foreach ($categories as $category) {
+            $categoriesOptions[$category->id] = $category->name_category;
+        }
 
-            $tagModel = new TagModel();
-            $tags = $tagModel->findAll();
+        $tagModel = new TagModel();
+        $tags = $tagModel->findAll();
 
-            $tagsOptions = [];
-            foreach ($tags as $tag) {
-                $tagsOptions[$tag->id] = $tag->name_tag;
-            }
+        $tagsOptions = [];
+        foreach ($tags as $tag) {
+            $tagsOptions[$tag->id] = $tag->name_tag;
+        }
 
-            $postFormService = new PostFormService();
-            $createPostForm = $postFormService->createPostService($categoriesOptions, $tagsOptions);
+        $postFormService = new PostFormService();
+        $createPostForm = $postFormService->createPostService($categoriesOptions, $tagsOptions);
 
-            $this->twig->display('admin/posts/create.html.twig', [
-                'errors' => $errors,
-                'createPostForm' => $createPostForm->create()
-            ]);
-        } catch (\Exception $e) {
+        $this->twig->display('admin/posts/create.html.twig', [
+            'errors' => $errors,
+            'createPostForm' => $createPostForm->create()
+        ]);
+        /*} catch (\Exception $e) {
             header('Location: /error-page-500');
             exit;
-        }
+        }*/
     }
 
 
@@ -190,157 +190,157 @@ class PostBackController extends BaseController
     {
         $errors = [];
 
-        try {
-            $postsModel = new PostModel();
+        //try {
+        $postsModel = new PostModel();
 
-            $post = $postsModel->find($id);
+        $post = $postsModel->find($id);
 
-            if (isset($_POST['submit'])) {
-                $title = trim(htmlspecialchars($_POST['title'], ENT_QUOTES, 'UTF-8'));
-                $postContent = $_POST['postContent']; // contenu brut, sera assaini plus tard avant enregistrement
-                $category = isset($_POST['category']) ? $_POST['category'] : '';
-                $postStatus = isset($_POST['postStatus']) ? $_POST['postStatus'] : '';
-                $postImage = $_FILES['postImages'];
+        if (isset($_POST['submit'])) {
+            $title = trim(htmlspecialchars($_POST['title'], ENT_QUOTES, 'UTF-8'));
+            $postContent = $_POST['postContent']; // contenu brut, sera assaini plus tard avant enregistrement
+            $category = isset($_POST['category']) ? $_POST['category'] : '';
+            $postStatus = isset($_POST['postStatus']) ? $_POST['postStatus'] : '';
+            $postImage = $_FILES['postImages'];
 
-                if (empty($title)) {
-                    $errors['title'] = ErrorMessage::TITLE_INVALID;
+            if (empty($title)) {
+                $errors['title'] = ErrorMessage::TITLE_INVALID;
+            }
+
+            if (empty($postContent)) {
+                $errors['content'] = ErrorMessage::CONTENT_INVALID;
+            }
+
+            if (empty($category)) {
+                $errors['category'] = ErrorMessage::CATEGORY_INVALID;
+            }
+
+            if (empty($postStatus)) {
+                $errors['postStatus'] = ErrorMessage::STATUS_INVALID;
+            }
+
+            if (!empty($postImage['name'])) {
+                if ($_FILES['postImages']['error'] > 0) {
+                    $errors['transfert'] = ErrorMessage::TRANSFERT_INVALID;
                 }
 
-                if (empty($postContent)) {
-                    $errors['content'] = ErrorMessage::CONTENT_INVALID;
+                $image_tmp_name = $_FILES['postImages']['tmp_name'];
+                $image_size = $_FILES['postImages']['size'];
+                $upload_path = "public/upload/";
+
+                $maxsize = 2 * 1024 * 1024;
+
+                if ($image_size >= $maxsize) {
+                    $errors['size'] = ErrorMessage::SIZE_INVALID;
                 }
 
-                if (empty($category)) {
-                    $errors['category'] = ErrorMessage::CATEGORY_INVALID;
-                }
+                $image_ext = pathinfo($postImage['name'], PATHINFO_EXTENSION);
+                $image_ext_min = strtolower($image_ext);
+                $allowed_ext = array('jpg', 'jpeg', 'png', 'gif');
 
-                if (empty($postStatus)) {
-                    $errors['postStatus'] = ErrorMessage::STATUS_INVALID;
-                }
-
-                if (!empty($postImage['name'])) {
-                    if ($_FILES['postImages']['error'] > 0) {
-                        $errors['transfert'] = ErrorMessage::TRANSFERT_INVALID;
-                    }
-
-                    $image_tmp_name = $_FILES['postImages']['tmp_name'];
-                    $image_size = $_FILES['postImages']['size'];
-                    $upload_path = "public/upload/";
-
-                    $maxsize = 2 * 1024 * 1024;
-
-                    if ($image_size >= $maxsize) {
-                        $errors['size'] = ErrorMessage::SIZE_INVALID;
-                    }
-
-                    $image_ext = pathinfo($postImage['name'], PATHINFO_EXTENSION);
-                    $image_ext_min = strtolower($image_ext);
-                    $allowed_ext = array('jpg', 'jpeg', 'png', 'gif');
-
-                    if (!in_array($image_ext_min, $allowed_ext)) {
-                        $errors['extension'] = ErrorMessage::EXTENSION_INVALID;
-                    }
-
-                    if (empty($errors)) {
-                        move_uploaded_file($image_tmp_name, $upload_path . $postImage['name']);
-                    }
+                if (!in_array($image_ext_min, $allowed_ext)) {
+                    $errors['extension'] = ErrorMessage::EXTENSION_INVALID;
                 }
 
                 if (empty($errors)) {
-                    $postsEdit = new PostModel();
-
-                    if ($title !== $post['title']) {
-                        $slugService = new SlugService();
-                        $slug = $slugService->generateSlug($title);
-                        $postsEdit->setSlug($slug);
-                    }
-
-                    $postsEdit->setTitle($title)
-                        ->setPostContent($postContent)
-                        ->setCategory_id($category)
-                        ->setPostStatus($postStatus)
-                        ->setUser_id($_SESSION['user']['id'])
-                        ->setUpdated_at_post();
-
-                    if (!empty($postImage['name'])) {
-                        $postsEdit->setPostImage($postImage['name']);
-                    }
-
-                    $postsEdit->update($id);
-
-                    $selectedTags = isset($_POST['tags']) ? $_POST['tags'] : [];
-
-                    $selectedTagsArray = explode(',', $selectedTags);
-
-                    $tagsModel = new TagModel();
-                    $postTagModel = new PostTagModel();
-
-                    if (!empty($selectedTags)) {
-                        $existingTagNames = $tagsModel->getAllTagNames();
-
-                        $tagsToAdd = array_values(array_diff($selectedTagsArray, $existingTagNames));
-
-                        $postTagModel->removeTagsFromPost($id);
-
-                        foreach ($tagsToAdd as $tagAdd) {
-                            $tagData = ['tag_name' => $tagAdd];
-
-                            $tagsModel->setNameTag($tagData['tag_name']);
-
-                            $tagsModel->create($tagData);
-                        }
-
-                        foreach($selectedTagsArray as $tag) {
-
-                            // récupére l'ID d'un tag en fonction de son nom
-                            $tagId = $tagsModel->getTagIdByTagName($tag);
-
-                            $postTag = $postTagModel->getByPostAndTag($id, $tagId->id);
-                            if(!$postTag) {
-                                // récupère l'id de postTag si un tag est déjà associé à un post
-                                $postTagModel->addTagsToPost($id, [$tagId->id]);
-                            }
-                        }
-                    }
-
-                    header('Location: ../index');
+                    move_uploaded_file($image_tmp_name, $upload_path . $postImage['name']);
                 }
             }
 
-            $categoryModel = new CategoryModel();
-            $categories = $categoryModel->findAll();
+            if (empty($errors)) {
+                $postsEdit = new PostModel();
 
-            $categoriesOptions = [];
-            foreach ($categories as $category) {
-                $categoriesOptions[$category->id] = $category->name_category;
+                if ($title !== $post['title']) {
+                    $slugService = new SlugService();
+                    $slugPost = $slugService->generateSlug($title);
+                    $postsEdit->setSlugPost($slugPost);
+                }
+
+                $postsEdit->setTitle($title)
+                    ->setPostContent($postContent)
+                    ->setCategory_id($category)
+                    ->setStatus_id($postStatus)
+                    ->setUser_id($_SESSION['user']['id'])
+                    ->setUpdated_at_post();
+
+                if (!empty($postImage['name'])) {
+                    $postsEdit->setPostImage($postImage['name']);
+                }
+
+                $postsEdit->update($id);
+
+                $selectedTags = isset($_POST['tags']) ? $_POST['tags'] : [];
+
+                $selectedTagsArray = explode(',', $selectedTags);
+
+                $tagsModel = new TagModel();
+                $postTagModel = new PostTagModel();
+
+                if (!empty($selectedTags)) {
+                    $existingTagNames = $tagsModel->getAllTagNames();
+
+                    $tagsToAdd = array_values(array_diff($selectedTagsArray, $existingTagNames));
+
+                    $postTagModel->removeTagsFromPost($id);
+
+                    foreach ($tagsToAdd as $tagAdd) {
+                        $tagData = ['name_tag' => $tagAdd];
+
+                        $tagsModel->setNameTag($tagData['name_tag']);
+
+                        $tagsModel->create($tagData);
+                    }
+
+                    foreach($selectedTagsArray as $tag) {
+
+                        // récupére l'ID d'un tag en fonction de son nom
+                        $tagId = $tagsModel->getTagIdByTagName($tag);
+
+                        $postTag = $postTagModel->getByPostAndTag($id, $tagId->id);
+                        if(!$postTag) {
+                            // récupère l'id de postTag si un tag est déjà associé à un post
+                            $postTagModel->addTagsToPost($id, [$tagId->id]);
+                        }
+                    }
+                }
+
+                header('Location: ../index');
             }
+        }
 
-            $tagModel = new TagModel();
-            $tags = $tagModel->findAll();
+        $categoryModel = new CategoryModel();
+        $categories = $categoryModel->findAll();
 
-            $tagsOptions = [];
-            foreach ($tags as $tag) {
-                $tagsOptions[$tag->id] = $tag->name_tag;
-            }
+        $categoriesOptions = [];
+        foreach ($categories as $category) {
+            $categoriesOptions[$category->id] = $category->name_category;
+        }
 
-            $tagsModel = new TagModel();
-            $tagsForPost = $tagsModel->getTagsForPost($id);
+        $tagModel = new TagModel();
+        $tags = $tagModel->findAll();
 
-            $selectedTagsIds = array_column($tagsForPost, 'tag_name');
+        $tagsOptions = [];
+        foreach ($tags as $tag) {
+            $tagsOptions[$tag->id] = $tag->name_tag;
+        }
 
-            $postFormService = new PostFormService();
-            $editPostForm = $postFormService->editPostService($categoriesOptions, $post, $tagsOptions, $tagsForPost);
+        $tagsModel = new TagModel();
+        $tagsForPost = $tagsModel->getTagsForPost($id);
 
-            $this->twig->display('admin/posts/edit.html.twig', [
-                'errors' => $errors,
-                'editPostForm' => $editPostForm->create(),
-                'tagsForPost' => $tagsForPost,
-                'selectedTagsIds' => $selectedTagsIds
-            ]);
-        } catch (\Exception $e) {
+        $selectedTagsIds = array_column($tagsForPost, 'name_tag');
+
+        $postFormService = new PostFormService();
+        $editPostForm = $postFormService->editPostService($categoriesOptions, $post, $tagsOptions, $tagsForPost);
+
+        $this->twig->display('admin/posts/edit.html.twig', [
+            'errors' => $errors,
+            'editPostForm' => $editPostForm->create(),
+            'tagsForPost' => $tagsForPost,
+            'selectedTagsIds' => $selectedTagsIds
+        ]);
+        /*} catch (\Exception $e) {
             header('Location: /error-page-500');
             exit;
-        }
+        }*/
     }
 
     /**

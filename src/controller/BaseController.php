@@ -16,7 +16,9 @@ abstract class BaseController
     {
         $this->loader = new FilesystemLoader(__DIR__ . '/../../src/view');
 
-        $this->twig = new Environment($this->loader);
+        $this->twig = new Environment($this->loader, [
+            'debug' => true,
+        ]);
 
         $this->twig->addGlobal('base_path', '/webdevpro/');
 
@@ -24,5 +26,7 @@ abstract class BaseController
         $this->twig->addGlobal('session', $sessionManager->getAll());
 
         $this->twig->addExtension(new AppTwigExtension());
+
+        $this->twig->addExtension(new \Twig\Extension\DebugExtension());
     }
 }

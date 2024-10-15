@@ -49,7 +49,7 @@ class TagController extends BaseController
                     $existingTags = $tagsModel->findAll();
 
                     foreach ($existingTags as $existingTag) {
-                        if (strtolower($existingTag->tag_name) === strtolower($nameTag)) {
+                        if (strtolower($existingTag->name_tag) === strtolower($nameTag)) {
                             $errors['uniqueNameTag'] = ErrorMessage::UNIQUENAMETAG_INVALID;
                             break;
                         }
@@ -113,7 +113,7 @@ class TagController extends BaseController
                     $existingTags = $tagsModel->findAll();
 
                     foreach ($existingTags as $existingTag) {
-                        if (strtolower($existingTag->tag_name) === strtolower($nameTag)) {
+                        if (strtolower($existingTag->name_tag) === strtolower($nameTag)) {
                             $errors['uniqueNameTag'] = ErrorMessage::UNIQUENAMETAG_INVALID;
                             break;
                         }

@@ -1,0 +1,18 @@
+{% extends 'template/layouts/base_frontend.html.twig' %}
+
+{% block title %}Post Archives
+{% endblock %}
+
+{% block content %}
+    <div class="container posts-list">
+    <div class="row">
+        <div class="col-lg-9">
+            <h3 class="fw-bold underline mb-3">Archives for : <em>{{ formattedDate }}</em></h3>
+            {% include 'template/_partials/_post_list.html.twig' %}
+        </div>
+        <div class="col-lg-3">
+            {% embed "template/_partials/_aside.html.twig" %}{% endembed %}
+        </div>
+    </div>
+</div>
+{% endblock %}

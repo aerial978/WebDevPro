@@ -45,7 +45,7 @@ class CommentModel extends Model
     // PostFrontController => singlePost()
     public function countCommentsByPost($postId)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE post_id = :postId";
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE post_id = :postId AND status_id = 1";
         $query = $this->request($sql, [':postId' => $postId]);
 
         return $query->fetchColumn();

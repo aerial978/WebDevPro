@@ -46,8 +46,10 @@ class Model extends Db
      */
     public function find(int $id)
     {
-        $query = $this->request("SELECT * FROM {$this->table} WHERE  id = $id");
-        return $query->fetch();
+        $req = "SELECT * FROM {$this->table} WHERE id = :id";
+        $query = $this->request($req, [':id' => $id]);
+
+        return $query->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**

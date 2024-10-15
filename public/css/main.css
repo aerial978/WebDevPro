@@ -1,4 +1,3 @@
-@charset "UTF-8";
 h1 {
   font-size: 4rem; }
 
@@ -14,6 +13,9 @@ a {
 
 ul {
   padding-left: 0; }
+
+em {
+  color: #1aBC9C; }
 
 *,
 ::after,
@@ -233,12 +235,35 @@ section {
   background-color: #2980B9;
   border-color: #2980B9; }
 
-/* Styles spécifiques pour la pagination de singlePost */
+/*
 .pagination-single-post .page-item:first-child .page-link,
 .pagination-single-post .page-item:last-child .page-link {
-  color: #2980B9;
-  /* Ou n'importe quel style par défaut */
-  background-color: inherit;
+    color: #2980B9;
+    background-color: inherit;
+    border-color: #2980B9;
+}*/
+.pagination-category .page-item:first-child .page-link,
+.pagination-category .page-item:last-child .page-link {
+  color: #fff;
+  background-color: #2980B9;
+  border-color: #2980B9; }
+
+.pagination-tag .page-item:first-child .page-link,
+.pagination-tag .page-item:last-child .page-link {
+  color: #fff;
+  background-color: #2980B9;
+  border-color: #2980B9; }
+
+.pagination-user .page-item:first-child .page-link,
+.pagination-user .page-item:last-child .page-link {
+  color: #fff;
+  background-color: #2980B9;
+  border-color: #2980B9; }
+
+.pagination-archive .page-item:first-child .page-link,
+.pagination-archive .page-item:last-child .page-link {
+  color: #fff;
+  background-color: #2980B9;
   border-color: #2980B9; }
 
 .pagination .page-item .page-link {
@@ -368,7 +393,8 @@ footer .menu-footer li a:hover {
   justify-content: space-between; }
 
 .blog-image {
-  position: relative; }
+  position: relative;
+  overflow: hidden; }
 
 .blog-image img {
   width: 100%; }
@@ -390,23 +416,29 @@ footer .menu-footer li a:hover {
   line-height: 1;
   font-weight: 500; }
 
-.blog-category {
+.blog-category-link {
   position: absolute;
   bottom: 0;
-  text-align: center;
+  left: 0;
+  text-decoration: none; }
+
+.blog-category {
+  background-color: #1aBC9C;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 0 5px 0 0;
   text-transform: uppercase;
   font-size: 12px;
-  font-weight: 500;
-  padding: 0 15px;
-  border-radius: 0 5px 0 0;
-  background-color: #1aBC9C;
-  color: #F6F6F6; }
+  font-weight: 500; }
+
+.blog-category:hover {
+  background-color: #94BFDC; }
 
 .blog-body {
   padding: 10px 15px; }
 
 .blog-title {
-  font-size: 25px;
+  font-size: 20px;
   font-weight: 600; }
 
 .blog-subtitle {
@@ -426,9 +458,18 @@ footer .menu-footer li a:hover {
   padding: 15px 15px 25px;
   background-color: #c9dfed; }
 
+.more-link {
+  color: #1aBC9C; }
+
+.more-link:hover {
+  color: #94BFDC; }
+
 .blog-author {
   font-size: 14px;
   font-weight: 600; }
+
+.blog-author:hover {
+  color: #1aBC9C; }
 
 .blog-post {
   font-size: 12px;
@@ -655,4 +696,4 @@ main {
   main {
     margin-left: 0; } }
 
-/**  Posts List **/
+/**  Post single **/

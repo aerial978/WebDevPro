@@ -17,7 +17,7 @@
                     <img src="{{ base_path }}public/upload/{{ latestPost.post_image }}" class="card-img" alt="{{ latestPost.title }}">
                     <div class="card-img-overlay d-flex align-items-end p-0">
                         <div class="card-title w-100 text-center p-2" style="background-color: rgba(0, 0, 0, 0.4);">
-                            <a href="#" class="fs-5 text-white text-decoration-none">{{ latestPost.title }}</a>
+                            <a href="{{ base_path }}postsingle/{{ latestPost.slug_post }}" class="fs-5 text-white text-decoration-none">{{ latestPost.title }}</a>
                         </div>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
         <ul class="category-list">
             {% for category in categories %}
                 <li class="list-group-item">
-                    <a href="#" class="category-link">{{ category.name_category }}
+                    <a href="{{ base_path }}category/{{ category.slug_category }}" class="category-link">{{ category.name_category }}
                         <span class="badge badge-pill">{{ category.post_count }}</span>
                     </a>
                 </li>
@@ -76,7 +76,7 @@
                     <img src="{{ base_path }}public/upload/{{ popularPost.post_image }}" class="card-img" alt="{{ popularPost.title }}">
                     <div class="card-img-overlay d-flex align-items-end p-0">
                         <div class="card-title w-100 text-center p-2" style="background-color: rgba(0, 0, 0, 0.4);">
-                            <a href="#" class="text-white text-decoration-none">{{ popularPost.title }}</a>
+                            <a href="{{ base_path }}postsingle/{{ popularPost.slug_post }}" class="text-white text-decoration-none">{{ popularPost.title }}</a>
                         </div>
                     </div>
                 </div>
@@ -96,13 +96,15 @@
     <div class="tags-list mb-4">
         <h5 class="widget-title">Tags</h5>
         <div class="tag-cloud">
-            {% for tag, size in tagSizes %}
+            {% for tag in tags %}
                 {% set colorClass = loop.index is odd ? 'tag-color-dark' : 'tag-color-green' %}
-            <a href="#" class="tag {{ colorClass }} {{ loop.index > 50 ? 'd-none' : '' }}" style="font-size: {{ size }}px">{{ tag }}</a>
+                <a href="{{ base_path }}tag/{{ tag.slug_tag }}" class="tag {{ colorClass }} {{ loop.index > 50 ? 'd-none' : '' }}" style="font-size: {{ tagSizes[tag.name_tag] }}px;">
+                    {{ tag.name_tag }} ({{ tag.frequency }})
+                </a>
             {% else %}
-            <li class="list-group-item">
-                <p class="mb-1">No tags found.</p>
-            </li>
+                <li class="list-group-item">
+                    <p class="mb-1">No tags found.</p>
+                </li>
             {% endfor %}
         </div>
         {% if tagSizes|length > 10 %}
@@ -112,14 +114,20 @@
         {% endif %}
     </div>
     <!-- Archives -->
-    <div class="mb-4">
-        <h5 class="widget-title">Archives</h5>
-        <ul class="list-group">
-            <li class="list-group-item">January 2021</li>
-            <li class="list-group-item">December 2020</li>
-            <li class="list-group-item">November 2020</li>
-        </ul>
-    </div>
+    <div class="archives-list mb-4">
+    <h5 class="widget-title">Archives</h5>
+    <select id="archive-select" class="form-select" onchange="navigateToArchive(this)">
+        <option value="">Select a month</option>
+        {% for archive in archives %}
+            <option value="{{ base_path }}archive/{{ archive.year }}/{{ archive.month }}">
+                {{ archive.month_name }} {{ archive.year }} ({{ archive.post_count }})
+            </option>
+        {% else %}
+            <option disabled>Aucune archive disponible</option>
+        {% endfor %}
+    </select>
+</div>
+
 </div>
 <style>
     .tags-list .tag-cloud-end button {
@@ -142,6 +150,14 @@
             moreButton.style.display = 'none';
         });
     });
+
+    function navigateToArchive(selectElement) {
+        var url = selectElement.value;
+        if (url) {
+            window.location.href = url;
+        }
+    }
 </script>
+
 
 

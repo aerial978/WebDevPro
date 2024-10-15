@@ -1,4 +1,9 @@
 <?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require 'vendor/autoload.php';
 
 use src\controller\ErrorController;
@@ -29,7 +34,7 @@ if ($requestUri) {
     foreach ($routes as $routeUri => $route) {
         // Générer une expression régulière pour la route
         $pattern = str_replace('/', '\/', $routeUri);///////
-        $pattern = '/^' . $pattern . '\/?(\d+)?$/';
+        $pattern = '/^' . $pattern . '\/?(\d+)?\/?(\d+)?$/';
 
         // Comparer l'URI avec le motif de la route
         if (preg_match($pattern, $cleanedUri, $matches)) {
@@ -41,11 +46,12 @@ if ($requestUri) {
             $action = $route['action'];
 
             // Passer l'ID à l'action du contrôleur si défini dans les matches
-            if (isset($matches[1])) {
-                $slug = $matches[1];
-                $controller->$action($slug);
+            if (isset($matches[1]) && isset($matches[2])) {
+                $controller->$action($matches[1], $matches[2]); // Passer deux paramètres (year, month)
+            } elseif (isset($matches[1])) {
+                $controller->$action($matches[1]); // Passer un seul paramètre (slug ou id)
             } else {
-                $controller->$action();
+                $controller->$action(); // Pas de paramètre
             }
 
             break; // Sortir de la boucle une fois la correspondance trouvée

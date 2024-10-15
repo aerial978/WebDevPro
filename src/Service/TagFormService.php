@@ -28,7 +28,7 @@ class TagFormService
 
         $editTagForm->startForm('post', '', ['class' => '', 'id' => 'editTagForm'])
         ->addLabelFor('nameTag', 'Name', ['class' => 'mt-3'])
-        ->addInput('text', 'nameTag', ['class' => 'form-control', 'id' => 'name_tag', 'value' => $tag->tag_name])
+        ->addInput('text', 'nameTag', ['class' => 'form-control', 'id' => 'name_tag', 'value' => $tag->name_tag])
         ->addError('nameTagError', ['class' => 'text-danger'])
 
         ->addButton('Submit', 'submit', 'submit', ['class' => 'btn btn-custom p-2', 'id' => 'submit'])

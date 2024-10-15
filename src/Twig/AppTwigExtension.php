@@ -21,8 +21,7 @@ class AppTwigExtension extends AbstractExtension
             $pos = array_keys($words);
             $text = substr($text, 0, $pos[$limit]) . $ellipsis;
         }
+
         return $text;
     }
-
-
 }

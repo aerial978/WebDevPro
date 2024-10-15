@@ -1,0 +1,17 @@
+{% extends 'template/layouts/base_frontend.html.twig' %}
+
+{% block title %}Posts in tag{% endblock %}
+
+{% block content %}
+<div class="container posts-list">
+    <div class="row">
+        <div class="col-lg-9">
+            <h3 class="fw-bold underline mb-3">Posts in tag : <em>{{ tag.name_tag }}</em></h3>
+            {% include 'template/_partials/_post_list.html.twig' %}
+        </div>
+        <div class="col-lg-3">
+            {% embed "template/_partials/_aside.html.twig" %}{% endembed %}
+        </div>
+    </div>
+</div>
+{% endblock %}
