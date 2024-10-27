@@ -1,0 +1,20 @@
+<nav class="mt-5 mb-4">
+    <ul class="pagination justify-content-center">
+        {% if totalPages > 1 %}
+            {% for i in 1..totalPages %}
+                {% if i == 1 or i == 2 or i == totalPages or i == totalPages - 1 or (i >= currentPage - 1 and i <= currentPage + 1) %}
+                    <li class="page-item {% if i == currentPage %}active{% endif %}">
+                        <a class="page-link" href="{{ base_path }}{{ url }}{{ i }}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}{% if currentStatus %}&status={{ currentStatus }}{% endif %}">
+                            {{ i }}
+                        </a>
+                    </li>
+                {% elseif i == currentPage - 2 or i == currentPage + 2 %}
+                    <li class="page-item disabled">
+                        <a class="page-link">...</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </ul>
+</nav>
+

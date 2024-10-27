@@ -17,7 +17,35 @@
                     </div>
                 {% endif %}
             <div id="generalError" class="error-message"></div>
-            {{ loginForm|raw }}
+            <form action="" method="post" id="loginForm">
+                <div class="mt-3">
+                    {% include 'template/_fragments/_form/_input_field.html.twig' with {
+                        'type': 'email',
+                        'name': 'email',
+                        'id': 'email',
+                        'class': 'form-control',
+                        'label': 'Email'
+                    } %}
+                </div>
+                <div class="mt-3">
+                    {% include 'template/_fragments/_form/_input_field.html.twig' with {
+                        'type': 'password',
+                        'name': 'password',
+                        'id': 'password',
+                        'class': 'form-control',
+                        'label': 'Password'
+                    } %}
+                </div>
+                <div class="mt-4">
+                    {% include 'template/_fragments/_form/_button_field.html.twig' with {
+                        'type' : 'submit',
+                        'name' : 'submit',
+                        'label': 'Submit',
+                        'id': 'submit',
+                        'class': 'btn btn-custom btn-submit w-100 p-3'
+                    } %}
+                </div>
+            </form>
             <div class="sign-link d-flex justify-content-between">
                 <h5><a href="">Forgot password ?</a></h5>
                 <h5>Not a member ?<a href="{{ base_path }}registration"> Sign up</a></h5>

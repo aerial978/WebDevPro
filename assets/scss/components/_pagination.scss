@@ -1,41 +1,12 @@
-.pagination-post-list .page-item:first-child .page-link,
-.pagination-post-list .page-item:last-child .page-link {
+.pagination-style .page-item:first-child .page-link,
+.pagination-style .page-item:last-child .page-link {
     color: #fff;
     background-color: #2980B9;
     border-color: #2980B9;
 }
 
-/*
-.pagination-single-post .page-item:first-child .page-link,
-.pagination-single-post .page-item:last-child .page-link {
-    color: #2980B9;
-    background-color: inherit;
-    border-color: #2980B9;
-}*/
-
-.pagination-category .page-item:first-child .page-link,
-.pagination-category .page-item:last-child .page-link {
-    color: #fff;
-    background-color: #2980B9;
-    border-color: #2980B9;
-}
-
-.pagination-tag .page-item:first-child .page-link,
-.pagination-tag .page-item:last-child .page-link {
-    color: #fff;
-    background-color: #2980B9;
-    border-color: #2980B9;
-}
-
-.pagination-user .page-item:first-child .page-link,
-.pagination-user .page-item:last-child .page-link {
-    color: #fff;
-    background-color: #2980B9;
-    border-color: #2980B9;
-}
-
-.pagination-archive .page-item:first-child .page-link,
-.pagination-archive .page-item:last-child .page-link {
+.pagination-comment-list .page-item:first-child .page-link,
+.pagination-comment-list .page-item:last-child .page-link {
     color: #fff;
     background-color: #2980B9;
     border-color: #2980B9;

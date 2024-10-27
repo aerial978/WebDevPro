@@ -1,0 +1,147 @@
+{% extends 'template/layouts/base_admin.html.twig' %}
+
+{% block title %}Comments Index
+{% endblock %}
+
+{% block content %}
+<main class="">
+    <div class="container-fluid px-4">
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-comment">
+                        <h4>Comments List</h4>
+                    </div>
+                    <div class="card-body">
+                        {% if errors %}
+                            <div class="alert alert-danger" role="alert">
+                                <ul class="errors-list">
+                                    {% for error in errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    {#    {% if indexTags is empty %}
+                            <div class="alert alert-danger show" role="alert">
+                                <h4 class="text-center">
+                                    <i class="bi bi-exclamation-triangle-fill"></i>
+                                    Comments list is empty !</h4>
+                            </div>
+                        {% else %} #}
+                            <div class="table-responsive-xl">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                        {% set columns = [
+                                            {'column': 'id', 'label': '#'},
+                                            {'column': 'comment_content', 'label': 'Content'},
+                                            {'column': 'username', 'label': 'Author'},
+                                            {'column': 'title', 'label': 'Post'},
+                                            {'column': 'name_status', 'label': 'Status'},
+                                            {'column': 'created_at_comment', 'label': 'Created_at'}
+                                        ] %}
+                                        {% for col in columns %}
+                                            <th scope="col" class="sortable" data-column="{{ col.column }}" data-order="{{ sortColumn == col.column ? sortOrder : 'desc' }}">
+                                                <!-- Pour la colonne "Statut", ajoutez une liste déroulante -->
+                                                {% if col.column == 'name_status' %}
+                                                    <div>
+                                                        <span>{{ col.label }}</span>
+                                                        <form method="GET" action="" id="statusFilterForm" style="display: inline-block; margin-left: 10px;">
+                                                            <select id="status-filter" name="status" class="form-select form-select-sm d-inline-block" onchange="this.form.submit()">
+                                                                <option value="0">All statuses</option>
+                                                                <option value="1" {% if currentStatus == '1' %}selected{% endif %}>Published</option>
+                                                                <option value="3" {% if currentStatus == '3' %}selected{% endif %}>Pending</option>
+                                                                <option value="5" {% if currentStatus == '5' %}selected{% endif %}>Rejected</option>
+                                                                <option value="7" {% if currentStatus == '7' %}selected{% endif %}>Ready for review</option>
+                                                                <option value="8" {% if currentStatus == '8' %}selected{% endif %}>Needs revision</option>
+                                                            </select>
+                                                        </form>
+                                                    </div>
+                                                {% else %}
+                                                    <a href="?sortColumn={{ col.column }}&sortOrder={{ sortOrder == 'asc' ? 'desc' : 'asc' }}{% if currentStatus %}&status={{ currentStatus }}{% endif %}">
+                                                        {{ col.label }}
+                                                        <span class="sort-icon default" style="{{ sortColumn == col.column ? 'display: none;' : '' }}"><i class="bi bi-chevron-expand"></i></span>
+                                                        <span class="sort-icon asc" style="{{ sortColumn == col.column and sortOrder == 'asc' ? 'display: inline;' : 'display: none;' }}"><i class="bi bi-chevron-up"></i></span>
+                                                        <span class="sort-icon desc" style="{{ sortColumn == col.column and sortOrder == 'desc' ? 'display: inline;' : 'display: none;' }}"><i class="bi bi-chevron-down"></i></span>
+                                                    </a>
+                                                {% endif %}
+                                            </th>
+                                        {% endfor %}
+                                        <th scope="col">Replies</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for indexComment in indexComments %}
+                                        <tr>
+                                            <th scope="row" class="centered-cell col-1" data-column="id">
+                                                {{ indexComment.commentId }}
+                                            </th>
+                                            <td class="centered-cell col-3" data-column="content">
+                                                <a>{{ indexComment.comment_content|truncate_words(5, '...') }}</a>
+                                                <div class="td-action-links">
+                                                    <a href="{{ base_path }}admin/comments/delete/{{ indexComment.commentId }}" class="trash text-danger pe-2">
+                                                        <i class="bi bi-trash-fill"></i>
+                                                    </a>
+                                                    <span class="inline-divider">|</span>
+                                                    {# L'icône du journal (toujours affichée) #}
+                                                    <a href="{{ base_path }}admin/comments/history/{{ indexComment.commentId }}" class="history text-primary px-2" title="View comment history">
+                                                        <i class="bi bi-book"></i>
+                                                    </a>
+                                                    {# Afficher l'icône de statut selon le statut actuel du commentaire #}
+                                                    {% if indexComment.statusId == 3 %}
+                                                        <span class="inline-divider">|</span>
+                                                        {# Sablier (brouillon, en attente de modération) #}
+                                                        <a href="{{ base_path }}admin/comments/edit/{{ indexComment.commentId }}" class="edit text-warning px-2" title="Pending">
+                                                            <i class="bi bi-hourglass-split"></i>
+                                                        </a>
+                                                    {% elseif indexComment.statusId == 7 %}
+                                                        <span class="inline-divider">|</span>
+                                                        {# Prêt pour révision (admin doit vérifier) #}
+                                                        <a href="{{ base_path }}admin/comments/edit/{{ indexComment.commentId }}" class="edit text-info px-2" title="Ready for review">
+                                                            <i class="bi bi-check-circle"></i>
+                                                        </a>
+                                                    {% elseif indexComment.statusId == 8 %}
+                                                        <span class="inline-divider">|</span>
+                                                        {# retour pour correction #}
+                                                        <a href="{{ base_path }}admin/comments/edit/{{ indexComment.commentId }}" class="edit text-danger px-2" title="Needs revision">
+                                                            <i class="bi bi-arrow-counterclockwise"></i>
+                                                        </a>
+                                                    {% endif %}
+                                                </div>
+                                            </td>
+
+                                            <td class="centered-cell col-1" data-column="username">
+                                                <a>{{ indexComment.username }}</a>
+                                            </td>
+                                            <td class="centered-cell col-3" data-column="title">
+                                                <a>{{ indexComment.title }}</a>
+                                            </td>
+                                            <td class="centered-cell col-2" data-column="name_status">
+                                                <a>{{ indexComment.name_status }}</a>
+                                            </td>
+                                            <td class="centered-cell col-1" data-column="created_at_comment">
+                                                <a>{{ indexComment.created_at_comment|date('d/m/Y') }}</a>
+                                            </td>
+                                            <td class="centered-cell col-1"></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% embed "template/_partials/_pagination_admin.html.twig" %}
+                                 {% set url = 'admin/comments/index?page=' %}
+                            {% endembed %}
+                    {#  {% endif %} #}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<style>
+    .sortable {
+        cursor: pointer;
+    }
+</style>
+{% endblock %}

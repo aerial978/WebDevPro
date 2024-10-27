@@ -7,7 +7,11 @@
     <div class="row">
         <div class="col-lg-9">
             <h3 class="fw-bold underline mb-3">Posts in tag : <em>{{ tag.name_tag }}</em></h3>
-            {% include 'template/_partials/_post_list.html.twig' %}
+            {% embed 'template/_partials/_post_list.html.twig' %}
+                {% set url = 'tag/' ~ tag.slug_tag ~ '?page=' %}
+                {% set totalPages = totalPages %}
+                {% if search %}{% set search = '&search=' ~ search %}{% endif %}
+            {% endembed %}
         </div>
         <div class="col-lg-3">
             {% embed "template/_partials/_aside.html.twig" %}{% endembed %}

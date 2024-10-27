@@ -18,9 +18,29 @@ class TagController extends BaseController
     {
         $tagsModel = new TagModel();
 
-        $indexTags = $tagsModel->findTagList();
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $limit = 14;
+        $offset = ($page - 1) * $limit;
 
-        $this->twig->display('admin/tags/index.html.twig', compact('indexTags'));
+        $sortColumn = $_GET['sortColumn'] ?? null; // Par défaut, tri par ID
+        $sortOrder = $_GET['sortOrder'] ?? 'desc'; // Par défaut, ordre décroissant
+
+        if ($sortColumn) {
+            $indexTags = $tagsModel->findTagList($offset, $limit, $sortColumn, $sortOrder);
+        } else {
+            $indexTags = $tagsModel->findTagList($offset, $limit);
+        }
+
+        $totalTags = $tagsModel->countTags();
+        $totalPages = ceil($totalTags / $limit);
+
+        $this->twig->display('admin/tags/index.html.twig', [
+            'indexTags' => $indexTags,
+            'totalPages' => $totalPages,
+            'currentPage' => $page,
+            'sortColumn' => $sortColumn,
+            'sortOrder' => $sortOrder,
+        ]);
     }
 
     /**
@@ -40,17 +60,17 @@ class TagController extends BaseController
 
         try {
             if (isset($_POST['submit'])) {
-                $nameTag = trim(htmlspecialchars($_POST['nameTag'], ENT_QUOTES, 'UTF-8'));
+                $nameTag = trim(htmlspecialchars($_POST['name-tag'], ENT_QUOTES, 'UTF-8'));
 
                 if (empty($nameTag)) {
-                    $errors['nameTag'] = ErrorMessage::NAMETAG_INVALID;
+                    $errors['name-tag'] = ErrorMessage::NAMETAG_INVALID;
                 } else {
                     $tagsModel = new TagModel();
                     $existingTags = $tagsModel->findAll();
 
                     foreach ($existingTags as $existingTag) {
                         if (strtolower($existingTag->name_tag) === strtolower($nameTag)) {
-                            $errors['uniqueNameTag'] = ErrorMessage::UNIQUENAMETAG_INVALID;
+                            $errors['unique-tag'] = ErrorMessage::UNIQUENAMETAG_INVALID;
                             break;
                         }
                     }
@@ -67,12 +87,9 @@ class TagController extends BaseController
                 }
             }
 
-            $tagFormService = new TagFormService();
-            $createTagForm = $tagFormService->createTagService();
-
             $this->twig->display('admin/tags/create.html.twig', [
                 'errors' => $errors,
-                'createTagForm' => $createTagForm->create()
+
             ]);
         } catch (\Exception $e) {
             header('Location: /error-page-500');
@@ -104,21 +121,21 @@ class TagController extends BaseController
             $tag = $tagsModel->find($id);
 
             if (isset($_POST['submit'])) {
-                $nameTag = trim(htmlspecialchars($_POST['nameTag'], ENT_QUOTES, 'UTF-8'));
+                $nameTag = trim(htmlspecialchars($_POST['name-tag'], ENT_QUOTES, 'UTF-8'));
 
                 if (empty($nameTag)) {
-                    $errors['nameTag'] = ErrorMessage::NAMETAG_INVALID;
-                } else {
+                    $errors['name-tag'] = ErrorMessage::NAMETAG_INVALID;
+                } /*else {
                     $tagsModel = new TagModel();
                     $existingTags = $tagsModel->findAll();
 
                     foreach ($existingTags as $existingTag) {
                         if (strtolower($existingTag->name_tag) === strtolower($nameTag)) {
-                            $errors['uniqueNameTag'] = ErrorMessage::UNIQUENAMETAG_INVALID;
+                            $errors['uniqueTag'] = ErrorMessage::UNIQUENAMETAG_INVALID;
                             break;
                         }
                     }
-                }
+                }*/
 
                 if (empty($errors)) {
 
@@ -132,12 +149,9 @@ class TagController extends BaseController
 
             }
 
-            $tagFormService = new TagFormService();
-            $editTagForm = $tagFormService->editTagService($tag);
-
             $this->twig->display('admin/tags/edit.html.twig', [
                 'errors' => $errors,
-                'editTagForm' => $editTagForm->create()
+                'tag' => $tag,
             ]);
 
         } catch (\Exception $e) {

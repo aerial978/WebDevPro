@@ -1,18 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Récupére le champ caché pour stocker les tags sélectionnés
-    const hiddenTagInput = document.getElementById('hidden-tag');
+    let hiddenTagInput = document.getElementById('hidden-tag');
     // Récupére le conteneur principal des éléments de tags
-    const tagInputContainer = document.getElementById('tag-input-container');
+    let tagInputContainer = document.getElementById('tag-input-container');
     // Récupére le conteneur des tags sélectionnés
-    const tagContainer = document.getElementById('tag-container');
+    let tagContainer = document.getElementById('tag-container');
     // Récupére le champ de sélection pour tous les tags existants
-    const allTagsSelect = document.getElementById('all-tags');
+    let allTagsSelect = document.getElementById('all-tags');
     // Limite maximale de tags pouvant être sélectionnés
-    const maxTags = 5;
+    let maxTags = 5;
     // Récupére le champ d'ajout de nouveau tag
-    const addNewTag = document.getElementById('add-newtag');
+    let addNewTag = document.getElementById('add-newtag');
     // Récupére l'élément pour afficher les erreurs liées aux tags
-    const tagError = document.getElementById('tagError');
+    let tagError = document.getElementById('tagError');
+
     // Obtenir la liste des options de tags existants sous forme de tableau
     let tagsOptions = Array.from(allTagsSelect.options).map(option => option.text);
 
@@ -27,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const span = document.createElement('span');
         span.classList.add('tag-label');
         span.dataset.tag = tagName;
-        span.innerHTML = `${tagName} <span class="remove-tag">x</span>`;
+        span.innerHTML = `${tagName} <span class="remove-tag">X</span>`;
         span.querySelector('.remove-tag').addEventListener('click', function() {
             span.remove();
             updateHiddenInput();
@@ -162,8 +163,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (hiddenTagInput.value.trim() === '') {
             event.preventDefault(); // Empêche la soumission du formulaire
             tagError.textContent = 'Please select one tag at least & press the enter key !';
+            addNewTag.classList.add('error-field'); // Ajoute la classe d'erreur
         } else {
             tagError.textContent = ''; // Réinitialise le message d'erreur
+            addNewTag.classList.remove('error-field'); // Retire la classe d'erreur
         }
     });
 });

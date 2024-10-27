@@ -32,14 +32,27 @@
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Related posts</th>
+                                            {% set columns = [
+                                                {'column': 'id', 'label': '#'},
+                                                {'column': 'name_category', 'label': 'Name'},
+                                                {'column': 'post_count', 'label': 'Related Posts'}
+                                            ] %}
+                                            {% for col in columns %}
+                                                <th scope="col" class="sortable" data-column="{{ col.column }}" data-order="{{ sortColumn == col.column ? sortOrder : 'desc' }}">
+                                                    <a href="?sortColumn={{ col.column }}&sortOrder={{ sortOrder == 'asc' ? 'desc' : 'asc' }}">{{ col.label }}
+                                                        <span class="sort-icon default" style="{{ sortColumn == col.column ? 'display: none;' : '' }}"><i class="bi bi-chevron-expand"></i></span>
+                                                        <span class="sort-icon asc" style="{{ sortColumn == col.column and sortOrder == 'asc' ? 'display: inline;' : 'display: none;' }}"><i class="bi bi-chevron-up"></i></span>
+                                                        <span class="sort-icon desc" style="{{ sortColumn == col.column and sortOrder == 'desc' ? 'display: inline;' : 'display: none;' }}"><i class="bi bi-chevron-down"></i></span>
+                                                    </a>
+                                                </th>
+                                            {% endfor %}
                                             <th scope="col">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {% for indexCategory in indexCategories %}
                                                 <tr>
+                                                    <th scope="row" class="centered-cell" data-column="id">{{ indexCategory.categoryId }}</th>
                                                     <td class="centered-cell">{{ indexCategory.name_category }}</td>
                                                     <td class="centered-cell">{{ indexCategory.post_count }}</td>
                                                     <td class="centered-cell">
@@ -54,6 +67,9 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                {% embed "template/_partials/_pagination_admin.html.twig" %}
+                                    {% set url = 'admin/categories/index?page=' %}
+                                {% endembed %}
                             {% endif %}
 						</div>
                     </div>

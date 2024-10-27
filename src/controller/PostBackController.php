@@ -4,13 +4,15 @@ namespace src\controller;
 
 use src\Models\TagModel;
 use src\Models\PostModel;
+use src\Models\CommentModel;
 use src\Models\PostTagModel;
-use src\Service\PostService;
-use src\Models\CategoryModel;
-use src\Constants\ErrorMessage;
-use src\Service\PostFormService;
-use src\service\TagCloudService;
 use src\service\SlugService;
+use src\Models\CategoryModel;
+use src\Service\StatusService;
+use src\Constants\ErrorMessage;
+use src\Models\PostHistoryModel;
+use src\Models\CommentHistoryModel;
+use src\Models\ModerationReasonModel;
 
 class PostBackController extends BaseController
 {
@@ -23,9 +25,29 @@ class PostBackController extends BaseController
     {
         $postsModel = new PostModel();
 
-        $indexPosts = $postsModel->findAllPost();
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $limit = 8;
+        $offset = ($page - 1) * $limit;
 
-        $this->twig->display('admin/posts/index.html.twig', compact('indexPosts'));
+        $sortColumn = $_GET['sortColumn'] ?? null; // Par défaut, tri par ID
+        $sortOrder = $_GET['sortOrder'] ?? 'desc'; // Par défaut, ordre décroissant
+
+        if ($sortColumn) {
+            $indexPosts = $postsModel->findAllPost($offset, $limit, $sortColumn, $sortOrder);
+        } else {
+            $indexPosts = $postsModel->findAllPost($offset, $limit);
+        }
+
+        $totalComments = $postsModel->countPosts();
+        $totalPages = ceil($totalComments / $limit);
+
+        $this->twig->display('admin/posts/index.html.twig', [
+            'indexPosts' => $indexPosts,
+            'totalPages' => $totalPages,
+            'currentPage' => $page,
+            'sortColumn' => $sortColumn,
+            'sortOrder' => $sortOrder,
+        ]);
     }
 
     /**
@@ -41,13 +63,15 @@ class PostBackController extends BaseController
     {
         $errors = [];
 
+        $statusService = new StatusService();
+        $statusOptions = $statusService->getStatusOptions();
+
         //try {
         if (isset($_POST['submit'])) {
             $title = trim(htmlspecialchars($_POST['title'], ENT_QUOTES, 'UTF-8'));
-            $postContent = $_POST['postContent']; // contenu brut, sera assaini plus tard avant enregistrement
+            $postContent = $_POST['content-post']; // contenu brut, sera assaini plus tard avant enregistrement
             $category = isset($_POST['category']) ? $_POST['category'] : '';
-            $postStatus = isset($_POST['postStatus']) ? $_POST['postStatus'] : '';
-            $postImage = $_FILES['postImage'];
+            $postImage = $_FILES['image-post'];
 
             if (empty($title)) {
                 $errors['title'] = ErrorMessage::TITLE_INVALID;
@@ -61,20 +85,16 @@ class PostBackController extends BaseController
                 $errors['category'] = ErrorMessage::CATEGORY_INVALID;
             }
 
-            if (empty($postStatus)) {
-                $errors['postStatus'] = ErrorMessage::STATUS_INVALID;
-            }
-
             if (empty($postImage['name'])) {
                 $errors['postImage'] = ErrorMessage::IMAGEPOST_INVALID;
-            } elseif (isset($_FILES['postImage']) && $_FILES['postImage']['size'] > 0) {
-                $error = $_FILES['postImage']['error'];
+            } elseif (isset($_FILES['image-post']) && $_FILES['image-post']['size'] > 0) {
+                $error = $_FILES['image-post']['error'];
                 if ($error > 0) {
                     $errors['transfert'] = ErrorMessage::TRANSFERT_INVALID;
                 }
 
-                $image_tmp_name = $_FILES['postImage']['tmp_name'];
-                $image_size = $_FILES['postImage']['size'];
+                $image_tmp_name = $_FILES['image-post']['tmp_name'];
+                $image_size = $_FILES['image-post']['size'];
                 $upload_path = "public/upload/";
 
                 $maxsize = 2 * 1024 * 1024;
@@ -105,7 +125,6 @@ class PostBackController extends BaseController
                     ->setPostContent($postContent)
                     ->setSlugPost($slugPost)
                     ->setCategory_id($category)
-                    ->setStatus_id($postStatus)
                     ->setPostImage($postImage['name'])
                     ->setUser_id($_SESSION['user']['id'])
                     ->setCreated_at_post();
@@ -140,7 +159,6 @@ class PostBackController extends BaseController
                         }
                     }
                 }
-
                 header('Location: index');
             }
         }
@@ -161,12 +179,11 @@ class PostBackController extends BaseController
             $tagsOptions[$tag->id] = $tag->name_tag;
         }
 
-        $postFormService = new PostFormService();
-        $createPostForm = $postFormService->createPostService($categoriesOptions, $tagsOptions);
-
         $this->twig->display('admin/posts/create.html.twig', [
             'errors' => $errors,
-            'createPostForm' => $createPostForm->create()
+            'statusOptions' => $statusOptions,
+            'categoriesOptions' => $categoriesOptions,
+            'tagsOptions' => $tagsOptions,
         ]);
         /*} catch (\Exception $e) {
             header('Location: /error-page-500');
@@ -192,15 +209,27 @@ class PostBackController extends BaseController
 
         //try {
         $postsModel = new PostModel();
-
         $post = $postsModel->find($id);
 
-        if (isset($_POST['submit'])) {
+        $statusService = new StatusService();
+        $statusOptions = $statusService->getStatusOptions();
+
+        $moderationReasonModel = new ModerationReasonModel();
+        $reasonsData = $moderationReasonModel->getAllReasons();
+
+        $reasons = [];
+        foreach ($reasonsData as $reason) {
+            $reasons[$reason['id']] = $reason['refusal_reason'];
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $title = trim(htmlspecialchars($_POST['title'], ENT_QUOTES, 'UTF-8'));
-            $postContent = $_POST['postContent']; // contenu brut, sera assaini plus tard avant enregistrement
-            $category = isset($_POST['category']) ? $_POST['category'] : '';
-            $postStatus = isset($_POST['postStatus']) ? $_POST['postStatus'] : '';
-            $postImage = $_FILES['postImages'];
+            $postContent = $_POST['post-content']; // contenu brut, sera assaini plus tard avant enregistrement
+            $category = $_POST['category'] ?? null;
+            $postStatus = $_POST['status-post'] ?? null;
+            $moderationReasonId = $_POST['moderation-reason'] ?? null;
+            $revisionDetails = $_POST['detail-revision'] ?? null;
+            $postImage = $_FILES['image-post'];
 
             if (empty($title)) {
                 $errors['title'] = ErrorMessage::TITLE_INVALID;
@@ -218,13 +247,23 @@ class PostBackController extends BaseController
                 $errors['postStatus'] = ErrorMessage::STATUS_INVALID;
             }
 
+            if ($postStatus == '5' && empty($moderationReasonId)) {
+                $errors['moderation-reason-id'] = ErrorMessage::REFUSAL_INVALID;
+            }
+
+            if ($postStatus == '5' && $moderationReasonId == '6') {
+                if (empty($revisionDetails)) {
+                    $errors['revision-reasons'] = ErrorMessage::SPECIFYREASON_INVALID;
+                }
+            }
+
             if (!empty($postImage['name'])) {
-                if ($_FILES['postImages']['error'] > 0) {
+                if ($_FILES['image-post']['error'] > 0) {
                     $errors['transfert'] = ErrorMessage::TRANSFERT_INVALID;
                 }
 
-                $image_tmp_name = $_FILES['postImages']['tmp_name'];
-                $image_size = $_FILES['postImages']['size'];
+                $image_tmp_name = $_FILES['image-post']['tmp_name'];
+                $image_size = $_FILES['image-post']['size'];
                 $upload_path = "public/upload/";
 
                 $maxsize = 2 * 1024 * 1024;
@@ -260,6 +299,7 @@ class PostBackController extends BaseController
                     ->setCategory_id($category)
                     ->setStatus_id($postStatus)
                     ->setUser_id($_SESSION['user']['id'])
+
                     ->setUpdated_at_post();
 
                 if (!empty($postImage['name'])) {
@@ -267,6 +307,18 @@ class PostBackController extends BaseController
                 }
 
                 $postsEdit->update($id);
+
+                $postHistoryModel = new PostHistoryModel();
+
+                $postHistoryModel->setPostId($id)
+                    ->setStatusId($postStatus)
+                    ->setUserId($post['user_id'])
+                    ->setModeratedByPost($_SESSION['user']['id'])
+                    ->setModerationReasonId($moderationReasonId)
+                    ->setRevisionDetails(!empty($revisionDetails) ? $revisionDetails : null)
+                    ->setCreatedAtModerationPost(date('Y-m-d H:i:s'));
+
+                $postHistoryModel->create();
 
                 $selectedTags = isset($_POST['tags']) ? $_POST['tags'] : [];
 
@@ -307,6 +359,13 @@ class PostBackController extends BaseController
             }
         }
 
+        $postHistoryModel = new PostHistoryModel();
+        $moderationActions = $postHistoryModel->findModerationHistoryByPostId($id);
+
+        $selectedValue = isset($moderationActions[0]['historyReasonId']) ? $moderationActions[0]['historyReasonId'] : null;
+
+        $revisionDetails = isset($moderationActions[0]['historyRevisionDetails']) ? $moderationActions[0]['historyRevisionDetails'] : null;
+
         $categoryModel = new CategoryModel();
         $categories = $categoryModel->findAll();
 
@@ -328,19 +387,36 @@ class PostBackController extends BaseController
 
         $selectedTagsIds = array_column($tagsForPost, 'name_tag');
 
-        $postFormService = new PostFormService();
-        $editPostForm = $postFormService->editPostService($categoriesOptions, $post, $tagsOptions, $tagsForPost);
-
         $this->twig->display('admin/posts/edit.html.twig', [
             'errors' => $errors,
-            'editPostForm' => $editPostForm->create(),
+            'post' => $post,
+            'statusOptions' => $statusOptions,
+            'categoriesOptions' => $categoriesOptions,
             'tagsForPost' => $tagsForPost,
-            'selectedTagsIds' => $selectedTagsIds
+            'selectedTagsIds' => $selectedTagsIds,
+            'tagsOptions' => $tagsOptions,
+            'reasons' => $reasons,
+            'selectedValue' => $selectedValue,
+            'revisionDetails' => $revisionDetails,
         ]);
         /*} catch (\Exception $e) {
             header('Location: /error-page-500');
             exit;
         }*/
+    }
+
+    public function historyPost($postId)
+    {
+        $postsModel = new PostModel();
+        $postHistory = $postsModel->findHistoryPostById($postId);
+
+        $postsHistoryModel = new PostHistoryModel();
+        $moderationActions = $postsHistoryModel->findModerationHistoryByPostId($postId);
+
+        $this->twig->display('admin/posts/history.html.twig', [
+            'postHistory' => $postHistory,
+            'moderationActions' => $moderationActions,
+        ]);
     }
 
     /**
@@ -374,75 +450,5 @@ class PostBackController extends BaseController
             header('Location: /error-page-500');
             exit;
         }
-    }
-
-    public function postList()
-    {
-        $postModel = new PostModel();
-        $postService = new PostService();
-
-        $search = isset($_GET['search']) ? trim($_GET['search']) : null;
-
-        $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-        // Nombre de posts par page
-        $limit = 2;
-        // Calcul de l'offset pour la pagination, qui détermine combien d'éléments (posts) doivent être ignorés avant de récupérer les résultats pour la page courante
-        $offset = ($page - 1) * $limit;
-
-        if ($search) {
-            $posts = $postModel->searchPosts($search, $offset, $limit);
-            // calcul du nombre total de posts
-            $totalPosts = count($posts);
-        } else {
-            $posts = $postModel->getPosts($offset, $limit);
-            // calcul du nombre total de posts
-            $totalPosts = $postModel->countPosts();
-        }
-
-        if ($search) {
-            $posts = $postModel->searchPosts($search, $offset, $limit);
-            $totalPosts = count($posts);
-            foreach ($posts as &$post) {
-                $post['time_elapsed'] = $postModel->timeElapsedString($post['updated_at_post']);
-                $post['excerpt_title'] = $postService->getExcerpt($post['title'], $search);
-                $post['excerpt_content'] = $postService->getExcerpt($post['post_content'], $search);
-            }
-        } else {
-            $posts = $postModel->getPosts($offset, $limit);
-            $totalPosts = $postModel->countPosts();
-            foreach ($posts as &$post) {
-                $post['time_elapsed'] = $postModel->timeElapsedString($post['updated_at_post']);
-            }
-        }
-
-        $categoryModel = new CategoryModel();
-        $categories = $categoryModel->findAllCategory();
-
-        // Récupére les fréquences des tags
-        $tagModel = new TagModel();
-        $tags = $tagModel->getTagFrequencies();
-
-        // Calcule les tailles des tags
-        $tagCloudService = new TagCloudService();
-        $tagSizes = $tagCloudService->calculateTagSizes($tags);
-
-        $latestPosts = $postModel->getPosts();
-
-        // Pagination, calcul du nombre total de pages
-        $totalPages = ceil($totalPosts / $limit);
-
-        $searchTerms = $search ? explode(' ', $search) : [];
-
-        $this->twig->display('frontend/postList.html.twig', [
-            'posts' => $posts,
-            'search' => $search,
-            'searchTerms' => $searchTerms,
-            'categories' => $categories,
-            'tagSizes' => $tagSizes,
-            'latestPosts' => $latestPosts,
-            'showSeeMoreLinks' => false,
-            'currentPage' => $page,
-            'totalPages' => $totalPages,
-        ]);
     }
 }

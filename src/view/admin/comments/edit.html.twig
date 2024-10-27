@@ -1,0 +1,160 @@
+{% extends 'template/layouts/base_admin.html.twig' %}
+
+{% block title %}Comment Edit
+{% endblock %}
+
+{% block content %}
+    <main>
+		<div class="container-fluid px-4">
+            <div class="row mt-4">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header card-header-comment d-flex justify-content-between">
+							<h4>Edit Comment</h4>
+							<a href="{{ base_path }}admin/comments/index" class="btn btn-danger">Back</a>
+						</div>
+						<div class="card-body">
+							{% if errors %}
+								<div class="alert alert-danger" role="alert">
+									<ul class="errors-list">
+										{% for error in errors %}
+											<li>{{ error }}</li>
+										{% endfor %}
+									</ul>
+								</div>
+							{% endif %}
+							<form id="editCommentForm" class="moderation-form" action="" method="post" data-form-type="comment">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="mt-3">
+											{% include 'template/_fragments/_form/_input_field.html.twig' with {
+												'type': 'text',
+												'name': 'author',
+												'id': 'author',
+												'class': 'form-control',
+												'label': 'Author',
+												'value': comment.username,
+												'disabled': true
+											} %}
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="mt-3">
+											{% include 'template/_fragments/_form/_input_field.html.twig' with {
+												'type': 'email',
+												'name': 'email',
+												'id': 'email',
+												'class': 'form-control',
+												'label': 'Email',
+												'value': comment.email,
+												'disabled': true
+											} %}
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="mt-3">
+											<label for="" class="form-label">Post associé : </label>
+											<a href="{{ base_path }}admin/posts/edit/{{ comment.post_id }}" class="clickable-link">{{ comment.title }}</a>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="mt-3">
+											{% include 'template/_fragments/_form/_input_field.html.twig' with {
+												'type': 'date',
+												'name': 'created-at-comment',
+												'class': 'form-control',
+												'label': 'Created at',
+												'value': comment.created_at_comment,
+												'disabled': true
+											} %}
+										</div>
+									</div>
+								</div>
+								<div class="mt-3">
+									{% include 'template/_fragments/_form/_textarea_field.html.twig' with {
+										'name': 'comment-content',
+										'id': 'comment-content',
+										'class': 'form-control',
+										'label': 'Content',
+										'value': comment.comment_content
+									} %}
+									<div id="commentContentError" class="text-danger"></div>
+								</div>
+								<div class="row">
+									<div class="col-md-4">
+										<div class="mt-3">
+											{% include 'template/_fragments/_form/_select_field.html.twig' with {
+												'name': 'status-comment',
+												'class': 'form-select status-comment',
+												'id': 'status-comment',
+												'label': 'Status',
+												'options': statusOptions,
+												'selected': comment.statusId
+											} %}
+											<div id="statusError" class="text-danger"></div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="mt-3 d-flex justify-content-center">
+											{% include 'template/_fragments/_form/_radios_field.html.twig' with {
+												'name': 'moderation-reason',
+												'class': 'moderation-reason',
+												'label': 'Reason for refusal :',
+												'radios': reasons
+											} %}
+										</div>
+										<div id="moderationReasonError" class="text-danger"></div>
+									</div>
+									<div class="col-md-4">
+										<div class="mt-3">
+										<div class="detail-refus-container">
+											{% include 'template/_fragments/_form/_textarea_field.html.twig' with {
+												'id': 'detail-refus',
+												'name': 'detail-refus',
+												'class': 'form-control detail-refus',
+												'label': 'Please specify',
+												'value': refusalDetails
+											} %}
+											<div id="refusalDetailError" class="text-danger"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="mt-3">
+									{% include 'template/_fragments/_form/_button_field.html.twig' with {
+										'type' : 'submit',
+										'name' : 'submit',
+										'label': 'Submit',
+										'id': 'submit',
+										'class': 'btn btn-custom submit'
+									} %}
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+            </div>
+		</div>
+	</main>
+	<style>
+    .clickable-link {
+        font-size: 17px;
+        font-weight: bold;
+        color: #007bff;
+        transition: color 0.3s;
+    }
+
+    .clickable-link:hover {
+        color: #0056b3;
+    }
+
+	.error-field {
+    background-color: #f8d7da; /* Rouge clair pour indiquer une erreur */
+    border: 1px solid #dc3545; /* Bordure rouge */
+}
+
+</style>
+
+{% endblock %}

@@ -32,16 +32,27 @@
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">Title</th>
-                                            <th scope="col">Creation date</th>
-                                            <th scope="col">Modification date</th>
-                                            <th scope="col">Author</th>
-                                            <th scope="col">Image</th>
-                                            <th scope="col">Comments</th>
-                                            <th scope="col">Category</th>
-                                            <th scope="col">Views</th>
-                                            <th scope="col">Status</th>
+                                            {% set columns = [
+                                                {'column': 'id', 'label': '#'},
+                                                {'column': 'title', 'label': 'Title'},
+                                                {'column': 'created_at_post', 'label': 'Creation date'},
+                                                {'column': 'updated_at_post', 'label': 'Modification date'},
+                                                {'column': 'username', 'label': 'Author'},
+                                                {'column': 'post_image', 'label': 'Image'},
+                                                {'column': 'total', 'label': 'Comment'},
+                                                {'column': 'name_category', 'label': 'Category'},
+                                                {'column': 'view_count', 'label': 'Views'},
+                                                {'column': 'name_status', 'label': 'Status'},
+                                            ] %}
+                                            {% for col in columns %}
+                                                <th scope="col" class="sortable" data-column="{{ col.column }}" data-order="{{ sortColumn == col.column ? sortOrder : 'desc' }}">
+                                                    <a href="?sortColumn={{ col.column }}&sortOrder={{ sortOrder == 'asc' ? 'desc' : 'asc' }}">{{ col.label }}
+                                                        <span class="sort-icon default" style="{{ sortColumn == col.column ? 'display: none;' : '' }}"><i class="bi bi-chevron-expand"></i></span>
+                                                        <span class="sort-icon asc" style="{{ sortColumn == col.column and sortOrder == 'asc' ? 'display: inline;' : 'display: none;' }}"><i class="bi bi-chevron-up"></i></span>
+                                                        <span class="sort-icon desc" style="{{ sortColumn == col.column and sortOrder == 'desc' ? 'display: inline;' : 'display: none;' }}"><i class="bi bi-chevron-down"></i></span>
+                                                    </a>
+                                                </th>
+                                            {% endfor %}
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -53,32 +64,54 @@
                                                         <div class="td-action-links">
                                                             <a href="{{ base_path }}admin/posts/delete/{{ indexPost.postId }}" class="trash text-danger pe-2"><i class="bi bi-trash-fill"></i></a>
                                                             <span class="inline-divider">|</span>
-                                                            <a href="{{ base_path }}admin/posts/edit/{{ indexPost.postId }}" class="edit text-success px-2"><i class="bi bi-pencil-fill"></i></a>
-                                                            <span class="inline-divider">|</span>
-                                                            <a href="#" class="edit text-primary px-2">Related Comments</a>
+                                                            {# L'icône du journal (toujours affichée) #}
+                                                            <a href="{{ base_path }}admin/posts/history/{{ indexPost.postId }}" class="history text-primary px-2" title="View comment history">
+                                                                <i class="bi bi-book"></i>
+                                                            </a>
+                                                            {# Afficher l'icône de statut selon le statut actuel du post #}
+                                                            {% if indexPost.statusId == 2 %}
+                                                                <span class="inline-divider">|</span>
+                                                                {# Sablier (brouillon, en attente de modération) #}
+                                                                <a href="{{ base_path }}admin/posts/edit/{{ indexPost.postId }}" class="edit text-warning px-2" title="Draft">
+                                                                    <i class="bi bi-hourglass-split"></i>
+                                                                </a>
+                                                            {% elseif indexPost.statusId == 7 %}
+                                                                <span class="inline-divider">|</span>
+                                                                {# Prêt pour révision (admin doit vérifier) #}
+                                                                <a href="{{ base_path }}admin/posts/edit/{{ indexPost.postId }}" class="edit text-info px-2" title="Ready for review">
+                                                                    <i class="bi bi-check-circle"></i>
+                                                                </a>
+                                                            {% elseif indexPost.statusId == 8 %}
+                                                                <span class="inline-divider">|</span>
+                                                                {# retour pour correction #}
+                                                                <a href="{{ base_path }}admin/posts/edit/{{ indexPost.postId }}" class="edit text-danger px-2" title="Needs revision">
+                                                                    <i class="bi bi-arrow-counterclockwise"></i>
+                                                                </a>
+                                                            {% endif %}
                                                         </div>
                                                     </td>
-                                                    <td class="centered-cell">{{ indexPost.created_at_post|date('d-m-Y H:i:s') }}</td>
+                                                    <td class="centered-cell">{{ indexPost.date_create }}</td>
                                                     <td class="centered-cell">
-                                                        {% if indexPost.updated_at_post is not null %}
-                                                            {{ indexPost.updated_at_post|date('d-m-Y H:i:s') }}
+                                                        {% if indexPost.date_update is not null %}
+                                                            {{ indexPost.date_update }}
                                                             {% else %}Not modified
                                                         {% endif %}
                                                     </td>
                                                     <td class="centered-cell">{{ indexPost.username }}</td>
                                                     <td class="centered-cell"><img src="{{ base_path }}public/upload/{{ indexPost.post_image }}" alt="post-pic" width="100px;"></td>
-                                                    <td class="centered-cell"></td>
+                                                    <td class="centered-cell">{{ indexPost.total}}</td>
                                                     <td class="centered-cell">{{ indexPost.name_category }}</td>
-                                                    <td class="centered-cell"></td>
-                                                    <td class="centered-cell">{{ indexPost.post_status }}</td>
+                                                    <td class="centered-cell">{{ indexPost.view_count }}</td>
+                                                    <td class="centered-cell">{{ indexPost.name_status }}</td>
                                                 </tr>
                                             {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
-                                {% embed "template/_partials/_pagination.html.twig" %}{% endembed %}
-                            {% endif %}
-                            
+                                {% embed "template/_partials/_pagination_admin.html.twig" %}
+                                    {% set url = 'admin/posts/index?page=' %}
+                                {% endembed %}
+                            {% endif %}  
 						</div>
                     </div>
                 </div>

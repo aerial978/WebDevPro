@@ -23,7 +23,27 @@
 									</ul>
 								</div>
 							{% endif %}
-                            {{ createTagForm|raw }}
+							<form action="" method="post" enctype="multipart/form-data" id="createTagForm">
+								<div class="mt-3">
+									{% include 'template/_fragments/_form/_input_field.html.twig' with {
+										'type': 'text',
+										'name': 'name-tag',
+										'id': 'name-tag',
+										'class': 'form-control',
+										'label': 'Name'
+									} %}
+									<div id="nameTagError" class="text-danger"></div>
+								</div>
+								<div class="mt-4">
+									{% include 'template/_fragments/_form/_button_field.html.twig' with {
+										'type' : 'submit',
+										'name' : 'submit',
+										'label': 'Submit',
+										'id': 'submit',
+										'class': 'btn btn-custom submit'
+									} %}
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>

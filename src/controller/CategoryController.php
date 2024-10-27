@@ -4,7 +4,6 @@ namespace src\controller;
 
 use src\Models\CategoryModel;
 use src\Constants\ErrorMessage;
-use src\Service\CategoryFormService;
 
 class CategoryController extends BaseController
 {
@@ -18,9 +17,29 @@ class CategoryController extends BaseController
     {
         $categoriesModel = new CategoryModel();
 
-        $indexCategories = $categoriesModel->findAllCategory();
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $limit = 14;
+        $offset = ($page - 1) * $limit;
 
-        $this->twig->display('admin/categories/index.html.twig', compact('indexCategories'));
+        $sortColumn = $_GET['sortColumn'] ?? null; // Par défaut, tri par ID
+        $sortOrder = $_GET['sortOrder'] ?? 'desc'; // Par défaut, ordre décroissant
+
+        if ($sortColumn) {
+            $indexCategories = $categoriesModel->findAllCategoryWithPagination($offset, $limit, $sortColumn, $sortOrder);
+        } else {
+            $indexCategories = $categoriesModel->findAllCategoryWithPagination($offset, $limit);
+        }
+
+        $totalCategories = $categoriesModel->countCategories();
+        $totalPages = ceil($totalCategories / $limit);
+
+        $this->twig->display('admin/categories/index.html.twig', [
+            'indexCategories' => $indexCategories,
+            'totalPages' => $totalPages,
+            'currentPage' => $page,
+            'sortColumn' => $sortColumn,
+            'sortOrder' => $sortOrder,
+        ]);
     }
 
     /**
@@ -40,25 +59,25 @@ class CategoryController extends BaseController
 
         try {
             if (isset($_POST['submit'])) {
-                $nameCategory = trim(htmlspecialchars($_POST['nameCategory'], ENT_QUOTES, 'UTF-8'));
-                $descriptionCategory = trim(htmlspecialchars($_POST['descriptionCategory'], ENT_QUOTES, 'UTF-8'));
+                $nameCategory = trim(htmlspecialchars($_POST['name-category'], ENT_QUOTES, 'UTF-8'));
+                $descriptionCategory = trim(htmlspecialchars($_POST['description-category'], ENT_QUOTES, 'UTF-8'));
 
                 if (empty($nameCategory)) {
-                    $errors['nameCategory'] = ErrorMessage::NAMECATEGORY_INVALID;
+                    $errors['name-category'] = ErrorMessage::NAMECATEGORY_INVALID;
                 } else {
                     $categoriesModel = new CategoryModel();
                     $existingCategories = $categoriesModel->findAll();
 
                     foreach ($existingCategories as $existingCategory) {
                         if (strtolower($existingCategory->name_category) === strtolower($nameCategory)) {
-                            $errors['uniqueNameCategory'] = ErrorMessage::UNIQUENAMECATEGORY_INVALID;
+                            $errors['unique-category'] = ErrorMessage::UNIQUENAMECATEGORY_INVALID;
                             break;
                         }
                     }
                 }
 
                 if (empty($descriptionCategory)) {
-                    $errors['descriptionCategory'] = ErrorMessage::DESCRIPTIONCATEGORY_INVALID;
+                    $errors['description-category'] = ErrorMessage::DESCRIPTIONCATEGORY_INVALID;
                 }
 
                 if (empty($errors)) {
@@ -73,12 +92,8 @@ class CategoryController extends BaseController
                 }
             }
 
-            $categoryFormService = new CategoryFormService();
-            $createCategoryForm = $categoryFormService->createCategoryService();
-
             $this->twig->display('admin/categories/create.html.twig', [
                 'errors' => $errors,
-                'createCategoryForm' => $createCategoryForm->create()
             ]);
         } catch (\Exception $e) {
             header('Location: /error-page-500');
@@ -110,15 +125,15 @@ class CategoryController extends BaseController
             $category = $categoriesModel->find($id);
 
             if (isset($_POST['submit'])) {
-                $nameCategory = trim(htmlspecialchars($_POST['nameCategory'], ENT_QUOTES, 'UTF-8'));
-                $descriptionCategory = trim(htmlspecialchars($_POST['descriptionCategory'], ENT_QUOTES, 'UTF-8'));
+                $nameCategory = trim(htmlspecialchars($_POST['name-category'], ENT_QUOTES, 'UTF-8'));
+                $descriptionCategory = trim(htmlspecialchars($_POST['description-category'], ENT_QUOTES, 'UTF-8'));
 
                 if (empty($nameCategory)) {
-                    $errors['nameCategory'] = ErrorMessage::NAMECATEGORY_INVALID;
+                    $errors['name-category'] = ErrorMessage::NAMECATEGORY_INVALID;
                 }
 
                 if (empty($descriptionCategory)) {
-                    $errors['descriptionCategory'] = ErrorMessage::DESCRIPTIONCATEGORY_INVALID;
+                    $errors['description-category'] = ErrorMessage::DESCRIPTIONCATEGORY_INVALID;
                 }
 
                 if (empty($errors)) {
@@ -134,12 +149,9 @@ class CategoryController extends BaseController
 
             }
 
-            $categoryFormService = new CategoryFormService();
-            $editCategoryForm = $categoryFormService->editCategoryService($category);
-
             $this->twig->display('admin/categories/edit.html.twig', [
                 'errors' => $errors,
-                'editCategoryForm' => $editCategoryForm->create()
+                'category' => $category,
             ]);
 
         } catch (\Exception $e) {

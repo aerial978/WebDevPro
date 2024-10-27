@@ -24,4 +24,6 @@ class ErrorMessage
     public const NAMETAG_INVALID = 'Tag name field is required !';
     public const DESCRIPTIONTAG_INVALID = 'Tag description field is required !';
     public const UNIQUENAMETAG_INVALID = 'Tag name already exists !';
+    public const REFUSAL_INVALID = 'Please choose the reason for refusal !';
+    public const SPECIFYREASON_INVALID = 'Please specify the reason for refusal !';
 }
