@@ -2,10 +2,15 @@
 ::after,
 ::before {
     box-sizing: border-box;
-}
+} 
 
 body {
     background-color: $white-color;
+    font-family: $secondary-font;
+}
+
+.admin-body {
+    background-color: $grey-color;
     font-family: $secondary-font;
 }
 

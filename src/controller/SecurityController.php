@@ -5,7 +5,6 @@ namespace src\controller;
 use src\Core\Form;
 use src\Models\UserModel;
 use src\Constants\ErrorMessage;
-use src\Service\SecurityFormService;
 
 class SecurityController extends BaseController
 {
@@ -71,12 +70,8 @@ class SecurityController extends BaseController
                 }
             }
 
-            $securityFormService = new SecurityFormService();
-            $registrationForm = $securityFormService->registrationService();
-
             $this->twig->display('frontend/Security/registration.html.twig', [
                 'errors' => $errors,
-                'registrationForm' => $registrationForm->create()
             ]);
         } catch (\Exception $e) {
             header('Location: /error-page-500');
@@ -118,12 +113,8 @@ class SecurityController extends BaseController
                 }
             }
 
-            $securityFormService = new SecurityFormService();
-            $loginForm = $securityFormService->loginService();
-
             $this->twig->display('frontend/Security/login.html.twig', [
                 'errors' => $errors,
-                'loginForm' => $loginForm->create(),
             ]);
         } catch (\Exception $e) {
             header('Location: /error-page-500');

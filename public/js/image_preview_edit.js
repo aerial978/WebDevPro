@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    let inputFiles = document.getElementsByName('postImages');
+    let inputFiles = document.getElementsByName('image-post');
     let existingImagePreview = document.getElementById('existingImagePreview');
     let existingFileInfo = document.getElementById('existingFileInfo');
     

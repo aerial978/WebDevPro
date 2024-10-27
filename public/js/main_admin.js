@@ -1,0 +1,9 @@
+import './post_admin.js';
+import './post_edit_admin.js';
+import './tag_label.js';
+import './toggle_refusal_reasons.js';
+import './toggle_revision_reasons.js';
+import './image_preview_create.js';
+import './image_preview_edit.js';
+import './comment_admin.js';
+//import './status_filter.js';

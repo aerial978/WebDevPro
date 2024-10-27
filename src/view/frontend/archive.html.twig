@@ -8,7 +8,11 @@
     <div class="row">
         <div class="col-lg-9">
             <h3 class="fw-bold underline mb-3">Archives for : <em>{{ formattedDate }}</em></h3>
-            {% include 'template/_partials/_post_list.html.twig' %}
+             {% embed 'template/_partials/_post_list.html.twig' %}
+                {% set url = 'archive/' ~ year ~ '/' ~ month  ~ '?page=' %}
+                {% set totalPages = totalPages %}
+                {% if search %}{% set search = '&search=' ~ search %}{% endif %}
+            {% endembed %}
         </div>
         <div class="col-lg-3">
             {% embed "template/_partials/_aside.html.twig" %}{% endembed %}

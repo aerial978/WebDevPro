@@ -68,7 +68,6 @@ class PostFrontController extends BaseController
             'showSeeMoreLinks' => false,
             'currentPage' => $page,
             'totalPages' => $totalPages,
-            'page' => 'postlist',
         ], $asideData));
     }
 
@@ -173,7 +172,6 @@ class PostFrontController extends BaseController
                 'category' => $category,
                 'currentPage' => $page,
                 'totalPages' => $totalPages,
-                'page' => 'category',
             ], $asideData));
         } else {
             $errorController = new ErrorController();
@@ -210,7 +208,6 @@ class PostFrontController extends BaseController
                 'tag' => $tag,
                 'currentPage' => $page,
                 'totalPages' => $totalPages,
-                'page' => 'tag',
             ], $asideData));
         } else {
             $errorController = new ErrorController();
@@ -247,7 +244,6 @@ class PostFrontController extends BaseController
                 'user' => $user,
                 'currentPage' => $page,
                 'totalPages' => $totalPages,
-                'page' => 'user',
             ], $asideData));
         } else {
             $errorController = new ErrorController();
@@ -298,7 +294,6 @@ class PostFrontController extends BaseController
             'year' => $year,
             'month' => $month,
             'formattedDate' => $formattedDate,
-            'page' => 'archive',
         ], $asideData));
     }
 

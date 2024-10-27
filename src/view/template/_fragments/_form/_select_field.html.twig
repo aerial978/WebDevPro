@@ -1,0 +1,9 @@
+<div class="form-group">
+    <label for="{{ id }}" class="form-label">{{ label }}</label>
+    <select id="{{ id }}" name="{{ name }}" class="form-select form-select-md" aria-label="Medium select example">
+        <option value="" selected disabled>Select a {{ label }}</option>
+        {% for option_value, option_label in options %}
+            <option value="{{ option_value }}" {% if option_value == selected %}selected{% endif %}>{{ option_label }}</option>
+        {% endfor %}
+    </select>
+</div>

@@ -24,7 +24,7 @@ class CategoryModel extends Model
 
         $query = $this->request($sql);
 
-        return $query->fetchAll();
+        return $query->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     // CategoryController => Create()
@@ -49,6 +49,38 @@ class CategoryModel extends Model
         $query = $this->request($sql, [':slugCategory' => $slug]);
 
         return $query->fetch(\PDO::FETCH_ASSOC);
+    }
+
+
+    public function findAllCategoryWithPagination($offset, $limit, $sortColumn = null, $sortOrder = 'desc')
+    {
+        $allowedColumns = [
+            'id' => 'category.id',
+            'name_category' => 'category.name_category',
+            'post_count' => 'post_count'
+        ];
+
+        $sortColumn = isset($allowedColumns[$sortColumn]) ? $allowedColumns[$sortColumn] : 'category.id';
+        $sortOrder = ($sortOrder === 'asc' || $sortOrder === 'desc') ? $sortOrder : 'desc';
+        $sortOrder = ($sortOrder === 'asc' || $sortOrder === 'desc') ? $sortOrder : 'desc';
+
+        $sql = "SELECT *, COUNT(post.id) AS post_count, category.id AS categoryId FROM {$this->table}
+        LEFT JOIN post ON category.id = post.category_id
+        GROUP BY category.id
+        ORDER BY $sortColumn $sortOrder 
+        LIMIT $offset, $limit";
+
+        $query = $this->request($sql);
+
+        return $query->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function countCategories()
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table}";
+        $query = $this->request($sql);
+
+        return $query->fetchColumn();
     }
 
     /**

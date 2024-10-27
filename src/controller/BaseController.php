@@ -28,5 +28,9 @@ abstract class BaseController
         $this->twig->addExtension(new AppTwigExtension());
 
         $this->twig->addExtension(new \Twig\Extension\DebugExtension());
+
+        $this->twig->addGlobal('_get', $_GET);
+
+        define('BASE_PATH', '/webdevpro/');
     }
 }

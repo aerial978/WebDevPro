@@ -1,0 +1,17 @@
+<div id="{{ id }}" class="form-group {{ class }}"">
+    <label class="mb-3">{{ label }}</label>
+    <div>
+        {% for value, text in radios %}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" id="{{ id }}-{{ loop.index }}" name="{{ name }}" value="{{ value }}" 
+                {% if value == selectedValue %}checked{% endif %}>
+                <label class="form-check-label" for="{{ id }}-{{ loop.index }}">{{ text }}</label>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+
+

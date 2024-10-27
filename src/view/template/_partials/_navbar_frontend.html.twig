@@ -19,7 +19,11 @@
 				<div class="navbar-nav ml-auto">
 					<div class="nav-item dropdown">
 						<a class="nav-link-front dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<img src="{{ base_path }}public/upload/avatar/{{ session.user.profile_picture }}" alt="user-pic" class="rounded-5" width="55">
+							 {% if session.user.profile_picture is not empty %}
+								<img src="{{ base_path }}public/upload/avatar/{{ session.user.profile_picture }}" alt="user-pic" class="rounded-5" width="55">
+							{% else %}
+								<img src="{{ base_path }}public/img/default.png" alt="default-pic" class="rounded-5" width="55">
+							{% endif %}
 							<span class="ms-2">{{ session.user.username }}</span>
 						</a>
 						<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">

@@ -15,11 +15,23 @@ class TagModel extends Model
     }
 
     // TagController => index()
-    public function findTagList()
+    public function findTagList($offset, $limit, $sortColumn = null, $sortOrder = 'desc')
     {
+        $allowedColumns = [
+            'id' => 'tag.id',
+            'name_tag' => 'tag.name_tag',
+            'post_count' => 'post_count'
+        ];
+
+        $sortColumn = isset($allowedColumns[$sortColumn]) ? $allowedColumns[$sortColumn] : 'tag.id';
+        $sortOrder = ($sortOrder === 'asc' || $sortOrder === 'desc') ? $sortOrder : 'desc';
+        $sortOrder = ($sortOrder === 'asc' || $sortOrder === 'desc') ? $sortOrder : 'desc';
+
         $sql = "SELECT name_tag, COUNT(post_tag.post_id) AS post_count, tag.id AS tagId FROM {$this->table}
         LEFT JOIN post_tag ON tag.id = post_tag.tag_id
-        GROUP BY name_tag ORDER BY name_tag ASC";
+        GROUP BY name_tag 
+        ORDER BY $sortColumn $sortOrder
+        LIMIT $offset, $limit";
 
         $query = $this->request($sql);
 
@@ -83,6 +95,14 @@ class TagModel extends Model
         $query = $this->request($sql, [':slugTag' => $slug]);
 
         return $query->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    public function countTags()
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table}";
+        $query = $this->request($sql);
+
+        return $query->fetchColumn();
     }
 
     /**

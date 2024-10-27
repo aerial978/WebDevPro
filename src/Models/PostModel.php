@@ -26,11 +26,33 @@ class PostModel extends Model
     }
 
     // PostBackController => index()
-    public function findAllPost()
+    public function findAllPost($offset, $limit, $sortColumn = null, $sortOrder = 'desc')
     {
-        $sql = "SELECT *, DATE_FORMAT(created_at_post, '%d/%m/%Y %H:%i:%s') AS date_create, post.id AS postId FROM {$this->table}
-                JOIN user ON post.user_id = user.id
-                JOIN category ON post.category_id = category.id ORDER BY updated_at_post DESC";
+        // Liste des colonnes autorisées et leurs équivalents dans la base de données pour éviter les injections SQL
+        $allowedColumns = [
+            'id' => 'post.id',
+            'title' => 'post.title',
+            'created_at_post' => 'post.created_at_post',
+            'updated_at_post' => 'post.updated_at_post',
+            'username' => 'user.username',
+            'total' => 'total',
+            'name_category' => 'category.name_category',
+            'view_count' => 'post.view_count',
+            'name_status' => 'post.name_status'
+        ];
+
+        $sortColumn = isset($allowedColumns[$sortColumn]) ? $allowedColumns[$sortColumn] : 'post.id';
+        $sortOrder = ($sortOrder === 'asc' || $sortOrder === 'desc') ? $sortOrder : 'desc';
+        $sortOrder = ($sortOrder === 'asc' || $sortOrder === 'desc') ? $sortOrder : 'desc';
+
+        $sql = "SELECT *, DATE_FORMAT(created_at_post, '%d/%m/%Y %H:%i:%s') AS date_create, DATE_FORMAT(updated_at_post, '%d/%m/%Y %H:%i:%s') AS date_update, COUNT(comment.id) AS total, post.id AS postId, status.id AS statusId FROM {$this->table}
+        LEFT JOIN comment ON comment.post_id = post.id
+        JOIN user ON post.user_id = user.id
+        JOIN category ON post.category_id = category.id
+        JOIN status ON post.status_id = status.id
+        GROUP BY post.id
+        ORDER BY $sortColumn $sortOrder 
+        LIMIT $offset, $limit";
 
         $query = $this->request($sql);
 
@@ -69,7 +91,7 @@ class PostModel extends Model
             ':postContent' => $this->post_content,
             ':slugPost' => $this->slug_post,
             ':category' => $this->category_id,
-            ':status_id' => $this->status_id,
+            ':status_id' => 2,
             ':postImage' => $this->post_image,
             ':user_id' => $this->user_id,
         ];
@@ -106,6 +128,7 @@ class PostModel extends Model
                 FROM {$this->table}  
                 JOIN category ON post.category_id = category.id
                 JOIN user ON post.user_id = user.id
+                WHERE status_id = 1 
                 GROUP BY post.id ORDER BY date_update ASC
                 LIMIT $offset, $limit";
 
@@ -354,6 +377,38 @@ class PostModel extends Model
         return $query->fetchColumn();
     }
 
+    public function findHistoryPostById($postId)
+    {
+        $sql = "SELECT *, 
+                    DATE_FORMAT(post.created_at_post, '%d/%m/%Y %H:%i:%s') AS dateCreatePost,
+                    DATE_FORMAT(user.created_at_user, '%d/%m/%Y %H:%i:%s') AS dateCreateUser,
+                    post.id AS postUniqueId,
+                    post.title AS postTitle,
+                    post.status_id AS postStatusId,
+                    post.post_image AS postImage,
+                    post.view_count AS postViewCount,
+                    user.id AS authorUserId,
+                    user.username AS authorUsername, 
+                    user.email AS authorEmail,
+                    user.profile_picture AS authorProfilePicture,
+                    role.name_role AS authorRole,
+                    status.name_status AS postStatusName,
+                    category.name_category AS postCategoryName,
+                    GROUP_CONCAT(tag.name_tag SEPARATOR ', ') AS postTags
+                FROM {$this->table} AS post
+                JOIN user ON post.user_id = user.id
+                JOIN role ON user.role_id = role.id
+                JOIN status ON post.status_id = status.id
+                JOIN category ON post.category_id = category.id
+                LEFT JOIN post_tag ON post.id = post_tag.post_id
+                LEFT JOIN tag ON tag.id = post_tag.tag_id
+                WHERE post.id = :postId
+                GROUP BY post.id";
+
+        $query = $this->request($sql, ['postId' => $postId]);
+
+        return $query->fetch(\PDO::FETCH_ASSOC);
+    }
 
     /**
      * Get the value of id
